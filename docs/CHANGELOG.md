@@ -4,7 +4,11 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 ## Unreleased
 
-—
+- **Guarantees matrix:** [Guarantees-matrix.md](guide/Guarantees-matrix.md) — product promises → mechanisms; Process vs Brakes modes; README hero matrix
+- **Architecture:** [Architecture.md](guide/Architecture.md) — agent-agnostic Core + platform adapters; updated [Platform parity](guide/Platform-parity.md)
+- **Docs positioning:** README/Home/FAQ/concepts aligned; dual mode as intentional strategy
+- **Removed:** companion fullstack-floor-map doc and in-repo links (solo product until domain atlases return)
+- Prior unreleased: tagline, P→S→R, honest Python / Brakes naming ([Home](guide/Home.md), [FAQ](guide/FAQ.md), [Concepts](guide/concepts.md))
 
 ## 3.1.1 — Release patch
 
@@ -46,7 +50,7 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 - Config API renamed: `parseSeatbeltConfig`, `mergeSeatbeltConfigs`, …
 - `doctor`: **Seatbelt Ready** score + Execute hint (`loop-plan` / `validate-state`)
 - Docs: agent commands, skills/hub, gates reference moved out of README
-- Companion guide: [Full Stack Floor Map](guide/Companion-fullstack-floor-map.md) (`@luizsantiago/fullstack-floor-map`)
+- Companion guide: Full Stack Floor Map (`@luizsantiago/fullstack-floor-map`; doc removed in 3.1.x docs refresh)
 - Desks v3 pairing notes (planned Floor Map 0.5.0) — Lane vs Desk vs seatbelt ownership
 
 ## 2.1.x — Parallel Execute

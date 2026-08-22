@@ -2,6 +2,8 @@
 
 Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you) runs them at phase boundaries.
 
+**Product view:** which guarantee each gate serves → [Guarantees matrix](Guarantees-matrix.md).
+
 **Exit code 0** = pass. **Non-zero** = stop, fix the artifact, re-run. Gates do not replace your judgment — they block **structural** gaps (empty specs, fake done, bad commit titles).
 
 ## Pipeline placement

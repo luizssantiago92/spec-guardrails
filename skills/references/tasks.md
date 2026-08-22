@@ -27,7 +27,7 @@ Break the work into atomic tasks with real dependencies and binary done criteria
 ## Procedure
 
 1. **Write one task per deliverable.** A task is something you would hand to a single agent and check in one commit.
-2. **Prefer vertical slices.** One thin verifiable path per **feature** (e.g. register), not “all schema then all APIs then all UI” as *phases*. If `.cursor/rules/fullstack-layer.mdc` is present (`@luizsantiago/fullstack-floor-map`), keep each task `Files` list on **one Lane** (path layer; 0.4.x docs may still say “Floor”). Split UI vs API into T1/T2 with `Depends on`. Vertical still means a thin *feature*, not one task mixing `apps/web` + `apps/api`. See [Companion: Full Stack Floor Map](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Companion-fullstack-floor-map.md).
+2. **Prefer vertical slices.** One thin verifiable path per **feature** (e.g. register), not “all schema then all APIs then all UI” as *phases*. Split UI vs API into separate tasks with `Depends on` when they must stay sequential. Vertical still means a thin *feature*, not one task that mixes unrelated areas without a dependency edge.
 3. **Give every task the full field set.** Authoring and the gate require all six:
    - `Requirement` — the spec ID it serves (gated)
    - `Files` — where the change lands (gated; required; `none` / `—` rejected; overlap across independent tasks blocks)

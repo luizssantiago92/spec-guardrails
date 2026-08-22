@@ -27,8 +27,8 @@ What `install` does on 3.0:
 | Writes / refreshes | Preserves |
 | --- | --- |
 | Skills under `.cursor/skills/` and `.claude/skills/` | `.specs/STATE.md`, feature specs, decisions |
-| Gate scripts under **`.specs/guardrails/scripts/`** | Companion assets (e.g. Floor Map desks / layer script) |
-| Markers `SPEC-GUARDRAILS` / `guardrails-managed` | User prose outside managed blocks |
+| Gate scripts under **`.specs/guardrails/scripts/`** | User prose outside managed blocks |
+| Markers `SPEC-GUARDRAILS` / `guardrails-managed` | — |
 | Upgrades old `.cursorrules` blocks (`SPEC-SEATBELT`, `AGENTIC-HARNESS`) | — |
 
 ## Breaking changes (clean break)
@@ -65,4 +65,3 @@ Same as above: install Spec Guardrails 3.0 fresh. Do not expect harness path dua
 
 - [Stability policy](Stability-policy.md) — why the name will not change again
 - [CHANGELOG](../CHANGELOG.md) — 3.0.0 section
-- Companion pairing: [Full Stack Floor Map](Companion-fullstack-floor-map.md)

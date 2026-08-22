@@ -1,5 +1,7 @@
 # Gates and guarantees
 
+**Product view:** [Guarantees matrix](Guarantees-matrix.md) — guarantee → mechanism → Process vs Brakes.
+
 **Who this is for:** anyone who wonders *“what does Spec Guardrails actually enforce?”*
 
 The short answer: it **blocks** incomplete **markdown artifacts** (missing sections, empty placeholders, missing REQ coverage lines, weak evidence citations in `validation.md`) and **guides** the rest (judgment, how you write specs). Gates do **not** prove that source code implements a criterion — they check paperwork structure.
@@ -77,6 +79,7 @@ Details: [`test/test_adversarial_gates.py`](../../test/test_adversarial_gates.py
 
 ## Related
 
+- [Guarantees matrix](Guarantees-matrix.md) — product promises → mechanisms  
 - [How it works](How-it-works.md) — full journey and sisters  
 - [Token efficiency](Token-efficiency.md) — why not everything loads at once  
 - [FAQ](FAQ.md)

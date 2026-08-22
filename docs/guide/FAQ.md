@@ -2,7 +2,28 @@
 
 ## What is this package, in plain language?
 
-A **guardrails for AI coding agents**. It makes them write down the plan, build against that plan, and prove the work before calling it done—so you get fewer half-finished “looks good” moments.
+A **spec-driven process kit for AI coding agents**. It makes them write down the goal, build against that plan, and prove the work before calling it done — so you get fewer half-finished “looks good” moments. **Spec Guardrails** is the name of the kit; **gates** are the structural brakes that exit non-zero when paperwork or evidence is missing.
+
+## Guardrails vs gates?
+
+**Spec Guardrails** = the repo-local process (skills, `.specs/` memory, phases, CLI). **Gates** = Python scripts that **block** incomplete specs, tasks, or evidence — exit ≠ 0 → stop and fix. The product name uses “guardrails” for the whole kit; the enforcement layer is hard brakes, not soft platform rails.
+
+## Do I need Python?
+
+**Node.js 18+** is required (CLI and `install`). **Python 3.10+** activates **Brakes mode** — without it you stay in **Process mode**: same phases and checklists, no exit-code enforcement. Run `npx @luizsantiago/spec-guardrails doctor` to see the banner when Python is missing.
+
+## Process vs Brakes?
+
+| Mode | Runtime | Best for |
+| --- | --- | --- |
+| **Process** | Node only | Flexible ceremony — workflow, `.specs/` memory, progressive loading, independent `/verify` |
+| **Brakes** | Node + Python | Structural stop-gates — incomplete specs, tasks, or evidence fail with exit ≠ 0 |
+
+Both are intentional. See [Guarantees matrix](Guarantees-matrix.md) for which promises require Brakes.
+
+## Is this only for Cursor?
+
+No. The **core** (`.specs/`, gates, CLI, hub content) is agent-agnostic. **Adapters** copy skills into platform paths — Cursor and Claude Code today; more planned. See [Architecture](Architecture.md) and [Platform parity](Platform-parity.md).
 
 ## Is this a framework or a product I run in production?
 
@@ -69,11 +90,7 @@ Yes at a high level: ask your agent to **install Spec Guardrails**, then to **sp
 2. [Quick start](Quick-start.md)  
 3. [How it works](How-it-works.md)  
 
-Then [Gates and guarantees](Gates-and-guarantees.md) / [Token efficiency](Token-efficiency.md) when you care about guarantees or cost.
-
-## How do I use this with frontend or backend skills?
-
-Spec Guardrails is stack-agnostic. Optional floor maps live in [`@luizsantiago/fullstack-floor-map`](https://www.npmjs.com/package/@luizsantiago/fullstack-floor-map): one Execute manual per **Lane**, one Lane per task, optional specialist depth (Desks for continuity planned in 0.5.0). Pairing contract: [Companion: Full Stack Floor Map](Companion-fullstack-floor-map.md).
+Then [Guarantees matrix](Guarantees-matrix.md) / [Gates and guarantees](Gates-and-guarantees.md) / [Token efficiency](Token-efficiency.md) when you care about promises, enforcement, or cost.
 
 ## Something looks wrong after install?
 

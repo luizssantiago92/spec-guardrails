@@ -15,9 +15,11 @@ Four ideas work together. You do not need to memorize jargon — this page expla
 
 Everything lives under `.specs/` in your repo so the next chat session can continue without re-explaining the project.
 
+**Guarantees** (product promises) map to **gates** and phase skills (mechanisms) in the [Guarantees matrix](Guarantees-matrix.md).
+
 ## Guardrails (this package)
 
-**Guardrails** here means the process kit: hub skill, phase references, sister skills, and Python **gates** that stop the agent when paperwork or evidence is incomplete.
+**Spec Guardrails** is the name of this process kit: hub skill, phase references, sister skills, and Python **gates**. Here “guardrails” means the **process kit and brakes** — not soft platform rails that guide without blocking.
 
 | Step | What happens |
 | --- | --- |
@@ -26,7 +28,9 @@ Everything lives under `.specs/` in your repo so the next chat session can conti
 | 3 | Gate runs — **fail** → stop, fix artifact, re-run |
 | 4 | Gate passes → your approval → next phase |
 
-Without these guardrails, agents often jump to code and say “done”. With them, **incomplete specs, empty stubs, and missing test evidence fail automatic checks** before you waste time reviewing fake progress.
+**Brakes / gates** exit non-zero when paperwork or evidence is incomplete. Without Python you keep the same phases and checklists, but lose automatic exit-code enforcement.
+
+Without these gates, agents often jump to code and say “done”. With them, **incomplete specs, empty stubs, and missing test evidence fail automatic checks** before you waste time reviewing fake progress.
 
 ## Loop engineering (Execute)
 

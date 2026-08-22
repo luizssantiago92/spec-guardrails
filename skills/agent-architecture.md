@@ -190,10 +190,6 @@ Never skip to step 5 while steps 1–4 are available. Fabrication cascades throu
 
 Project rules: `.cursor/rules/engineering-baseline.mdc` (always applied in Cursor).
 
-## Optional companion: Full Stack Floor Map
-
-When [`@luizsantiago/fullstack-floor-map`](https://www.npmjs.com/package/@luizsantiago/fullstack-floor-map) is installed, **Execute** may load one **Lane** layer manual and at most one catalog specialist per turn; **`/verify` stays Guardrails-only** (no Lane manuals, no catalog). Floor Map **0.5.0 (planned)** adds **Desk** memory under `.specs/desks/` for specialist continuity and handoff — companion-owned, not Guardrails gates. Pairing contract: [Companion: Full Stack Floor Map](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Companion-fullstack-floor-map.md).
-
 ## Commands
 
 | Command | Reference | Action |

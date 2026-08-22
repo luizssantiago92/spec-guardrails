@@ -1,7 +1,7 @@
 {
   "name": "@luizsantiago/spec-guardrails",
   "version": "3.1.2",
-  "description": "Guardrails for AI coding agents — spec-driven phases, automatic gates, progressive skill loading (~70% fewer tokens per turn). Works in Cursor and Claude.",
+  "description": "Spec-driven process kit for repo-local AI agents (Cursor and Claude Code adapters today): written goals, structural stop-gates, independent verify, progressive skill loading.",
   "type": "module",
   "bin": {
     "spec-guardrails": "./index.js"

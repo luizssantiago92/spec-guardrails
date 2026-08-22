@@ -47,6 +47,24 @@ async function createTempDir(prefix) {
   return fs.mkdtemp(path.join(os.tmpdir(), prefix));
 }
 
+/** @returns {Promise<boolean>} false when symlink creation is unavailable (skip the test). */
+async function canCreateSymlinks() {
+  const probe = await createTempDir("symlink-probe-");
+  try {
+    const target = path.join(probe, "target.txt");
+    await fs.writeFile(target, "probe", "utf8");
+    await fs.symlink(target, path.join(probe, "link.txt"));
+    return true;
+  } catch (err) {
+    if (err.code === "EPERM" || err.code === "ENOTSUP") {
+      return false;
+    }
+    throw err;
+  } finally {
+    await fs.rm(probe, { recursive: true, force: true });
+  }
+}
+
 async function pathExists(filePath) {
   try {
     await fs.access(filePath);
@@ -542,7 +560,11 @@ keep me
     });
   });
 
-  it("refuses to create STATE.md through a dangling symlink", async () => {
+  it("refuses to create STATE.md through a dangling symlink", async (t) => {
+    if (process.platform === "win32" || !(await canCreateSymlinks())) {
+      t.skip("Symlink security checks are not reliable in this environment");
+      return;
+    }
     const cwd = await createTempDir("ah-state-symlink-");
     const secret = path.join(cwd, "secret.env");
     await fs.mkdir(path.join(cwd, ".specs", "features"), { recursive: true });
@@ -559,7 +581,11 @@ keep me
     }
   });
 
-  it("refuses to write .cursorrules through a symlink", async () => {
+  it("refuses to write .cursorrules through a symlink", async (t) => {
+    if (process.platform === "win32" || !(await canCreateSymlinks())) {
+      t.skip("Symlink security checks are not reliable in this environment");
+      return;
+    }
     const cwd = await createTempDir("ah-rules-symlink-");
     const secret = path.join(cwd, "secret.env");
     await fs.writeFile(secret, "SECRET=keep\n", "utf8");
@@ -909,7 +935,11 @@ describe("download safety", () => {
     }
   });
 
-  it("refuses to overwrite a destination symlink", async () => {
+  it("refuses to overwrite a destination symlink", async (t) => {
+    if (process.platform === "win32" || !(await canCreateSymlinks())) {
+      t.skip("Symlink security checks are not reliable in this environment");
+      return;
+    }
     const cwd = await createTempDir("ah-symlink-");
     const secret = path.join(cwd, "secret.env");
     const link = path.join(cwd, "skill.md");

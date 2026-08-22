@@ -3,9 +3,13 @@
 [![npm version](https://img.shields.io/npm/v/@luizsantiago/spec-guardrails.svg)](https://www.npmjs.com/package/@luizsantiago/spec-guardrails)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Guardrails for AI coding agents** — agree on the goal in writing, break work into provable steps, run automatic checks before calling anything “done”, and verify with a fresh context that did not write the code.
+**Keep AI coding agents honest — specify the work, prove each step, verify independently.**
 
-**Token-efficient by design:** the agent loads **one phase guide per turn** (~9k est. tokens on Specify) instead of dumping the full skill library (~31k). Measured savings: **~72%** on planning, **~86%** on Execute vs a naive full reload ([details below](#token-cost)).
+| | |
+| --- | --- |
+| **Problem** | Agents ship “looks good” with thin specs, missing evidence, and the same context that wrote the code declaring victory. |
+| **Solution** | A repo-local process kit: Specify → Tasks → Execute waves → Verify with fresh context. **Process mode** (Node) always; **Brakes mode** (+ Python) adds structural stop-gates; you approve specs/tasks. |
+| **Result** | Traceable `.specs/` memory, fewer fake finishes, cheaper turns (~70% less skill text on planning), and an explicit stop when evidence is missing. |
 
 npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.1.x**
 
@@ -22,7 +26,7 @@ npx @luizsantiago/spec-guardrails install
 | Requirement | Role |
 | --- | --- |
 | **Node.js 18+** | Required — runs the CLI and `install` |
-| **Python 3.10+** | Recommended — runs automatic **gates** (`validate-spec`, `validate-tasks`, …). Without Python the agent still follows the same checklists manually |
+| **Python 3.10+** | Activates **Brakes mode** — structural gates (`validate-spec`, `validate-tasks`, …). Without Python you stay in **Process mode**: same phases and checklists, no exit-code enforcement. Run [`doctor`](#install) to see the banner when Python is missing |
 
 ### What install does
 
@@ -44,6 +48,55 @@ Re-run `install` anytime to refresh skills; your `.specs/` decisions and `STATE.
 
 ---
 
+## How it works in one screen
+
+Four ideas stack — full explanation: **[Concepts](docs/guide/concepts.md)**
+
+| Idea | What it is | What it does |
+| --- | --- | --- |
+| **Spec-driven** | Written plan before code | `spec.md` + `tasks.md`; evidence before “done” |
+| **Brakes / Gates** | Structural stop-gates | Python scripts exit non-zero when paperwork or evidence is missing |
+| **Loop** | Execute in waves | `loop-plan` picks the next jobs; sub-agents when files don’t overlap |
+| **Graph** | Parallel task map | `task-graph.md` — safe parallelism without file collisions |
+| **Memory** | Repo-local state | `.specs/` — specs, decisions, and handoff survive across chats |
+
+**You** approve specs and tasks. **The agent** runs gates and implements. **Gates** exit non-zero when paperwork or evidence is missing.
+
+Plain-language tour: [Home](docs/guide/Home.md) · [How it works](docs/guide/How-it-works.md) · [Quick start](docs/guide/Quick-start.md)
+
+---
+
+## Operating modes
+
+| Mode | Runtime | What you get |
+| --- | --- | --- |
+| **Process** | Node.js 18+ | Workflow, `.specs/` memory, progressive loading, independent `/verify` |
+| **Brakes** | Node + Python 3.10+ | Process **plus** exit-code enforcement on structural gates |
+
+Python activates Brakes — not a bug. Without it you keep the same phases and checklists (flexible mode). Run `doctor` to see when enforcement is manual-only.
+
+---
+
+## Guarantees matrix
+
+**Guarantees are the product.** Commands are implementation.
+
+| Guarantee | Mechanism | Mode | Enforcement |
+| --- | --- | --- | --- |
+| Intent exists before code | `validate-spec` | Brakes | Hard gate |
+| Tasks derive from requirements | `analyze-artifacts` | Brakes | Hard gate |
+| Requirements stay traceable | `validate-traceability` | Brakes | Hard gate |
+| Dependencies respected in Execute | `loop-plan` | Brakes | Hard gate |
+| Parallel work is file-safe | `task-graph.md` + `validate-tasks` | Process + Brakes | Artifact + gate |
+| Completion cites evidence | `validate-state` | Brakes | Hard gate |
+| Commits follow policy | `check-commit` | Brakes | Hard gate |
+| Verification is independent | `/verify` + `validate.md` | Process | Phase skill |
+| Knowledge survives chats | `.specs/` + `archive-feature` | Process | Install + CLI |
+
+Full matrix, limits, and phase diagram → **[Guarantees matrix](docs/guide/Guarantees-matrix.md)** · [Architecture](docs/guide/Architecture.md) (Core + adapters)
+
+---
+
 ## Token cost
 
 Progressive loading is the main cost win: **one working set per turn**, not the entire playbook.
@@ -59,24 +112,6 @@ Progressive loading is the main cost win: **one working set per turn**, not the 
 Savings vs full dump: **~72%** (Specify), **~86%** (Execute). Numbers from `lib/token-cost.js`; CI guardrails in `test/test_token_cost.test.js`. Order-of-magnitude only — not a billing API.
 
 More: [Token efficiency](docs/guide/Token-efficiency.md)
-
----
-
-## How the pieces fit together
-
-Four ideas stack — full explanation: **[Concepts](docs/guide/concepts.md)**
-
-| Idea | What it is | What it does |
-| --- | --- | --- |
-| **Spec-driven** | Written plan before code | `spec.md` + `tasks.md`; evidence before “done” |
-| **Guardrails** | This package | Skills + Python gates that stop incomplete work |
-| **Loop** | Execute in waves | `loop-plan` picks the next jobs; sub-agents when files don’t overlap |
-| **Graph** | Parallel task map | `task-graph.md` — safe parallelism without file collisions |
-| **Memory** | Repo-local state | `.specs/` — specs, decisions, and handoff survive across chats |
-
-**You** approve specs and tasks. **The agent** runs gates and implements. **Gates** exit non-zero when paperwork or evidence is missing.
-
-Plain-language tour: [Home](docs/guide/Home.md) · [How it works](docs/guide/How-it-works.md) · [Quick start](docs/guide/Quick-start.md)
 
 ---
 
@@ -115,7 +150,7 @@ Full map: **[Skills and hub](docs/guide/skills-and-hub.md)**
 
 ## Gates (summary)
 
-Scripts in `.specs/guardrails/scripts/`. **Exit ≠ 0 → stop and fix.**
+Commands implement the guarantees above. Scripts in `.specs/guardrails/scripts/`. **Exit ≠ 0 → stop and fix.**
 
 | When | Gate | What it blocks |
 | --- | --- | --- |
@@ -130,7 +165,7 @@ Scripts in `.specs/guardrails/scripts/`. **Exit ≠ 0 → stop and fix.**
 | After Verify FAIL | `lessons` | Ungrounded “lessons learned” |
 | After Verify PASS | `archive-feature` | (CLI) folds feature into domain memory |
 
-Full reference: **[Gates](docs/guide/gates.md)** · [Gates and guarantees](docs/guide/Gates-and-guarantees.md)
+Full reference: **[Gates](docs/guide/gates.md)** · [Guarantees matrix](docs/guide/Guarantees-matrix.md) · [Gates and guarantees](docs/guide/Gates-and-guarantees.md)
 
 ---
 
@@ -138,12 +173,14 @@ Full reference: **[Gates](docs/guide/gates.md)** · [Gates and guarantees](docs/
 
 | Doc | For |
 | --- | --- |
+| [Guarantees matrix](docs/guide/Guarantees-matrix.md) | Product promises → mechanisms |
+| [Architecture](docs/guide/Architecture.md) | Core vs platform adapters |
 | [Agent commands](docs/guide/agent-commands.md) | Every `/specify`, `/loop`, `/verify`, … — purpose, when, examples |
 | [Quick start](docs/guide/Quick-start.md) | First ten minutes |
 | [Concepts](docs/guide/concepts.md) | Spec-driven + guardrails + loop + graph |
 | [Skills and hub](docs/guide/skills-and-hub.md) | What each skill file does |
 | [Gates](docs/guide/gates.md) | How each gate works |
-| [Platform parity](docs/guide/Platform-parity.md) | Cursor vs Claude Code |
+| [Platform parity](docs/guide/Platform-parity.md) | Cursor vs Claude Code adapters today |
 | [FAQ](docs/guide/FAQ.md) | Common questions |
 | [Changelog](docs/CHANGELOG.md) | Full version history |
 

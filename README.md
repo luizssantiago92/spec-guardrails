@@ -32,7 +32,7 @@ npx @luizsantiago/spec-guardrails install
 
 | Lands in your project | Purpose |
 | --- | --- |
-| `.cursor/skills/` + `.claude/skills/` | Hub, phase references, sister skills (first shipped **adapters** — not the only supported agents) |
+| `.cursor/skills/` + `.claude/skills/` + `.github/skills/` + `.codex/skills/` | Hub, phase references, sister skills (**shipped adapters** — same content, product-specific paths) |
 | `.specs/guardrails/scripts/` | Python gate scripts (Brakes mode) |
 | `.specs/STATE.md`, `.specs/features/`, … | Project memory (any agent) |
 | `.cursor/rules/engineering-baseline.mdc` | Always-on Cursor rule |

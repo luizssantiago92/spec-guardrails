@@ -164,6 +164,23 @@ describe("install guardrails", () => {
           await fs.readFile(path.join(cwd, ".claude/CLAUDE.md"), "utf8"),
           /SPEC-GUARDRAILS:BEGIN/,
         );
+        assert.equal(
+          await pathExists(path.join(cwd, ".github/copilot-instructions.md")),
+          true,
+        );
+        assert.match(
+          await fs.readFile(
+            path.join(cwd, ".github/copilot-instructions.md"),
+            "utf8",
+          ),
+          /\.github\/skills\/agent-architecture\.md/,
+        );
+        assert.equal(await pathExists(path.join(cwd, "AGENTS.md")), true);
+        assert.equal(await pathExists(path.join(cwd, ".codex/AGENTS.md")), true);
+        assert.match(
+          await fs.readFile(path.join(cwd, ".codex/AGENTS.md"), "utf8"),
+          /\.codex\/skills\/agent-architecture\.md/,
+        );
 
         assert.equal(await fs.readFile(cursorSkill, "utf8"), SKILL_FIXTURE);
         assert.equal(
@@ -225,7 +242,12 @@ describe("install guardrails", () => {
       try {
         await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
 
-        for (const dir of [".cursor/skills", ".claude/skills"]) {
+        for (const dir of [
+          ".cursor/skills",
+          ".claude/skills",
+          ".github/skills",
+          ".codex/skills",
+        ]) {
           for (const reference of REFERENCE_ASSETS) {
             const referencePath = path.join(
               cwd,

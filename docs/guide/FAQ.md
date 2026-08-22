@@ -6,7 +6,7 @@ A **spec-driven process kit for AI coding agents**. It makes them write down the
 
 ## Guardrails vs gates?
 
-**Spec Guardrails** = the repo-local process (skills, `.specs/` memory, phases, CLI). **Gates** = Python scripts that **block** incomplete specs, tasks, or evidence — exit ≠ 0 → stop and fix. The product name uses “guardrails” for the whole kit; the enforcement layer is hard brakes, not soft platform rails.
+**Spec Guardrails** = the spec-driven process kit (skills, `.specs/` memory, phases, CLI). **Gates** = Python scripts that **block** incomplete specs, tasks, or evidence — exit ≠ 0 → stop and fix. The product name uses “guardrails” for the whole kit; the enforcement layer is hard brakes, not soft platform rails.
 
 ## Do I need Python?
 

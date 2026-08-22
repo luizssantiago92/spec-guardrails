@@ -18,7 +18,7 @@ flowchart TB
   subgraph adapters [PlatformAdapters]
     cursor[".cursor/ + .cursorrules"]
     claude[".claude/ + CLAUDE.md"]
-    future["Codex GitHub Copilot OpenCode ..."]
+    future["Codex GitHub Copilot AGENTS.md ..."]
   end
   core --> adapters
   agents[Any AI agent in your environment]
@@ -46,9 +46,9 @@ Install copies the **same** markdown into each adapter tree. Only always-on entr
 | --- | --- | --- | --- |
 | **Cursor** | `.cursor/skills/` | `.cursorrules` + `.cursor/rules/engineering-baseline.mdc` | **Shipped** |
 | **Claude Code** | `.claude/skills/` | `.claude/CLAUDE.md` | **Shipped** |
-| **OpenAI Codex** | TBD | TBD | Planned |
-| **GitHub Copilot** (repo instructions) | TBD | TBD | Planned |
-| **Other agents** (Windsurf, OpenCode, …) | TBD | TBD | Planned / community |
+| **GitHub Copilot** | `.github/skills/` | `.github/copilot-instructions.md` | **Shipped** |
+| **OpenAI Codex** | `.codex/skills/` | `.codex/AGENTS.md` + root `AGENTS.md` | **Shipped** |
+| **Other agents** (Windsurf, OpenCode, …) | copy or symlink a shipped tree | root `AGENTS.md` or product docs | Planned / community |
 
 Re-run `install` to refresh managed skill blocks. User prose outside Spec Guardrails markers is preserved.
 

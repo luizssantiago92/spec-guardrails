@@ -9,8 +9,10 @@ import {
   resolveExecuteHint,
   runDoctorChecks,
   scoreDoctorChecks,
+  scoreDoctorModes,
   topDoctorSuggestions,
 } from "../lib/doctor.js";
+import { CURSORRULES_MARKER_BEGIN, CURSORRULES_MARKER_END } from "../lib/constants.js";
 
 async function createTempDir(prefix) {
   return fs.mkdtemp(path.join(os.tmpdir(), prefix));
@@ -162,7 +164,31 @@ describe("guardrails doctor", () => {
     assert.match(hint ?? "", /validate-state/);
   });
 
-  it("doctor prints execute hint in human mode", async () => {
+  it("scores Process and Brakes modes separately", async () => {
+    const cwd = await createTempDir("doctor-modes-");
+    await fs.mkdir(path.join(cwd, ".specs/features"), { recursive: true });
+    await fs.mkdir(path.join(cwd, ".specs/project"), { recursive: true });
+    await fs.mkdir(path.join(cwd, ".specs/guardrails/scripts"), { recursive: true });
+    await fs.mkdir(path.join(cwd, ".cursor/skills"), { recursive: true });
+    await fs.mkdir(path.join(cwd, ".cursor/rules"), { recursive: true });
+    await fs.writeFile(path.join(cwd, ".specs/STATE.md"), "# State\n\n- Feature: —\n");
+    await fs.writeFile(path.join(cwd, ".specs/config.yaml"), "schema: spec-driven\n");
+    await fs.writeFile(path.join(cwd, ".cursor/skills/agent-architecture.md"), "# Hub\n");
+    await fs.writeFile(path.join(cwd, ".cursor/rules/engineering-baseline.mdc"), "---\n");
+    await fs.writeFile(
+      path.join(cwd, ".cursorrules"),
+      `${CURSORRULES_MARKER_BEGIN}\n# test\n${CURSORRULES_MARKER_END}\n`,
+    );
+
+    const checks = await runDoctorChecks(cwd);
+    const modes = scoreDoctorModes(checks);
+    assert.ok(modes.process.score >= 80);
+    assert.ok(typeof modes.brakes.score === "number");
+    assert.equal(typeof modes.process.ready, "boolean");
+    assert.equal(typeof modes.brakes.ready, "boolean");
+  });
+
+  it("doctor human mode prints Process and Brakes scores", async () => {
     const cwd = await createTempDir("doctor-hint-output-");
     const feature = "001-auth";
     const featureDir = path.join(cwd, ".specs/features", feature);
@@ -189,6 +215,9 @@ describe("guardrails doctor", () => {
     console.log = (...args) => logs.push(args.join(" "));
     try {
       await doctor(cwd, { suggest: false });
+      assert.match(logs.join("\n"), /Operating modes/);
+      assert.match(logs.join("\n"), /Process:/);
+      assert.match(logs.join("\n"), /Brakes:/);
       assert.match(logs.join("\n"), /Execute hint:/);
       assert.match(logs.join("\n"), /loop-plan/);
     } finally {
@@ -214,7 +243,10 @@ describe("guardrails doctor", () => {
     try {
       const result = await doctor(cwd, { json: true });
       assert.ok(result.score >= 0);
+      assert.ok(result.modes.process.score >= 0);
+      assert.ok(result.modes.brakes.score >= 0);
       assert.match(logs.join("\n"), /"score"/);
+      assert.match(logs.join("\n"), /"modes"/);
       assert.match(logs.join("\n"), /"pythonMissing"/);
     } finally {
       console.log = original;

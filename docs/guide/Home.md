@@ -12,7 +12,7 @@ Agents are great at writing code and terrible at knowing when to stop. Spec Guar
 
 With **Brakes** on, incomplete write-ups or missing test evidence **fail a Python gate** before the feature is called done. **Process** mode keeps the same phases without exit-code enforcement — a deliberate choice for lighter work.
 
-Works with **any repo-local AI agent** — Cursor and Claude Code adapters ship first; the core is not locked to those products. See [Architecture](Architecture.md).
+Works with **any AI coding agent** — Cursor, Claude Code, GitHub Copilot, OpenAI Codex, and more. Shipped adapters install the same hub into each product's tree. See [Architecture](Architecture.md).
 
 ## Operating modes
 

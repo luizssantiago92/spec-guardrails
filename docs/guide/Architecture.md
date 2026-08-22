@@ -1,8 +1,8 @@
 # Architecture — Core and platform adapters
 
-Spec Guardrails is **agent-agnostic at the core**. Any agent that can read repo instructions, edit files, and run shell commands can use the same loop, memory, and (with Python) structural gates.
+Spec Guardrails is **not limited to Cursor or Claude Code**. The **core** works with any AI coding agent that can read repo instructions, edit files, and run shell commands. Platform folders are **adapters** — where the same hub, references, and sisters land for each product.
 
-Platform-specific folders are **adapters** — where skills and always-on rules land for each product. Today: Cursor and Claude Code. More adapters can ship later without changing the core contract.
+**Process mode** (Node only) and **Brakes mode** (Node + Python gates) both use this core. Gates stay **Python** — that is the full product with automated enforcement, not a gap to close later.
 
 ## Diagram
 
@@ -11,61 +11,70 @@ flowchart TB
   subgraph core [SpecGuardrailsCore]
     specs[".specs/ memory"]
     state[STATE and features]
-    gates[gates scripts]
+    gates[Python gate scripts]
     cli[CLI and doctor]
     hub[hub and phase references]
   end
   subgraph adapters [PlatformAdapters]
     cursor[".cursor/ + .cursorrules"]
     claude[".claude/ + CLAUDE.md"]
-    future[".codex/ .github/ ... planned"]
+    future["Codex GitHub Copilot OpenCode ..."]
   end
   core --> adapters
-  agents[Any agent that reads repo instructions and runs CLI]
+  agents[Any AI agent in your environment]
   adapters --> agents
 ```
 
-## Core (shared, agent-agnostic)
+## Core (shared, every agent)
 
 | Piece | Location / entry | Role |
 | --- | --- | --- |
 | Project memory | `.specs/` (`STATE.md`, `features/`, domains, lessons) | Survives chats; source of truth for plans and status |
-| Structural gates | `.specs/guardrails/scripts/*.py` | Brakes mode — exit ≠ 0 when paperwork fails |
+| Structural gates | `.specs/guardrails/scripts/*.py` | **Brakes mode** — Python by design; exit ≠ 0 when paperwork fails |
 | CLI | `npx @luizsantiago/spec-guardrails …` | install, doctor, gate commands, archive, feature-init |
 | Hub + phases | Packaged under `skills/`; copied to adapter trees on install | One phase guide per turn; complexity router |
 | Guarantees | [Guarantees matrix](Guarantees-matrix.md) | Product promises → mechanisms |
 | Task graph rules | `task-graph.md` artifact + `validate-tasks` | Safe parallelism when 3+ tasks |
 
-The core does **not** depend on Cursor or Claude APIs. It depends on **your repo** and optional Python for Brakes.
+The core does **not** call Cursor or Claude APIs. It depends on **your repo**, Node for install/CLI, and Python when you want Brakes.
 
-## Adapters (platform-specific)
+## Adapters (where skills land)
 
-Install copies the **same** hub, references, and sister skills into each adapter tree. Only always-on entry files differ.
+Install copies the **same** markdown into each adapter tree. Only always-on entry files differ.
 
-| Adapter | Skills | Always-on contract | Status |
+| Adapter | Skills / rules | Always-on contract | Status |
 | --- | --- | --- | --- |
-| **Cursor** | `.cursor/skills/` | `.cursorrules` + `.cursor/rules/engineering-baseline.mdc` | Shipped |
-| **Claude Code** | `.claude/skills/` | `.claude/CLAUDE.md` | Shipped |
-| **Codex / GitHub / others** | TBD paths | TBD entry doc | Planned — not in install yet |
+| **Cursor** | `.cursor/skills/` | `.cursorrules` + `.cursor/rules/engineering-baseline.mdc` | **Shipped** |
+| **Claude Code** | `.claude/skills/` | `.claude/CLAUDE.md` | **Shipped** |
+| **OpenAI Codex** | TBD | TBD | Planned |
+| **GitHub Copilot** (repo instructions) | TBD | TBD | Planned |
+| **Other agents** (Windsurf, OpenCode, …) | TBD | TBD | Planned / community |
 
 Re-run `install` to refresh managed skill blocks. User prose outside Spec Guardrails markers is preserved.
 
-Details for the two shipped adapters: [Platform parity](Platform-parity.md).
+Shipped adapter details: [Platform parity](Platform-parity.md).
 
-## What “agent-agnostic” means in practice
+## Using an agent without a shipped adapter
 
-| Requirement | Notes |
-| --- | --- |
-| Read markdown skills from the repo | Adapter paths differ; content is the same |
-| Run CLI gates when Brakes mode is on | `python3` or `npx @luizsantiago/spec-guardrails validate-*` |
-| Follow chat phase conventions | `/specify`, `/loop`, `/verify` are **conventions** in skills — not shell binaries |
-| Keep plans under `.specs/` | Core memory — not adapter-specific |
+You do not need to wait for an official adapter to get value:
 
-If your agent cannot load project skills or run local commands, you can still use the **CLI and `.specs/` layout** manually; progressive loading and phase automation assume an agent that follows the hub.
+1. Run `npx @luizsantiago/spec-guardrails install` — you still get `.specs/`, Python gates, and at least the shipped adapter trees.
+2. Point your agent at the **hub** (`agent-architecture.md`) and phase files under `skills/references/` (paths may differ per product — copy or symlink if needed).
+3. Use the **CLI** for gates in Brakes mode: `npx @luizsantiago/spec-guardrails validate-spec …`
+4. Follow the same chat conventions (`/specify`, `/loop`, `/verify`) — they are documented in skills, not shell binaries.
+
+Contributing a new adapter = new install targets in `lib/install.js` + docs — core and gates unchanged.
+
+## Operating modes (same core, different enforcement)
+
+| Mode | Runtime | Enforcement |
+| --- | --- | --- |
+| **Process** | Node | Workflow + `.specs/` + verify skill — flexible |
+| **Brakes** | Node + Python | Process **plus** [Guarantees matrix](Guarantees-matrix.md) via Python gates |
 
 ## Related
 
-- [Guarantees matrix](Guarantees-matrix.md) — what the core promises
+- [Guarantees matrix](Guarantees-matrix.md) — what Brakes enforce
 - [Platform parity](Platform-parity.md) — Cursor vs Claude install surface today
 - [Skills and hub](skills-and-hub.md) — load order and sister skills
 - [Stability policy](Stability-policy.md) — semver and gate freeze

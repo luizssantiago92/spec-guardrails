@@ -8,8 +8,8 @@
 | | |
 | --- | --- |
 | **Problem** | Agents ship “looks good” with thin specs, missing evidence, and the same context that wrote the code declaring victory. |
-| **Solution** | A repo-local process kit: Specify → Tasks → Execute waves → Verify with fresh context. **Process mode** (Node) always; **Brakes mode** (+ Python) adds structural stop-gates; you approve specs/tasks. |
-| **Result** | Traceable `.specs/` memory, fewer fake finishes, cheaper turns (~70% less skill text on planning), and an explicit stop when evidence is missing. |
+| **Solution** | One kit, two deliberate modes: **Process** (Node only) for a flexible spec-driven workflow; **Brakes** (Node + Python) for the **full product** — structural gates that exit non-zero when paperwork or evidence is missing. You approve specs/tasks in both. |
+| **Result** | Traceable `.specs/` memory, fewer fake finishes, cheaper turns (~70% less skill text on planning). Choose Process for light ceremony; add Python when you want the [Guarantees matrix](#guarantees-matrix) enforced automatically. |
 
 npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.1.x**
 
@@ -26,16 +26,18 @@ npx @luizsantiago/spec-guardrails install
 | Requirement | Role |
 | --- | --- |
 | **Node.js 18+** | Required — runs the CLI and `install` |
-| **Python 3.10+** | Activates **Brakes mode** — structural gates (`validate-spec`, `validate-tasks`, …). Without Python you stay in **Process mode**: same phases and checklists, no exit-code enforcement. Run [`doctor`](#install) to see the banner when Python is missing |
+| **Python 3.10+** | Activates **Brakes mode** — the **full** kit with Python structural gates (`validate-spec`, `validate-tasks`, …). Gates stay Python by design. Without Python you stay in **Process mode**: same phases and checklists, no exit-code enforcement. Run [`doctor`](#install) to see which mode you are in |
 
 ### What install does
 
 | Lands in your project | Purpose |
 | --- | --- |
-| `.cursor/skills/` + `.claude/skills/` | Hub, phase references, sister skills |
-| `.specs/guardrails/scripts/` | Python gate scripts |
-| `.specs/STATE.md`, `.specs/features/`, … | Project memory |
+| `.cursor/skills/` + `.claude/skills/` | Hub, phase references, sister skills (first shipped **adapters** — not the only supported agents) |
+| `.specs/guardrails/scripts/` | Python gate scripts (Brakes mode) |
+| `.specs/STATE.md`, `.specs/features/`, … | Project memory (any agent) |
 | `.cursor/rules/engineering-baseline.mdc` | Always-on Cursor rule |
+
+**Agent environments:** the **core** (`.specs/`, CLI, hub, Python gates) works with any AI agent that reads repo instructions and runs shell commands. Install ships Cursor + Claude Code adapters today; Codex, GitHub Copilot, and others are documented in [Architecture](docs/guide/Architecture.md).
 
 Re-run `install` anytime to refresh skills; your `.specs/` decisions and `STATE.md` are kept.
 
@@ -68,12 +70,16 @@ Plain-language tour: [Home](docs/guide/Home.md) · [How it works](docs/guide/How
 
 ## Operating modes
 
-| Mode | Runtime | What you get |
-| --- | --- | --- |
-| **Process** | Node.js 18+ | Workflow, `.specs/` memory, progressive loading, independent `/verify` |
-| **Brakes** | Node + Python 3.10+ | Process **plus** exit-code enforcement on structural gates |
+Two modes, one package — pick how much rigor you want:
 
-Python activates Brakes — not a bug. Without it you keep the same phases and checklists (flexible mode). Run `doctor` to see when enforcement is manual-only.
+| Mode | Runtime | What you get | Best for |
+| --- | --- | --- | --- |
+| **Process** | Node.js 18+ | Spec-driven workflow, `.specs/` memory, progressive loading, independent `/verify` | Flexible ceremony, exploration, teams that enforce by review |
+| **Brakes** | Node + **Python 3.10+** | Everything in Process **plus** Python gates from the [Guarantees matrix](#guarantees-matrix) — exit ≠ 0 → stop and fix | The **full Spec Guardrails** — traceability, evidence, and structural guarantees enforced automatically |
+
+**Gates stay Python.** That is the product: Brakes mode is the complete version with automated enforcement. Process mode is the same loop without exit-code brakes — intentional, not incomplete.
+
+Install Python when you want gates to fire; run `doctor` to confirm Brakes are available.
 
 ---
 
@@ -180,7 +186,7 @@ Full reference: **[Gates](docs/guide/gates.md)** · [Guarantees matrix](docs/gui
 | [Concepts](docs/guide/concepts.md) | Spec-driven + guardrails + loop + graph |
 | [Skills and hub](docs/guide/skills-and-hub.md) | What each skill file does |
 | [Gates](docs/guide/gates.md) | How each gate works |
-| [Platform parity](docs/guide/Platform-parity.md) | Cursor vs Claude Code adapters today |
+| [Platform parity](docs/guide/Platform-parity.md) | Shipped adapters (Cursor, Claude Code) — core works with any agent |
 | [FAQ](docs/guide/FAQ.md) | Common questions |
 | [Changelog](docs/CHANGELOG.md) | Full version history |
 

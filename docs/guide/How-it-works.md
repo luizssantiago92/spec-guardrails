@@ -68,7 +68,7 @@ After a pass, the feature folds into long-lived project memory. **Push and merge
 - Fewer “it works in the chat” moments  
 - Clearer handoffs between sessions (the project remembers where it left off)  
 - Less wasted AI context: the agent loads **this step’s guide**, not a giant manual every time  
-- Install once — same feel on Cursor or Claude  
+- Install once — same core on any agent that reads the repo; Cursor and Claude adapters ship first  
 
 ## What it does *not* do
 

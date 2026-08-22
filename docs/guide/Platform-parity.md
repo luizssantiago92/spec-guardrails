@@ -1,8 +1,6 @@
-# Platform parity — adapters today
+# Platform adapters — Cursor and Claude Code (shipped)
 
-Spec Guardrails is **agent-agnostic at the core** — see [Architecture](Architecture.md). **Adapters** are where skills and always-on rules land for each product.
-
-Today install ships two adapters: **Cursor** and **Claude Code**. The same hub, phase references, Python gates, and `.specs/` memory apply to both; only entry paths differ.
+Spec Guardrails is **not limited to these two products**. This page documents the **first shipped adapters**. The [Architecture](Architecture.md) core works with any AI agent; more adapters (Codex, GitHub Copilot, …) are planned.
 
 ## What install writes
 

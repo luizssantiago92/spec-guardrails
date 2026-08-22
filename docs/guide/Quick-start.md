@@ -8,7 +8,7 @@ In your project folder (not in the Spec Guardrails source repo):
 
     npx @luizsantiago/spec-guardrails install
 
-You should see a playbook land for Cursor (and Claude if you use it), plus a `.specs/` folder where the project keeps notes and the automatic checks.
+You should see skills land for shipped adapters (Cursor and Claude Code by default), plus a `.specs/` folder and Python gate scripts for **Brakes mode**.
 
 Optional sanity check:
 
@@ -16,7 +16,7 @@ Optional sanity check:
 
 ## 2. Tell your agent what you want
 
-Open Cursor or Claude and say something concrete, for example:
+Open your **AI coding agent** in this project (Cursor and Claude Code are the first shipped adapters) and say something concrete, for example:
 
 > Specify a small feature: users can sign in with email and password and get a session. Keep social login out of scope.
 

@@ -6,7 +6,7 @@ import { formatInstallNextSteps } from "../lib/next-steps.js";
 describe("install next steps", () => {
   it("tells humans to use the agent, not memorize CLI", () => {
     const text = formatInstallNextSteps({ pythonAvailable: true }).join("\n");
-    assert.match(text, /Open Cursor or Claude Code/);
+    assert.match(text, /AI coding agent/);
     assert.match(text, /Specify/);
     assert.match(text, /GETTING_STARTED\.md/);
     assert.match(text, /Quick-start/);

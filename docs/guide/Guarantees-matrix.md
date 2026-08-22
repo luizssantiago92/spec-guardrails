@@ -6,12 +6,16 @@ Commands are implementation. **Guarantees** are the product. See [gates.md](gate
 
 ## Operating modes
 
-| Mode | Runtime | What you get |
-| --- | --- | --- |
-| **Process** | Node.js 18+ | Spec-driven workflow, `.specs/` memory, progressive skill loading, independent `/verify` (phase skill — not exit-code) |
-| **Brakes** | Node + Python 3.10+ | Everything in Process **plus** exit-code enforcement on the rows marked *Brakes* below |
+Two modes, one package:
 
-Process mode is intentional — flexible ceremony without automatic stop. Brakes mode is for teams that want structural gates to **block** incomplete paperwork. Run `npx @luizsantiago/spec-guardrails doctor` to see whether Python (Brakes) is available.
+| Mode | Runtime | What you get | Best for |
+| --- | --- | --- | --- |
+| **Process** | Node.js 18+ | Spec-driven workflow, `.specs/` memory, progressive skill loading, independent `/verify` (phase skill — not exit-code) | Flexible ceremony — same loop, lighter enforcement |
+| **Brakes** | Node + **Python 3.10+** | Everything in Process **plus** exit-code enforcement on the rows marked *Brakes* below | **Full Spec Guardrails** — Python gates enforce the guarantees automatically |
+
+**Gates stay Python.** Brakes mode is the complete product: structural gates that block incomplete specs, tasks, and evidence. Process mode is intentionally flexible — not a broken install.
+
+Run `npx @luizsantiago/spec-guardrails doctor` to see whether Brakes (Python) are available.
 
 ## Matrix
 

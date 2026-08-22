@@ -1,8 +1,8 @@
 # Agent commands (chat — not the terminal)
 
-**Agent commands** are phrases you type in **Cursor or Claude Code** — not in your shell.
-They tell the agent which **phase procedure** to load from `.cursor/skills/references/`.
-The agent runs Python gates and CLI helpers (`validate-spec`, `loop-plan`, …) for you.
+**Agent commands** are phrases you type in **your AI coding agent’s chat** (Cursor, Claude Code, or any environment that loads project skills) — not in your shell.
+They tell the agent which **phase procedure** to load from the hub references (e.g. `.cursor/skills/references/` on Cursor).
+The agent runs Python gates and CLI helpers (`validate-spec`, `loop-plan`, …) for you when **Brakes mode** (Python) is available.
 
 | Command | Purpose | When to use | How you invoke it |
 | --- | --- | --- | --- |

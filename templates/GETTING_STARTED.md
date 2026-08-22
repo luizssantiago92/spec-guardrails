@@ -4,7 +4,7 @@ You installed the **Spec Guardrails**. You do **not** need to memorize CLI comma
 
 ## What to do now
 
-1. Open **Cursor** or **Claude Code** in this project.
+1. Open your **AI coding agent** in this project (Cursor or Claude Code if you use those adapters).
 2. Start with **Specify** (an **agent command** — chat, not terminal):
 
    ```
@@ -20,7 +20,7 @@ You installed the **Spec Guardrails**. You do **not** need to memorize CLI comma
 
 ## Agent commands (chat — not terminal)
 
-Type these in **Cursor or Claude Code**. They load phase procedures from `.cursor/skills/references/`. The agent runs gates for you.
+Type these in **chat** in your agent environment. They load phase procedures from the installed skills tree (e.g. `.cursor/skills/references/`). In **Brakes mode**, the agent runs Python gates for you.
 
 | Command | When |
 | --- | --- |

@@ -10,20 +10,26 @@ A **spec-driven process kit for AI coding agents**. It makes them write down the
 
 ## Do I need Python?
 
-**Node.js 18+** is required (CLI and `install`). **Python 3.10+** activates **Brakes mode** — without it you stay in **Process mode**: same phases and checklists, no exit-code enforcement. Run `npx @luizsantiago/spec-guardrails doctor` to see the banner when Python is missing.
+**Node.js 18+** runs install and the CLI (always). **Python 3.10+** activates **Brakes mode** — the **full** Spec Guardrails with automatic Python gates. Without Python you stay in **Process mode**: same phases and checklists, no exit-code enforcement. Run `doctor` to see which mode you are in.
+
+## Why are gates Python?
+
+**By design.** Brakes mode is the complete product: deterministic structural gates under `.specs/guardrails/scripts/*.py`, locked by the adversarial CI matrix. Node runs install and CLI; Python runs enforcement. We are **not** porting gates to Node — Process mode is the flexible Node-only path; Python is how the guarantees fire.
 
 ## Process vs Brakes?
 
 | Mode | Runtime | Best for |
 | --- | --- | --- |
 | **Process** | Node only | Flexible ceremony — workflow, `.specs/` memory, progressive loading, independent `/verify` |
-| **Brakes** | Node + Python | Structural stop-gates — incomplete specs, tasks, or evidence fail with exit ≠ 0 |
+| **Brakes** | Node + Python | **Full kit** — same loop plus Python gates that exit non-zero when paperwork or evidence is incomplete |
 
-Both are intentional. See [Guarantees matrix](Guarantees-matrix.md) for which promises require Brakes.
+Both are intentional product modes. See [Guarantees matrix](Guarantees-matrix.md).
 
-## Is this only for Cursor?
+## Which AI agents are supported?
 
-No. The **core** (`.specs/`, gates, CLI, hub content) is agent-agnostic. **Adapters** copy skills into platform paths — Cursor and Claude Code today; more planned. See [Architecture](Architecture.md) and [Platform parity](Platform-parity.md).
+**Any** agent that reads repo instructions, edits files, and can run shell commands can use the **core** (`.specs/`, hub content, CLI, Python gates in Brakes mode).
+
+**Install** ships **adapters** for Cursor and Claude Code first (skills + always-on entry files). Codex, GitHub Copilot, and other environments are on the roadmap — see [Architecture](Architecture.md) for using the core before an official adapter exists.
 
 ## Is this a framework or a product I run in production?
 

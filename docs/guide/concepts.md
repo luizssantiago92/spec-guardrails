@@ -28,7 +28,7 @@ Everything lives under `.specs/` in your repo so the next chat session can conti
 | 3 | Gate runs — **fail** → stop, fix artifact, re-run |
 | 4 | Gate passes → your approval → next phase |
 
-**Brakes / gates** exit non-zero when paperwork or evidence is incomplete. Without Python you keep the same phases and checklists, but lose automatic exit-code enforcement.
+**Brakes / gates** exit non-zero when paperwork or evidence is incomplete. **Process mode** (Node only) keeps the same phases without automatic gates. **Brakes mode** (Node + Python) is the full product — gates stay Python by design.
 
 Without these gates, agents often jump to code and say “done”. With them, **incomplete specs, empty stubs, and missing test evidence fail automatic checks** before you waste time reviewing fake progress.
 

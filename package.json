@@ -1,6 +1,6 @@
 {
   "name": "@luizsantiago/spec-guardrails",
-  "version": "3.1.5",
+  "version": "3.1.6",
   "description": "Keep AI coding agents honest — specify the work, prove each step, verify independently. Process mode (Node) for flexibility; Brakes mode (Node + Python) for structural gates and a Guarantees matrix. Progressive loading, independent verify — any AI agent.",
   "type": "module",
   "bin": {

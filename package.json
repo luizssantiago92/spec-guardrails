@@ -1,6 +1,6 @@
 {
   "name": "@luizsantiago/spec-guardrails",
-  "version": "3.1.3",
+  "version": "3.1.4",
   "description": "Spec-driven process kit for any repo-local AI agent: Process mode (Node) or full Brakes mode (Node + Python gates). Progressive loading, independent verify, Guarantees matrix.",
   "type": "module",
   "bin": {

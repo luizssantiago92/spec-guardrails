@@ -8,7 +8,7 @@ In your project folder (not in the Spec Guardrails source repo):
 
     npx @luizsantiago/spec-guardrails install
 
-You should see skills land for shipped adapters (Cursor and Claude Code by default), plus a `.specs/` folder and Python gate scripts for **Brakes mode**.
+You should see skills land in **four adapter trees** (Cursor, Claude, Copilot, Codex), plus root `AGENTS.md`, a `.specs/` folder, and Python gate scripts for **Brakes mode**.
 
 Optional sanity check:
 
@@ -16,7 +16,7 @@ Optional sanity check:
 
 ## 2. Tell your agent what you want
 
-Open your **AI coding agent** in this project (Cursor and Claude Code are the first shipped adapters) and say something concrete, for example:
+Open your **AI coding agent** in this project (use the adapter entry file for your tool — see [Platform parity](Platform-parity.md)) and say something concrete, for example:
 
 > Specify a small feature: users can sign in with email and password and get a session. Keep social login out of scope.
 

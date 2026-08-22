@@ -18,7 +18,9 @@ flowchart TB
   subgraph adapters [PlatformAdapters]
     cursor[".cursor/ + .cursorrules"]
     claude[".claude/ + CLAUDE.md"]
-    future["Codex GitHub Copilot AGENTS.md ..."]
+    copilot[".github/ + copilot-instructions"]
+    codex[".codex/ + AGENTS.md"]
+    agentsMd["root AGENTS.md"]
   end
   core --> adapters
   agents[Any AI agent in your environment]
@@ -75,6 +77,6 @@ Contributing a new adapter = new install targets in `lib/install.js` + docs — 
 ## Related
 
 - [Guarantees matrix](Guarantees-matrix.md) — what Brakes enforce
-- [Platform parity](Platform-parity.md) — Cursor vs Claude install surface today
+- [Platform parity](Platform-parity.md) — shipped adapters (Cursor, Claude, Copilot, Codex)
 - [Skills and hub](skills-and-hub.md) — load order and sister skills
 - [Stability policy](Stability-policy.md) — semver and gate freeze

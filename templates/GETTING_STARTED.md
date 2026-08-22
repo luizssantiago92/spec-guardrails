@@ -4,7 +4,7 @@ You installed the **Spec Guardrails**. You do **not** need to memorize CLI comma
 
 ## What to do now
 
-1. Open your **AI coding agent** in this project (Cursor or Claude Code if you use those adapters).
+1. Open your **AI coding agent** in this project (Cursor, Claude Code, GitHub Copilot, OpenAI Codex, or any agent that reads root `AGENTS.md`).
 2. Start with **Specify** (an **agent command** — chat, not terminal):
 
    ```

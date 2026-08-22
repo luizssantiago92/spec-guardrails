@@ -50,12 +50,18 @@ jobs:
 
       - name: Verify phase references exist
         run: |
+          test -f skills/references/explore.md
+          test -f skills/references/constitution.md
           test -f skills/references/specify.md
           test -f skills/references/discuss.md
           test -f skills/references/design.md
           test -f skills/references/tasks.md
+          test -f skills/references/analyze.md
           test -f skills/references/implement.md
           test -f skills/references/validate.md
+          test -f skills/references/converge.md
+          test -f skills/references/archive.md
+          test -f skills/references/project-init.md
           test -f skills/references/memory.md
           test -f skills/references/quick-mode.md
           test -f skills/references/context-limits.md
@@ -68,6 +74,8 @@ jobs:
           test -f scripts/validate_spec.py
           test -f scripts/validate_tasks.py
           test -f scripts/validate_state.py
+          test -f scripts/validate_traceability.py
+          test -f scripts/validate_quick.py
           test -f scripts/analyze_artifacts.py
           test -f scripts/loop_plan.py
           test -f scripts/check_commit.py

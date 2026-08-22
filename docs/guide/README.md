@@ -31,7 +31,7 @@ Plain-language guides for Spec Guardrails **3.1.x**. Start at [Home](Home.md).
 | --- | --- |
 | [loop-patterns.md](loop-patterns.md) | Feature vs operational loops; `doctor` score |
 | [ecosystem.md](ecosystem.md) | Where Spec Guardrails sits |
-| [Platform-parity.md](Platform-parity.md) | Shipped adapters (Cursor, Claude) — core is agent-agnostic |
+| [Platform-parity.md](Platform-parity.md) | Shipped adapters (Cursor, Claude, Copilot, Codex) — core is agent-agnostic |
 | [brownfield-context.md](brownfield-context.md) | KG & RepoGraph deferral |
 | [FAQ.md](FAQ.md) | Common questions |
 | [credits.md](credits.md) | Full attribution |

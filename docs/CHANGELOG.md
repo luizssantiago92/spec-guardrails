@@ -6,11 +6,12 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
-## 3.1.7 — Platform adapters + doctor modes
+## 3.1.7 — Platform adapters + doctor modes + parity hardening
 
 - **Adapters shipped:** GitHub Copilot (`.github/copilot-instructions.md` + `.github/skills/`), OpenAI Codex (`.codex/AGENTS.md` + `.codex/skills/`), root `AGENTS.md` open standard
-- **Doctor:** separate **Process** and **Brakes** scores; JSON `modes` object; clearer Python banner
-- **Docs:** Home/FAQ without “repo-local” framing; Architecture and Platform-parity updated
+- **Doctor:** separate **Process** and **Brakes** scores; requires hub in all adapter trees and all platform entry contracts; JSON `modes` object; Python 3.10+ enforcement
+- **Contracts:** Cursor and Claude use the same `buildExecutionContractBlock` as Copilot/Codex (includes `classify-change` / `feature-status`)
+- **Docs:** FAQ, README, Quick-start, hub aligned with shipped adapters; Process mode naming; GitHub doc links from install next-steps
 
 ## 3.1.6 — npm sync
 

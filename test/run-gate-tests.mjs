@@ -22,8 +22,8 @@ if (!python) {
 const suiteDir = path.dirname(fileURLToPath(import.meta.url));
 
 const child = spawn(
-  python,
-  ["-m", "unittest", "discover", "-s", suiteDir, "-p", "test_*.py"],
+  python.command,
+  [...python.args, "-m", "unittest", "discover", "-s", suiteDir, "-p", "test_*.py"],
   { stdio: "inherit" },
 );
 child.on("error", (err) => {

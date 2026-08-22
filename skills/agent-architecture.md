@@ -14,7 +14,7 @@ This file is the contract and the map. Phase procedures live in `references/`; c
 
 ## Critical Rules (read before acting)
 
-**Reference files.** Phase procedures live in `references/` next to this file (`.cursor/skills/references/`, `.claude/skills/references/`). Read a reference **completely** before acting on it. Never act on a partial read. Load the working set per `references/context-limits.md` — one feature at a time, current phase only.
+**Reference files.** Phase procedures live in `references/` next to this file (`.cursor/skills/references/`, `.claude/skills/references/`, `.github/skills/references/`, `.codex/skills/references/` — use the tree your agent loads). Read a reference **completely** before acting on it. Never act on a partial read. Load the working set per `references/context-limits.md` — one feature at a time, current phase only.
 
 **Gate scripts.** Structural gates live in `.specs/guardrails/scripts/` at the project root. Run them with `python3`; never assume a project-local `scripts/` directory belongs to Spec Guardrails.
 
@@ -45,8 +45,11 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | Before confirming a spec | `python3 .specs/guardrails/scripts/validate_spec.py [feature]` |
 | Before approving tasks | `python3 .specs/guardrails/scripts/analyze_artifacts.py [feature]` |
 | Before presenting tasks for approval | `python3 .specs/guardrails/scripts/validate_tasks.py [feature]` |
+| Before Execute waves (3+ tasks) | `npx @luizsantiago/spec-guardrails loop-plan [feature]` |
 | On each commit | `python3 .specs/guardrails/scripts/check_commit.py --message "<message>"` |
 | Before declaring a feature done | `python3 .specs/guardrails/scripts/validate_state.py [feature]` |
+| Traceability (Medium+ features) | `python3 .specs/guardrails/scripts/validate_traceability.py [feature]` |
+| Quick mode evidence | `python3 .specs/guardrails/scripts/validate_quick.py [feature]` |
 | After Verify PASS | `npx @luizsantiago/spec-guardrails archive-feature [feature]` (Tier 0) |
 | Before a phase procedure (optional) | `npx @luizsantiago/spec-guardrails phase-context <phase>` |
 | After a FAIL verdict | `python3 .specs/guardrails/scripts/lessons.py add --source .specs/features/[feature]/validation.md` |
@@ -55,7 +58,7 @@ Gates accept a feature name, a feature directory, or a path to the artifact. Wit
 
 A **non-zero exit means STOP** — fix the artifact, then re-run the gate. Never continue past a failing gate.
 
-**Degraded mode.** If Python 3 or shell execution is unavailable, say so once, then perform the same checks by reading the artifact against the reference checklist. Degraded mode never lowers the standard; it only changes who runs the check.
+**Process mode (Brakes off).** If Python 3.10+ or shell execution is unavailable, say so once, then perform the same checks by reading the artifact against the reference checklist. Process mode never lowers the standard; it only changes who runs the check. Run `doctor` to see separate **Process** and **Brakes** scores.
 
 ## Phase Map
 

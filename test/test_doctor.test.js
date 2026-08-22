@@ -12,28 +12,49 @@ import {
   scoreDoctorModes,
   topDoctorSuggestions,
 } from "../lib/doctor.js";
-import { CURSORRULES_MARKER_BEGIN, CURSORRULES_MARKER_END } from "../lib/constants.js";
+import { CURSORRULES_MARKER_BEGIN, CURSORRULES_MARKER_END, SKILL_DIRS } from "../lib/constants.js";
 
 async function createTempDir(prefix) {
   return fs.mkdtemp(path.join(os.tmpdir(), prefix));
 }
 
-describe("guardrails doctor", () => {
-  it("scores installed scaffold highly", async () => {
-    const cwd = await createTempDir("doctor-good-");
-    await fs.mkdir(path.join(cwd, ".specs/features"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".specs/project"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".specs/guardrails/scripts"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".cursor/skills"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".cursor/rules"), { recursive: true });
-    await fs.writeFile(path.join(cwd, ".specs/STATE.md"), "# State\n\n- Feature: —\n");
-    await fs.writeFile(path.join(cwd, ".specs/config.yaml"), "schema: spec-driven\n");
-    await fs.writeFile(path.join(cwd, ".cursor/skills/agent-architecture.md"), "# Hub\n");
-    await fs.writeFile(path.join(cwd, ".cursor/rules/engineering-baseline.mdc"), "---\n");
+async function scaffoldDoctorInstall(cwd, { includeGateDeps = true } = {}) {
+  await fs.mkdir(path.join(cwd, ".specs/features"), { recursive: true });
+  await fs.mkdir(path.join(cwd, ".specs/project"), { recursive: true });
+  await fs.mkdir(path.join(cwd, ".specs/guardrails/scripts"), { recursive: true });
+  await fs.mkdir(path.join(cwd, ".cursor/rules"), { recursive: true });
+  await fs.writeFile(path.join(cwd, ".specs/STATE.md"), "# State\n\n- Feature: —\n");
+  await fs.writeFile(path.join(cwd, ".specs/config.yaml"), "schema: spec-driven\n");
+  await fs.writeFile(path.join(cwd, ".cursor/rules/engineering-baseline.mdc"), "---\n");
+
+  for (const dir of SKILL_DIRS) {
+    await fs.mkdir(path.join(cwd, dir), { recursive: true });
+    await fs.writeFile(path.join(cwd, dir, "agent-architecture.md"), "# Hub\n");
+  }
+
+  const markerBlock = `${CURSORRULES_MARKER_BEGIN}\n# test\n${CURSORRULES_MARKER_END}\n`;
+  await fs.writeFile(path.join(cwd, ".cursorrules"), markerBlock);
+  await fs.writeFile(path.join(cwd, ".claude/CLAUDE.md"), markerBlock);
+  await fs.writeFile(path.join(cwd, ".github/copilot-instructions.md"), markerBlock);
+  await fs.writeFile(path.join(cwd, "AGENTS.md"), markerBlock);
+  await fs.writeFile(path.join(cwd, ".codex/AGENTS.md"), markerBlock);
+
+  if (includeGateDeps) {
     await fs.copyFile(
       path.join(process.cwd(), "scripts/check_commit.py"),
       path.join(cwd, ".specs/guardrails/scripts/check_commit.py"),
     );
+    await fs.copyFile(
+      path.join(process.cwd(), "scripts/_common.py"),
+      path.join(cwd, ".specs/guardrails/scripts/_common.py"),
+    );
+  }
+}
+
+describe("guardrails doctor", () => {
+  it("scores installed scaffold highly", async () => {
+    const cwd = await createTempDir("doctor-good-");
+    await scaffoldDoctorInstall(cwd);
 
     const checks = await runDoctorChecks(cwd);
     const score = scoreDoctorChecks(checks);
@@ -164,21 +185,30 @@ describe("guardrails doctor", () => {
     assert.match(hint ?? "", /validate-state/);
   });
 
+  it("fails platform-adapters when any contract entry is missing", async () => {
+    const cwd = await createTempDir("doctor-adapters-");
+    await scaffoldDoctorInstall(cwd, { includeGateDeps: false });
+    await fs.rm(path.join(cwd, ".codex/AGENTS.md"));
+
+    const checks = await runDoctorChecks(cwd);
+    assert.equal(
+      checks.find((check) => check.id === "platform-adapters")?.pass,
+      false,
+    );
+  });
+
+  it("fails skills-hub when any adapter tree is missing the hub", async () => {
+    const cwd = await createTempDir("doctor-hub-");
+    await scaffoldDoctorInstall(cwd, { includeGateDeps: false });
+    await fs.rm(path.join(cwd, ".codex/skills/agent-architecture.md"));
+
+    const checks = await runDoctorChecks(cwd);
+    assert.equal(checks.find((check) => check.id === "skills-hub")?.pass, false);
+  });
+
   it("scores Process and Brakes modes separately", async () => {
     const cwd = await createTempDir("doctor-modes-");
-    await fs.mkdir(path.join(cwd, ".specs/features"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".specs/project"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".specs/guardrails/scripts"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".cursor/skills"), { recursive: true });
-    await fs.mkdir(path.join(cwd, ".cursor/rules"), { recursive: true });
-    await fs.writeFile(path.join(cwd, ".specs/STATE.md"), "# State\n\n- Feature: —\n");
-    await fs.writeFile(path.join(cwd, ".specs/config.yaml"), "schema: spec-driven\n");
-    await fs.writeFile(path.join(cwd, ".cursor/skills/agent-architecture.md"), "# Hub\n");
-    await fs.writeFile(path.join(cwd, ".cursor/rules/engineering-baseline.mdc"), "---\n");
-    await fs.writeFile(
-      path.join(cwd, ".cursorrules"),
-      `${CURSORRULES_MARKER_BEGIN}\n# test\n${CURSORRULES_MARKER_END}\n`,
-    );
+    await scaffoldDoctorInstall(cwd);
 
     const checks = await runDoctorChecks(cwd);
     const modes = scoreDoctorModes(checks);

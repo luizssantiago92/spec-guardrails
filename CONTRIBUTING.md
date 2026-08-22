@@ -10,7 +10,7 @@ Thanks for improving the Spec Guardrails.
 
 ## Gate stability (0.7.x)
 
-Structural gates are frozen for the 0.7 line. See [ADR 0001](docs/adr/0001-harness-freeze-v0.7.md) and [`prd/gate-stability.md`](prd/gate-stability.md).
+Structural gates follow the freeze line documented in [Gates and guarantees](Gates-and-guarantees.md) and ADR 0001 (gate contract lineage — not the old package 0.7.x label):
 
 If you believe a gate false-passes:
 

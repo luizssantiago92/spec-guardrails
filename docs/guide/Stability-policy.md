@@ -30,7 +30,7 @@ Structural Python gates under `.specs/guardrails/scripts/` follow the freeze lin
 
 - Zero runtime npm dependencies for the CLI
 - Progressive skill loading (one phase guide per turn)
-- Repo-local memory under `.specs/`
+- Persistent project memory under `.specs/`
 - English for code, tests, commits, and `.specs/` artifacts
 
 ## Related

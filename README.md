@@ -37,7 +37,7 @@ npx @luizsantiago/spec-guardrails install
 | `.specs/STATE.md`, `.specs/features/`, … | Project memory (any agent) |
 | `.cursor/rules/engineering-baseline.mdc` | Always-on Cursor rule |
 
-**Agent environments:** the **core** (`.specs/`, CLI, hub, Python gates) works with any AI agent that reads repo instructions and runs shell commands. Install ships Cursor + Claude Code adapters today; Codex, GitHub Copilot, and others are documented in [Architecture](docs/guide/Architecture.md).
+**Agent environments:** the **core** (`.specs/`, CLI, hub, Python gates) works with any AI agent. **Install** ships adapters for **Cursor, Claude Code, GitHub Copilot, and OpenAI Codex** (plus root `AGENTS.md`). See [Architecture](docs/guide/Architecture.md).
 
 Re-run `install` anytime to refresh skills; your `.specs/` decisions and `STATE.md` are kept.
 
@@ -60,7 +60,7 @@ Four ideas stack — full explanation: **[Concepts](docs/guide/concepts.md)**
 | **Brakes / Gates** | Structural stop-gates | Python scripts exit non-zero when paperwork or evidence is missing |
 | **Loop** | Execute in waves | `loop-plan` picks the next jobs; sub-agents when files don’t overlap |
 | **Graph** | Parallel task map | `task-graph.md` — safe parallelism without file collisions |
-| **Memory** | Repo-local state | `.specs/` — specs, decisions, and handoff survive across chats |
+| **Memory** | Persistent project state | `.specs/` — specs, decisions, and handoff survive across chats |
 
 **You** approve specs and tasks. **The agent** runs gates and implements. **Gates** exit non-zero when paperwork or evidence is missing.
 
@@ -186,7 +186,7 @@ Full reference: **[Gates](docs/guide/gates.md)** · [Guarantees matrix](docs/gui
 | [Concepts](docs/guide/concepts.md) | Spec-driven + guardrails + loop + graph |
 | [Skills and hub](docs/guide/skills-and-hub.md) | What each skill file does |
 | [Gates](docs/guide/gates.md) | How each gate works |
-| [Platform parity](docs/guide/Platform-parity.md) | Shipped adapters (Cursor, Claude Code) — core works with any agent |
+| [Platform parity](docs/guide/Platform-parity.md) | Shipped adapters (Cursor, Claude, Copilot, Codex) — core works with any agent |
 | [FAQ](docs/guide/FAQ.md) | Common questions |
 | [Changelog](docs/CHANGELOG.md) | Full version history |
 
@@ -202,7 +202,7 @@ npx @luizsantiago/spec-guardrails install
 
 | Version | What you gain |
 | --- | --- |
-| **3.1.x** | Doctor STATE fix; `validate-traceability` / `validate-quick`; `classify-change` / `feature-status`; Claude `CLAUDE.md` |
+| **3.1.x** | Copilot/Codex/AGENTS.md adapters; doctor Process + Brakes scores; unified execution contracts; `validate-traceability` / `validate-quick`; `classify-change` / `feature-status` |
 | **3.0.x** | Final name Spec Guardrails; `.specs/guardrails/`; no dual-path ([Migration](docs/guide/Migration.md)) |
 | **2.2.x** | Seatbelt-era paths & markers; `doctor` Execute hints; docs split from README |
 | **2.1.x** | `loop-plan` + parallel `/loop` waves |

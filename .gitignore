@@ -9,8 +9,15 @@ __pycache__/
 .env.*
 !.env.example
 
+# Maintainer-local (never commit)
+.local/
+
 # Installer output in this source repo (consumers commit their own .specs/)
 .cursor/
 .claude/
+.codex/
 .specs/
 .cursorrules
+AGENTS.md
+.github/copilot-instructions.md
+.github/skills/

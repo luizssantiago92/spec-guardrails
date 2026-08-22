@@ -4,12 +4,19 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 ## Unreleased
 
-- **Guarantees matrix:** [Guarantees-matrix.md](guide/Guarantees-matrix.md) — product promises → mechanisms; Process vs Brakes modes; README hero matrix
-- **Architecture:** [Architecture.md](guide/Architecture.md) — agent-agnostic Core + platform adapters; updated [Platform parity](guide/Platform-parity.md)
-- **Docs positioning:** README/Home/FAQ/concepts aligned; dual mode as intentional strategy
-- **Removed:** companion fullstack-floor-map doc and in-repo links (solo product until domain atlases return)
-- Prior unreleased: tagline, P→S→R, honest Python / Brakes naming ([Home](guide/Home.md), [FAQ](guide/FAQ.md), [Concepts](guide/concepts.md))
-- **Positioning refinement:** Process (Node) vs Brakes (Node + Python gates) as two deliberate product modes; gates stay Python; agent-agnostic core + adapter roadmap (Codex, GitHub Copilot); install/CLI copy aligned
+—
+
+## 3.1.5 — npm description (tagline-first)
+
+- **npm `description`:** lead with honest-agents tagline; Process vs Brakes; Guarantees matrix; any AI agent (no repo-local framing)
+
+## 3.1.4 — npm description positioning
+
+- Prior publish line; superseded by 3.1.5 tagline-first `description`
+
+## 3.1.3 — Release patch
+
+- Version bump for docs positioning publish line
 
 ## 3.1.1 — Release patch
 

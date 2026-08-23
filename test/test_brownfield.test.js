@@ -103,4 +103,14 @@ describe("brownfield project-init", () => {
 
     await assert.rejects(() => fs.access(path.join(cwd, ".specs/STATE.md")));
   });
+
+  it("rejects unsafe manual domain slugs", async () => {
+    const cwd = await createTempDir("project-init-domain-");
+    await fs.writeFile(path.join(cwd, "package.json"), JSON.stringify({ name: "app" }));
+
+    await assert.rejects(
+      () => projectInit({ cwd, domains: ["../evil"], skipProject: true }),
+      /Invalid domain slug/,
+    );
+  });
 });

@@ -6,6 +6,15 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.1.10 — Path safety leftovers + Actions publish
+
+- Confine `validate-quick` to `.specs/quick/NNN-slug` (reject `..` and outside paths)
+- `project-init --domains` uses `assertSafeDomainSlug`
+- Doctor Process score treats `config.yaml` as optional (aligns with hub)
+- Regression: Process score stays ready without Cursor baseline / config
+- Hub Complexity Router lists both Quick gates (`check_commit` + `validate-quick`)
+- Actions publish: no auto bump — publishes version already on `main` after merge; refuse duplicate npm versions; tag `vX.Y.Z`
+
 ## 3.1.9 — Audit hardening
 
 - Quick gate contract unified in hub (`check_commit.py` + `validate-quick`)

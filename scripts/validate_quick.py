@@ -22,7 +22,7 @@ import re
 import sys
 from pathlib import Path
 
-from _common import Report, visible_markdown
+from _common import Report, is_valid_feature_id, visible_markdown
 
 GATE = "validate-quick"
 QUICK_DIR = Path(".specs/quick")
@@ -43,38 +43,65 @@ EVIDENCE_LINE = re.compile(
 )
 
 
+def _fail_usage(message: str, target: str = ".") -> None:
+    print(f"[{GATE}] USAGE - {message}", file=sys.stderr)
+    raise SystemExit(2)
+
+
+def _quick_dir_under_root(quick_dir: Path, root: Path) -> bool:
+    quick_root = (root / QUICK_DIR).resolve()
+    try:
+        resolved = quick_dir.resolve()
+        relative = resolved.relative_to(quick_root)
+    except ValueError:
+        return False
+    if not relative.parts:
+        return False
+    return is_valid_feature_id(relative.parts[0])
+
+
 def resolve_quick_dir(raw: str | None, root: Path = Path(".")) -> Path:
     if raw:
+        if raw in (".", "..") or ".." in Path(raw).parts:
+            _fail_usage(f"invalid quick id: {raw} (expected NNN-slug)", raw)
+
         candidate = Path(raw).expanduser()
+
+        if candidate.is_file():
+            quick_dir = candidate.parent
+            if not _quick_dir_under_root(quick_dir, root):
+                _fail_usage(f"no such quick folder: {raw}", raw)
+            return quick_dir
+
         if candidate.is_dir():
+            if not _quick_dir_under_root(candidate, root):
+                _fail_usage(f"no such quick folder: {raw}", raw)
             return candidate
+
+        if not is_valid_feature_id(raw):
+            _fail_usage(f"invalid quick id: {raw} (expected NNN-slug)", raw)
+
         named = root / QUICK_DIR / raw
         if named.is_dir():
             return named
-        print(f"[{GATE}] USAGE - no such quick folder: {raw}", file=sys.stderr)
-        raise SystemExit(2)
+
+        _fail_usage(f"no such quick folder: {raw}", raw)
 
     base = root / QUICK_DIR
     if not base.is_dir():
-        print(
-            f"[{GATE}] USAGE - {base} missing — create .specs/quick/NNN-slug/ first",
-            file=sys.stderr,
-        )
-        raise SystemExit(2)
+        _fail_usage(f"{base} missing — create .specs/quick/NNN-slug/ first", str(base))
 
-    folders = sorted(p for p in base.iterdir() if p.is_dir())
+    folders = sorted(
+        p for p in base.iterdir() if p.is_dir() and is_valid_feature_id(p.name)
+    )
     if len(folders) == 1:
         return folders[0]
     if not folders:
-        print(f"[{GATE}] USAGE - no quick folders under {base}", file=sys.stderr)
-        raise SystemExit(2)
+        _fail_usage(f"no quick folders under {base}", str(base))
 
     listed = "\n".join(f"            {p.name}" for p in folders)
-    print(
-        f"[{GATE}] USAGE - {len(folders)} quick folders — name one:\n{listed}",
-        file=sys.stderr,
-    )
-    raise SystemExit(2)
+    _fail_usage(f"{len(folders)} quick folders — name one:\n{listed}", str(base))
+    raise AssertionError("unreachable")
 
 
 def field_map(text: str) -> dict[str, str]:

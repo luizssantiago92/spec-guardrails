@@ -4,6 +4,10 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 ## Unreleased
 
+—
+
+## 3.1.9 — Audit hardening
+
 - Quick gate contract unified in hub (`check_commit.py` + `validate-quick`)
 - Path safety for feature IDs and domain slugs (Node + Python)
 - Doctor Process score no longer penalizes missing Cursor baseline rule

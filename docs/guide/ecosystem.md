@@ -9,7 +9,7 @@ Where Spec Guardrails sits among harness, loop, and graph engineering — and wh
 | **Runtime** (sessions, tools, models, desktop) | DeepCode, harness-foundry | Adjacent — we do not ship a runtime |
 | **Operational loops** (cadence, triage, CI, cost) | loop-engineering | Complementary — see [loop-patterns.md](loop-patterns.md) |
 | **Spec + gates + memory** | **@luizsantiago/spec-guardrails** | **This package** — skills, `.specs/`, Python gates, [Guarantees matrix](Guarantees-matrix.md) |
-| **Atlas companions** (optional specialization) | `@luizsantiago/tech-atlas` (first — tech engineering) | Route domain context for agents; solo or Lego with Guardrails — see [Companion-tech-atlas.md](Companion-tech-atlas.md). Guardrails does **not** require an Atlas. |
+| **Atlas companions** (optional specialization) | `@luizsantiago/tech-atlas` (first — tech engineering) | Route domain context for agents; solo or Lego with Guardrails — see [Companion-atlas-family.md](Companion-atlas-family.md) and [Companion-tech-atlas.md](Companion-tech-atlas.md). Guardrails does **not** require an Atlas. |
 | **Code context** (repo graphs, search) | RepoGraph | Optional brownfield plugin — not bundled |
 
 ## This package

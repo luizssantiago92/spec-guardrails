@@ -43,9 +43,11 @@ Re-run `install` anytime to refresh skills; your `.specs/` decisions and `STATE.
 
 ### Optional Atlas companions (Lego)
 
-Spec Guardrails is a **complete product alone**. Optional **Atlas** packages add domain specialization (Path Domains, catalogs). The first is [**Tech Atlas**](https://github.com/luizssantiago92/tech-atlas) (`@luizsantiago/tech-atlas`) — tech engineering context routing.
+Spec Guardrails is a **complete product alone**. Optional **Atlas** packages add domain specialization (Path Domains, catalogs). The first is [**Tech Atlas**](https://github.com/luizssantiago92/tech-atlas) (`@luizsantiago/tech-atlas` **0.6.x**) — tech engineering context routing.
 
-When paired, install Guardrails first, then the Atlas. Re-running Guardrails `install` **preserves** companion assets: Atlas skills/catalog, `.specs/atlas/`, mirrored `validate_layer_routing.py`, and `.specs/desks/` if present. Contract: [Companion: Tech Atlas](docs/guide/Companion-tech-atlas.md).
+When paired, install Guardrails first, then the Atlas. Each Atlas registers in **`.specs/companions/INDEX.json`** on `install`. Re-running Guardrails `install` **preserves** companion assets: Atlas skills/catalog, `.specs/tech-atlas/` (legacy `.specs/atlas/` still honored), namespaced gate mirror `validate_tech_atlas_routing.py`, and `.specs/desks/` if present. `doctor` lists installed companions from the INDEX when paired.
+
+Contracts: [Companion: Atlas family](docs/guide/Companion-atlas-family.md) · [Companion: Tech Atlas](docs/guide/Companion-tech-atlas.md).
 
 | Need | Command |
 | --- | --- |
@@ -196,6 +198,7 @@ Full reference: **[Gates](docs/guide/gates.md)** · [Guarantees matrix](docs/gui
 | [Skills and hub](docs/guide/skills-and-hub.md) | What each skill file does |
 | [Gates](docs/guide/gates.md) | How each gate works |
 | [Platform parity](docs/guide/Platform-parity.md) | Shipped adapters (Cursor, Claude, Copilot, Codex) — core works with any agent |
+| [Companion: Atlas family](docs/guide/Companion-atlas-family.md) | Optional Lego companions (Tech Atlas first) |
 | [FAQ](docs/guide/FAQ.md) | Common questions |
 | [Changelog](docs/CHANGELOG.md) | Full version history |
 
@@ -211,7 +214,7 @@ npx @luizsantiago/spec-guardrails install
 
 | Version | What you gain |
 | --- | --- |
-| **3.1.x** | Copilot/Codex/AGENTS.md adapters; doctor Process + Brakes scores; unified execution contracts; `validate-traceability` / `validate-quick`; `classify-change` / `feature-status` |
+| **3.1.x** | Copilot/Codex/AGENTS.md adapters; doctor Process + Brakes scores; Atlas companion INDEX + probes; `validate-traceability` / `validate-quick`; `classify-change` / `feature-status` |
 | **3.0.x** | Final name Spec Guardrails; `.specs/guardrails/`; no dual-path ([Migration](docs/guide/Migration.md)) |
 | **2.2.x** | Seatbelt-era paths & markers; `doctor` Execute hints; docs split from README |
 | **2.1.x** | `loop-plan` + parallel `/loop` waves |

@@ -91,11 +91,14 @@ Install Python when you want gates to fire; run `doctor` to confirm Brakes are a
 | --- | --- | --- | --- |
 | Intent exists before code | `validate-spec` | Brakes | Hard gate |
 | Tasks derive from requirements | `analyze-artifacts` | Brakes | Hard gate |
+| Task shape and graph when needed | `validate-tasks` | Brakes | Hard gate |
 | Requirements stay traceable | `validate-traceability` | Brakes | Hard gate |
+| Quick evidence is complete | `validate-quick` | Brakes | Hard gate |
 | Dependencies respected in Execute | `loop-plan` | Brakes | Hard gate |
 | Parallel work is file-safe | `task-graph.md` + `validate-tasks` | Process + Brakes | Artifact + gate |
 | Completion cites evidence | `validate-state` | Brakes | Hard gate |
 | Commits follow policy | `check-commit` | Brakes | Hard gate |
+| Lessons grounded after FAIL | `lessons` | Brakes | Hard gate |
 | Verification is independent | `/verify` + `validate.md` | Process | Phase skill |
 | Knowledge survives chats | `.specs/` + `archive-feature` | Process | Install + CLI |
 

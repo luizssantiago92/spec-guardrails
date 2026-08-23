@@ -218,5 +218,5 @@ Full CLI list: `npx @luizsantiago/spec-guardrails --help`.
 - [Concepts](concepts.md) — how spec-driven, loop, and graph fit together
 - [Skills and hub](skills-and-hub.md) — what each skill file does
 - [Gates reference](gates.md) — what the agent runs at each phase
-- [Platform parity](Platform-parity.md) — Cursor vs Claude Code
+- [Platform parity](Platform-parity.md) — Cursor, Claude Code, Copilot, Codex, and AGENTS.md
 - [Quick start](Quick-start.md) — first ten minutes

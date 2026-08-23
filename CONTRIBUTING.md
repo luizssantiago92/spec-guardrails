@@ -10,7 +10,7 @@ Thanks for improving the Spec Guardrails.
 
 ## Gate stability (0.7.x)
 
-Structural gates follow the freeze line documented in [Gates and guarantees](Gates-and-guarantees.md) and ADR 0001 (gate contract lineage — not the old package 0.7.x label):
+Structural gates follow the freeze line documented in [Gates and guarantees](docs/guide/Gates-and-guarantees.md) and ADR 0001 (gate contract lineage — not the old package 0.7.x label):
 
 If you believe a gate false-passes:
 

@@ -750,7 +750,7 @@ describe("gate execution", () => {
     try {
       await install({ cwd, silent: true });
 
-      const featureDir = path.join(cwd, ".specs/features/auth");
+      const featureDir = path.join(cwd, ".specs/features/001-auth");
       await fs.mkdir(featureDir, { recursive: true });
       await fs.writeFile(
         path.join(featureDir, "spec.md"),
@@ -773,7 +773,7 @@ Let users sign in with email and password.
         "utf8",
       );
 
-      const code = await runGate("validate-spec", ["auth"], {
+      const code = await runGate("validate-spec", ["001-auth"], {
         cwd,
         stdio: "ignore",
       });

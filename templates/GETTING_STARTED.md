@@ -20,7 +20,7 @@ You installed the **Spec Guardrails**. You do **not** need to memorize CLI comma
 
 ## Agent commands (chat — not terminal)
 
-Type these in **chat** in your agent environment. They load phase procedures from the installed skills tree (e.g. `.cursor/skills/references/`). In **Brakes mode**, the agent runs Python gates for you.
+Type these in **chat** in your agent environment. They load phase procedures from the installed skills tree (e.g. `.cursor/skills/references/`, `.github/skills/references/`, `.codex/skills/references/` — use the tree your agent loads). In **Brakes mode**, the agent runs Python gates for you.
 
 | Command | When |
 | --- | --- |
@@ -55,7 +55,8 @@ Everything else (`loop-plan`, `validate-tasks`, `check-commit`, …) is normally
 
 | Path | Purpose |
 | --- | --- |
-| `.cursor/skills/agent-architecture.md` | Hub — phase map |
+| `*/skills/agent-architecture.md` | Hub — phase map (`.cursor/`, `.claude/`, `.github/`, `.codex/`) |
+| Root `AGENTS.md` | Open-standard entry |
 | `.specs/STATE.md` | Where you left off |
 | `.specs/features/` | One folder per feature |
 | `.specs/guardrails/scripts/` | Automatic gates |

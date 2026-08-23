@@ -58,6 +58,14 @@ jobs:
           VERSION_BUMP: ${{ inputs.version }}
         run: npm version "$VERSION_BUMP" -m "chore release"
 
+      - name: Require CHANGELOG section for package version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if ! grep -q "^## ${VERSION}" docs/CHANGELOG.md; then
+            echo "docs/CHANGELOG.md must include a ## ${VERSION} section before publish."
+            exit 1
+          fi
+
       - name: Publish to npm
         run: npm publish --access public
         env:

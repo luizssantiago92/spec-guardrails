@@ -82,12 +82,15 @@ Dumping every skill + reference every turn ≈ **31k tokens** — see [Token eff
 
 | Path | Contents |
 | --- | --- |
-| `.cursor/skills/agent-architecture.md` | Hub |
-| `.cursor/skills/references/*.md` | Phase procedures |
-| `.cursor/skills/*.md` | Sister skills |
-| `.claude/skills/` | Same tree for Claude Code |
-| `.cursor/rules/engineering-baseline.mdc` | Always-on rule |
+| `.cursor/skills/agent-architecture.md` | Hub (Cursor) |
+| `.claude/skills/` | Same tree (Claude Code) |
+| `.github/skills/` | Same tree (GitHub Copilot) |
+| `.codex/skills/` | Same tree (OpenAI Codex) |
+| `*/skills/references/*.md` | Phase procedures |
+| `*/skills/*.md` | Sister skills |
+| `.cursor/rules/engineering-baseline.mdc` | Cursor always-on rule |
 | `.specs/guardrails/scripts/` | Python gate scripts |
+| Root `AGENTS.md` | Open-standard entry for agent-agnostic tools |
 
 ## Related
 

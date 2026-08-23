@@ -80,7 +80,7 @@ EXPLORE (optional) → SPECIFY → DISCUSS (conditional) → DESIGN (optional) �
 | **Archive** | After Verify PASS | `references/archive.md` | `git-handoff.md` | `archive-feature` |
 | **Converge** | On drift | `references/converge.md` | — | `analyze_artifacts.py` |
 | **Handoff** | Yes | `references/memory.md` | `git-handoff.md` | — |
-| **Quick** | Alternative | `references/quick-mode.md` | — | `check_commit.py` |
+| **Quick** | Alternative | `references/quick-mode.md` | — | `check_commit.py`, `validate_quick.py` |
 | **Context** | Always | `references/context-limits.md` | — | — |
 | **Sub-agents** | When batched | `references/sub-agents.md` | `task-graph-engineering.md` | — |
 | **Lessons** | On FAIL | `references/lessons.md` | — | `lessons.py` |
@@ -114,7 +114,7 @@ Complexity determines depth. Do not run every phase on every change.
 
 **Rules**
 
-- **Specify and Verify are always required on the full pipeline** — you must know WHAT was asked and prove it was delivered. **Quick** is the exception: the express lane in `references/quick-mode.md` (describe → implement → verify → commit) with only `check_commit.py` as a structural gate.
+- **Specify and Verify are always required on the full pipeline** — you must know WHAT was asked and prove it was delivered. **Quick** is the exception: the express lane in `references/quick-mode.md` (describe → implement → verify → commit) with `check_commit.py` on each commit and `validate-quick` as the close/evidence gate.
 - **Design is skipped** when there are no architectural decisions and no new patterns.
 - **Tasks is skipped** when there are ≤3 obvious steps.
 - **Discuss is triggered inside Specify** when the feature touches persistence, external calls, auth, payments, concurrency, or state transitions, or when the owner's intent is ambiguous.

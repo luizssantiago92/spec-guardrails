@@ -96,6 +96,8 @@ class Report:
 
 FEATURES_DIR = Path(".specs/features")
 
+FEATURE_ID_PATTERN = re.compile(r"^\d{3}-[a-z0-9][a-z0-9-]*$")
+
 REQUIREMENT_ID = re.compile(
     r"^(?P<level>#{2,6})\s*(?P<id>[A-Z][A-Z0-9]{1,9}-\d{2,4})\b",
     re.MULTILINE,
@@ -215,6 +217,22 @@ def _fail_usage(gate: str, target: str, message: str) -> None:
     sys.exit(EXIT_USAGE)
 
 
+def is_valid_feature_id(feature_id: str) -> bool:
+    return bool(FEATURE_ID_PATTERN.match(feature_id))
+
+
+def _feature_dir_under_root(feature_dir: Path, root: Path) -> bool:
+    features_root = (root / FEATURES_DIR).resolve()
+    try:
+        resolved = feature_dir.resolve()
+        relative = resolved.relative_to(features_root)
+    except ValueError:
+        return False
+    if not relative.parts:
+        return False
+    return is_valid_feature_id(relative.parts[0])
+
+
 def list_features(root: Path = Path(".")) -> list[Path]:
     """Return every feature directory under `.specs/features`, sorted by name."""
 
@@ -223,7 +241,11 @@ def list_features(root: Path = Path(".")) -> list[Path]:
     if not base.is_dir():
         return []
 
-    return sorted(path for path in base.iterdir() if path.is_dir())
+    return sorted(
+        path
+        for path in base.iterdir()
+        if path.is_dir() and is_valid_feature_id(path.name)
+    )
 
 
 def resolve_feature_dir(
@@ -231,18 +253,37 @@ def resolve_feature_dir(
 ) -> Path:
     """Resolve a feature directory from a path, a bare feature name, or context.
 
-    Accepts `.specs/features/auth/spec.md`, `.specs/features/auth`, `auth`, or
-    nothing at all when the project has exactly one feature.
+    Accepts `.specs/features/001-auth/spec.md`, `.specs/features/001-auth`,
+    `001-auth`, or nothing at all when the project has exactly one feature.
     """
 
     if raw:
+        if raw in (".", "..") or ".." in Path(raw).parts:
+            _fail_usage(
+                gate,
+                raw,
+                f"invalid feature id: {raw} (expected NNN-slug)",
+            )
+
         candidate = Path(raw).expanduser()
 
         if candidate.is_file():
-            return candidate.parent
+            feature_dir = candidate.parent
+            if not _feature_dir_under_root(feature_dir, root):
+                _fail_usage(gate, raw, f"no such feature or path: {raw}")
+            return feature_dir
 
         if candidate.is_dir():
+            if not _feature_dir_under_root(candidate, root):
+                _fail_usage(gate, raw, f"no such feature or path: {raw}")
             return candidate
+
+        if not is_valid_feature_id(raw):
+            _fail_usage(
+                gate,
+                raw,
+                f"invalid feature id: {raw} (expected NNN-slug)",
+            )
 
         named = root / FEATURES_DIR / raw
         if named.is_dir():

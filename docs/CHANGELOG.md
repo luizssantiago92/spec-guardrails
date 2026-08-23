@@ -4,7 +4,16 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 ## Unreleased
 
-—
+- Quick gate contract unified in hub (`check_commit.py` + `validate-quick`)
+- Path safety for feature IDs and domain slugs (Node + Python)
+- Doctor Process score no longer penalizes missing Cursor baseline rule
+- Windows Python resolution prefers `py -3`; stricter version parse
+- Docs parity for four adapters; README guarantees matrix rows; CONTRIBUTING link fix
+- Publish workflow requires CHANGELOG section matching `package.json` version
+
+## 3.1.8 — Automated release bump
+
+- Version bump published via GitHub Actions (`chore release`); no additional product delta beyond 3.1.7 line
 
 ## 3.1.7 — Platform adapters + doctor modes + parity hardening
 

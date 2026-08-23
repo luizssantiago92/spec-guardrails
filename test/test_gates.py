@@ -1061,17 +1061,17 @@ class FeatureResolveTest(unittest.TestCase):
         return directory
 
     def test_auto_detects_the_only_feature(self):
-        feature = self._write_feature("auth")
+        feature = self._write_feature("001-auth")
         resolved = _common.resolve_feature_dir(None, "validate-spec", root=self.root)
         self.assertEqual(resolved.resolve(), feature.resolve())
 
     def test_resolves_a_bare_feature_name(self):
-        feature = self._write_feature("oauth-2_0")
-        resolved = _common.resolve_feature_dir("oauth-2_0", "validate-spec", root=self.root)
+        feature = self._write_feature("003-oauth-20")
+        resolved = _common.resolve_feature_dir("003-oauth-20", "validate-spec", root=self.root)
         self.assertEqual(resolved.resolve(), feature.resolve())
 
     def test_resolves_a_path_to_the_artifact(self):
-        feature = self._write_feature("auth")
+        feature = self._write_feature("001-auth")
         path, text = _common.resolve_artifact(
             str(feature / "spec.md"), "spec.md", "validate-spec", root=self.root
         )
@@ -1094,26 +1094,38 @@ class FeatureResolveTest(unittest.TestCase):
         self.assertIn("no features found", output)
 
     def test_multiple_features_require_an_explicit_name(self):
-        self._write_feature("auth")
-        self._write_feature("billing")
+        self._write_feature("001-auth")
+        self._write_feature("002-billing")
         code, output = _capture_exit(
             lambda: _common.resolve_feature_dir(None, "validate-spec", root=self.root)
         )
         self.assertEqual(code, _common.EXIT_USAGE)
         self.assertIn("2 features found", output)
-        self.assertIn("auth", output)
-        self.assertIn("billing", output)
+        self.assertIn("001-auth", output)
+        self.assertIn("002-billing", output)
 
     def test_unknown_feature_name_is_a_usage_error(self):
-        self._write_feature("auth")
+        self._write_feature("001-auth")
         code, output = _capture_exit(
             lambda: _common.resolve_feature_dir("nope", "validate-spec", root=self.root)
         )
         self.assertEqual(code, _common.EXIT_USAGE)
-        self.assertIn("no such feature or path", output)
+        self.assertIn("invalid feature id", output)
+
+    def test_rejects_path_traversal_feature_ids(self):
+        self.features.mkdir(parents=True)
+        for raw in ("..", ".", "foo/../.."):
+            with self.subTest(raw=raw):
+                code, output = _capture_exit(
+                    lambda raw=raw: _common.resolve_feature_dir(
+                        raw, "validate-spec", root=self.root
+                    )
+                )
+                self.assertEqual(code, _common.EXIT_USAGE)
+                self.assertIn("invalid feature id", output)
 
     def test_wrong_artifact_filename_is_a_usage_error(self):
-        feature = self._write_feature("auth", tasks=VALID_TASKS)
+        feature = self._write_feature("001-auth", tasks=VALID_TASKS)
         code, output = _capture_exit(
             lambda: _common.resolve_artifact(
                 str(feature / "tasks.md"), "spec.md", "validate-spec", root=self.root
@@ -1123,29 +1135,29 @@ class FeatureResolveTest(unittest.TestCase):
         self.assertIn("expected spec.md", output)
 
     def test_validate_spec_main_auto_detects_from_cwd(self):
-        self._write_feature("auth")
+        self._write_feature("001-auth")
         with _chdir(self.root):
             code, _ = _run_main(lambda: validate_spec.main([]))
         self.assertEqual(code, 0)
 
     def test_validate_spec_main_accepts_a_feature_name(self):
-        self._write_feature("auth")
-        self._write_feature("billing")
+        self._write_feature("001-auth")
+        self._write_feature("002-billing")
         with _chdir(self.root):
-            code, _ = _run_main(lambda: validate_spec.main(["billing"]))
+            code, _ = _run_main(lambda: validate_spec.main(["002-billing"]))
         self.assertEqual(code, 0)
 
     def test_validate_spec_main_lists_candidates_when_ambiguous(self):
-        self._write_feature("auth")
-        self._write_feature("billing")
+        self._write_feature("001-auth")
+        self._write_feature("002-billing")
         with _chdir(self.root):
             code, output = _capture_exit(lambda: validate_spec.main([]))
         self.assertEqual(code, _common.EXIT_USAGE)
-        self.assertIn("auth", output)
-        self.assertIn("billing", output)
+        self.assertIn("001-auth", output)
+        self.assertIn("002-billing", output)
 
     def test_three_tasks_without_task_graph_fails_on_disk(self):
-        feature = self._write_feature("auth", tasks="""# Tasks
+        feature = self._write_feature("001-auth", tasks="""# Tasks
 
 ### T1: Create session token module
 - **Requirement**: REQ-001
@@ -1177,7 +1189,7 @@ class FeatureResolveTest(unittest.TestCase):
         self.assertIn("task-graph.md", output)
 
     def test_three_tasks_with_task_graph_passes_on_disk(self):
-        feature = self._write_feature("auth", tasks="""# Tasks
+        feature = self._write_feature("001-auth", tasks="""# Tasks
 
 ### T1: Create session token module
 - **Requirement**: REQ-001
@@ -1209,16 +1221,16 @@ class FeatureResolveTest(unittest.TestCase):
         self.assertEqual(code, 0)
 
     def test_validate_tasks_main_accepts_a_feature_name(self):
-        self._write_feature("auth", tasks=VALID_TASKS)
+        self._write_feature("001-auth", tasks=VALID_TASKS)
         with _chdir(self.root):
-            code, _ = _run_main(lambda: validate_tasks.main(["auth"]))
+            code, _ = _run_main(lambda: validate_tasks.main(["001-auth"]))
         self.assertEqual(code, 0)
 
     def test_validate_state_main_accepts_a_feature_name(self):
-        directory = self._write_feature("auth")
+        directory = self._write_feature("001-auth")
         (directory / "validation.md").write_text(VALID_VALIDATION, encoding="utf-8")
         with _chdir(self.root):
-            code, _ = _run_main(lambda: validate_state.main(["auth"]))
+            code, _ = _run_main(lambda: validate_state.main(["001-auth"]))
         self.assertEqual(code, 0)
 
 

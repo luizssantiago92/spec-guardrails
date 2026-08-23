@@ -1,19 +1,11 @@
 name: Publish to npm
 
+# Publishes the version already on main (no bump here).
+# Owner flow: merge PR with package.json + CHANGELOG ## x.y.z → Actions → Publish.
 on:
   release:
     types: [published]
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Version bump type (patch, minor, major)"
-        required: true
-        default: patch
-        type: choice
-        options:
-          - patch
-          - minor
-          - major
 
 jobs:
   publish:
@@ -32,6 +24,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.event_name == 'workflow_dispatch' && 'main' || github.ref }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -47,22 +40,18 @@ jobs:
       - name: Run tests
         run: npm test
 
-      - name: Configure git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump version (manual dispatch)
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          VERSION_BUMP: ${{ inputs.version }}
-        run: npm version "$VERSION_BUMP" -m "chore release"
-
       - name: Require CHANGELOG section for package version
+        id: version
         run: |
           VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           if ! grep -q "^## ${VERSION}" docs/CHANGELOG.md; then
             echo "docs/CHANGELOG.md must include a ## ${VERSION} section before publish."
+            echo "Bump version + CHANGELOG in a PR, merge to main, then re-run this workflow."
+            exit 1
+          fi
+          if npm view "@luizsantiago/spec-guardrails@$VERSION" version 2>/dev/null; then
+            echo "npm already has @luizsantiago/spec-guardrails@$VERSION — refuse duplicate publish."
             exit 1
           fi
 
@@ -71,6 +60,16 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Push version tag (manual dispatch)
-        if: github.event_name == 'workflow_dispatch'
-        run: git push origin main --follow-tags
+      - name: Create and push git tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          TAG="v${VERSION}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists — skip."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG" -m "Release $TAG"
+            git push origin "$TAG"
+          fi

@@ -79,7 +79,22 @@ describe("guardrails doctor", () => {
     const checks = await runDoctorChecks(cwd);
     const config = checks.find((check) => check.id === "config");
     assert.equal(config?.pass, false);
+    assert.equal(config?.optional, true);
     assert.match(config?.suggest ?? "", /init-config/);
+  });
+
+  it("Process score ignores missing config and Cursor baseline", async () => {
+    const cwd = await createTempDir("doctor-process-optional-");
+    await scaffoldDoctorInstall(cwd);
+    await fs.rm(path.join(cwd, ".specs/config.yaml"));
+    await fs.rm(path.join(cwd, ".cursor/rules/engineering-baseline.mdc"));
+
+    const checks = await runDoctorChecks(cwd);
+    const modes = scoreDoctorModes(checks);
+    assert.equal(checks.find((check) => check.id === "config")?.optional, true);
+    assert.equal(checks.find((check) => check.id === "baseline-rule")?.optional, true);
+    assert.ok(modes.process.score >= 80);
+    assert.equal(modes.process.ready, true);
   });
 
   it("requires task-graph.md when active feature has 3+ tasks", async () => {

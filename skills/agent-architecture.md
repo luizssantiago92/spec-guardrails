@@ -104,7 +104,7 @@ Complexity determines depth. Do not run every phase on every change.
 
 | Tier | Scope | Path |
 | --- | --- | --- |
-| **Quick** | ≤3 files, no design decisions, no new dependencies | `references/quick-mode.md` — describe, implement, verify, commit; gate: `validate-quick` |
+| **Quick** | ≤3 files, no design decisions, no new dependencies | `references/quick-mode.md` — describe, implement, verify, commit; gates: `check_commit.py` + `validate-quick` |
 | **Simple** | 2–5 files, localized change | Specify → Execute → Verify |
 | **Medium** | New feature, <10 tasks | Specify → Tasks → Execute → Verify |
 | **Complex** | New architecture, API surface, infra | Specify → Discuss → Design → Tasks → Execute → Verify |

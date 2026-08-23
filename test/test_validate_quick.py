@@ -92,5 +92,48 @@ class ValidateQuickFailTest(unittest.TestCase):
         self.assertTrue(any("Evidence must cite" in err for err in report.errors))
 
 
+class ResolveQuickDirTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        self.quick = self.root / ".specs" / "quick"
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def _write_quick(self, name: str) -> Path:
+        directory = self.quick / name
+        directory.mkdir(parents=True)
+        (directory / "TASK.md").write_text(GOOD_TASK, encoding="utf-8")
+        (directory / "SUMMARY.md").write_text(GOOD_SUMMARY, encoding="utf-8")
+        return directory
+
+    def test_resolves_bare_nnn_slug(self):
+        feature = self._write_quick("001-theme-persist")
+        resolved = validate_quick.resolve_quick_dir("001-theme-persist", root=self.root)
+        self.assertEqual(resolved.resolve(), feature.resolve())
+
+    def test_rejects_path_traversal(self):
+        self.quick.mkdir(parents=True)
+        for raw in ("..", ".", "foo/../.."):
+            with self.subTest(raw=raw):
+                with self.assertRaises(SystemExit) as ctx:
+                    validate_quick.resolve_quick_dir(raw, root=self.root)
+                self.assertEqual(ctx.exception.code, 2)
+
+    def test_rejects_directory_outside_specs_quick(self):
+        outside = Path(tempfile.mkdtemp())
+        (outside / "TASK.md").write_text(GOOD_TASK, encoding="utf-8")
+        with self.assertRaises(SystemExit) as ctx:
+            validate_quick.resolve_quick_dir(str(outside), root=self.root)
+        self.assertEqual(ctx.exception.code, 2)
+
+    def test_rejects_non_nnn_slug_names(self):
+        self._write_quick("theme-only")
+        with self.assertRaises(SystemExit) as ctx:
+            validate_quick.resolve_quick_dir("theme-only", root=self.root)
+        self.assertEqual(ctx.exception.code, 2)
+
+
 if __name__ == "__main__":
     unittest.main()

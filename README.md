@@ -41,6 +41,12 @@ npx @luizsantiago/spec-guardrails install
 
 Re-run `install` anytime to refresh skills; your `.specs/` decisions and `STATE.md` are kept.
 
+### Optional Atlas companions (Lego)
+
+Spec Guardrails is a **complete product alone**. Optional **Atlas** packages add domain specialization (Path Domains, catalogs). The first is [**Tech Atlas**](https://github.com/luizssantiago92/tech-atlas) (`@luizsantiago/tech-atlas`) — tech engineering context routing.
+
+When paired, install Guardrails first, then the Atlas. Re-running Guardrails `install` **preserves** companion assets: Atlas skills/catalog, `.specs/atlas/`, mirrored `validate_layer_routing.py`, and `.specs/desks/` if present. Contract: [Companion: Tech Atlas](docs/guide/Companion-tech-atlas.md).
+
 | Need | Command |
 | --- | --- |
 | First time / upgrade | `install` |

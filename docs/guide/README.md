@@ -29,6 +29,7 @@ Plain-language guides for Spec Guardrails **3.1.x**. Start at [Home](Home.md).
 
 | File | Topic |
 | --- | --- |
+| [Companion-tech-atlas.md](Companion-tech-atlas.md) | Optional Tech Atlas Lego pairing (first Atlas) |
 | [loop-patterns.md](loop-patterns.md) | Feature vs operational loops; `doctor` score |
 | [ecosystem.md](ecosystem.md) | Where Spec Guardrails sits |
 | [Platform-parity.md](Platform-parity.md) | Shipped adapters (Cursor, Claude, Copilot, Codex) — core is agent-agnostic |

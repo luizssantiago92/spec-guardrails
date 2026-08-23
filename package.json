@@ -12,7 +12,7 @@
   "scripts": {
     "guardrails": "node index.js",
     "test": "npm run test:node && npm run test:gates",
-    "test:node": "node --test test/install.test.js test/test_feature_init.test.js test/test_config.test.js test/test_archive.test.js test/test_delta_merge.test.js test/test_presets.test.js test/test_brownfield.test.js test/test_doctor.test.js test/test_token_cost.test.js test/test_next_steps.test.js test/test_classify_change.test.js test/test_feature_status.test.js test/test_agent_contract.test.js test/test_gates_python.test.js test/test_specs_utils.test.js test/test_companions.test.js",
+    "test:node": "node --test test/install.test.js test/test_feature_init.test.js test/test_config.test.js test/test_archive.test.js test/test_delta_merge.test.js test/test_presets.test.js test/test_brownfield.test.js test/test_doctor.test.js test/test_token_cost.test.js test/test_next_steps.test.js test/test_classify_change.test.js test/test_feature_status.test.js test/test_agent_contract.test.js test/test_gates_python.test.js test/test_specs_utils.test.js test/test_companions.test.js test/test_companion_doctor.test.js",
     "test:gates": "node test/run-gate-tests.mjs",
     "prepublishOnly": "npm test"
   },

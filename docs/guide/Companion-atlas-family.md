@@ -56,6 +56,17 @@ Each Atlas mirrors its routing gate to Guardrails with a **namespaced filename**
 
 **Verify = Guardrails only.** No Atlas manuals, catalog, or desks on `/verify` — enforced by each Atlas `loadPolicy.verify.forbidden` in the manifest.
 
+## Doctor (unified when paired)
+
+Either doctor analyzes the **full Lego stack** when a connection exists — no need to run both:
+
+| Command | Solo | Paired |
+| --- | --- | --- |
+| `npx @luizsantiago/spec-guardrails doctor` | Guardrails Process + Brakes | Same + all Atlas companions from INDEX (gates, rules, registry, mirrors) |
+| `npx @luizsantiago/tech-atlas doctor` | Atlas assets only | Atlas assets + Guardrails probes (hub, gates, memory, baseline) |
+
+Filesystem probes only — neither doctor spawns the other CLI.
+
 ## Related
 
 - [Companion-tech-atlas.md](Companion-tech-atlas.md) — Tech Atlas pairing details

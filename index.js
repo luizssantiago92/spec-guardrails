@@ -50,6 +50,7 @@ Commands:
     [--json]                         Machine-readable output
   phase-context <phase>              Print .specs/config.yaml context + rules for a phase
   doctor [path]                      Audit guardrails readiness (score + next actions)
+    When Atlas companions are installed, also probes their gates, rules, and PROJECT.md registry via `.specs/companions/INDEX.json` — one doctor for the Lego stack.
     [--json]                         Machine-readable output
     [--no-suggest]                   Hide per-check remediation hints
   validate-spec [spec.md|feature]    Closure gate for a feature spec

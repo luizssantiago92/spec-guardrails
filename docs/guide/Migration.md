@@ -61,7 +61,12 @@ Same as above: install Spec Guardrails 3.0 fresh. Do not expect harness path dua
 - Dual CLI bin aliases (`spec-seatbelt` / `agentic-harness`)
 - Silent acceptance of old env var names at runtime
 
+## Optional Atlas companions
+
+After Guardrails 3.x is installed, you may add [**Tech Atlas**](https://github.com/luizssantiago92/tech-atlas) (`@luizsantiago/tech-atlas`) for Path Domain routing and a specialist catalog — solo or paired (Lego). Guardrails does not require an Atlas. Pairing contract: [Companion-tech-atlas.md](Companion-tech-atlas.md).
+
 ## Related
 
 - [Stability policy](Stability-policy.md) — why the name will not change again
+- [Companion-tech-atlas.md](Companion-tech-atlas.md) — optional Tech Atlas Lego pairing
 - [CHANGELOG](../CHANGELOG.md) — 3.0.0 section

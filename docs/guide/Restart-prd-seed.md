@@ -171,9 +171,28 @@ Do **not** claim features from external repos unless verified against their curr
 
 ---
 
-## Migration from Spec Guardrails 3.2
+## Roadmap P1 / P2 (same repo — no reboot required)
 
-If forking the 3.2 codebase:
+Continue on the **Spec Guardrails** repository. The items below ship incrementally on `main` — not via a new repo or rename:
+
+| Phase | Capability | Status in 3.2.1 |
+| --- | --- | --- |
+| P1 | Lesson graduation lifecycle | Shipped (`promote`, `graduate`) |
+| P1 | Adapter registry abstraction | Shipped (`lib/adapter-registry.js`) |
+| P1 | SQLite memory index + rebuild | Shipped (`memory-index rebuild`) |
+| P1 | Knowledge graph traversal | Shipped (`memory-query --from …`) |
+| P1 | Intent/effect policy (READ/WRITE/DELETE) | Planned |
+| P2 | Contextual auto-guards | Planned |
+| P2 | Solution exploration | Planned |
+| P2 | Semantic retrieval | Planned |
+
+Use this seed as a **product north star**, not a migration checklist. For day-to-day work, stay on `@luizsantiago/spec-guardrails` and ship small semver releases.
+
+---
+
+## Legacy: forking under a new product name
+
+If you fork under a new name (optional — not required for P1):
 
 1. Rename package, CLI bin, display strings, and hub markers.
 2. Remove all Atlas/companion code paths (already done in 3.2.0 source).

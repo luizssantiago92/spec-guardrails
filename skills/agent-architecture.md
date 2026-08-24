@@ -46,6 +46,10 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | Before approving tasks | `python3 .specs/guardrails/scripts/analyze_artifacts.py [feature]` |
 | Before presenting tasks for approval | `python3 .specs/guardrails/scripts/validate_tasks.py [feature]` |
 | Before Execute waves (3+ tasks) | `npx @luizsantiago/spec-guardrails loop-plan [feature]` |
+| Parallel wave (2+ tasks, disjoint Files) | `npx @luizsantiago/spec-guardrails workspace-prepare [feature] --tasks T1,T2` |
+| After parallel wave merge | `npx @luizsantiago/spec-guardrails workspace-cleanup [feature] --force` |
+| Before editing paths outside task Files | `npx @luizsantiago/spec-guardrails execution-policy check-path <path>` |
+| On gate retry (Execute playbook) | `npx @luizsantiago/spec-guardrails execution-policy record-retry Tn` |
 | On each commit | `python3 .specs/guardrails/scripts/check_commit.py --message "<message>"` |
 | Before declaring a feature done | `python3 .specs/guardrails/scripts/validate_state.py [feature]` |
 | Traceability (Medium+ features) | `python3 .specs/guardrails/scripts/validate_traceability.py [feature]` |

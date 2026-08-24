@@ -6,6 +6,24 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.2.1 — P0 parity + P1 foundations
+
+### Fixed
+
+- **`execution-policy record-retry`** — refuses to increment when `max_retries_per_task` is exhausted (exit 1)
+- **`execution-policy check-path`** — honors `escalation.on_policy_violation: warn` (exit 0 with warning)
+- **Delta specs** — `validate-spec` validates Out of Scope boundaries on delta specs too
+
+### Added
+
+- **`execution-policy record-run`** — increments `agent_runs` with budget enforcement
+- **`workspace-list`** — list isolated git worktrees for a feature
+- **Hub/docs parity** — worktrees, execution policy, and memory CLIs documented in hub, agent-commands, git-handoff, Guarantees matrix
+- **Gate warnings** — `analyze-artifacts` warns on missing `design.md` and verify plan for Medium+ features (5+ tasks)
+- **Lesson graduation** — lifecycle `observed → repeated → candidate → approved → graduated`; CLI `promote`, `graduate`
+- **Adapter registry** — `lib/adapter-registry.js` decouples platform install from core
+- **SQLite memory index** — `memory-index rebuild` and `memory-query --from <id>` over `.specs/memory/memory.db`
+
 ## 3.2.0 — Single package + strategic P0
 
 ### Breaking / removal

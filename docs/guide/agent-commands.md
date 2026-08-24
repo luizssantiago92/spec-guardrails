@@ -140,9 +140,11 @@ Implement approved tasks — test-first, one commit per task, gates between step
 **What the agent does each round:**
 
 1. `loop-plan [feature]` — next wave + parallel groups
-2. **Parallel group (2+ tasks):** dispatch sub-agents (you confirm) per `sub-agents.md`
+2. **Parallel group (2+ tasks):** `workspace-prepare [feature] --tasks T1,T2` → dispatch sub-agents (you confirm) per `sub-agents.md`; each worker uses its git worktree under `.specs/workspaces/`
 3. **Single task:** test first → implement → gate → `check-commit` → mark `[x]` in `tasks.md`
-4. Merge after parallel rounds; repeat until done → `/verify`
+4. Before touching files: `execution-policy check-path <path>` when scope is configured in `.specs/config.yaml`
+5. On gate retry: `execution-policy record-retry Tn` (respects `max_retries_per_task`)
+6. Merge after parallel rounds; `workspace-cleanup [feature] --force`; repeat until done → `/verify`
 
 ---
 
@@ -208,6 +210,15 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `validate-traceability [feature]` | REQ → tasks → validation coverage chain |
 | `validate-quick [quick-folder]` | Quick-mode structural gate |
 | `phase-context <phase>` | Print `.specs/config.yaml` rules for a phase |
+| `workspace-prepare <feature> --tasks T1,T2` | Create git worktrees for parallel Execute |
+| `workspace-list <feature>` | List isolated worktrees for a feature |
+| `workspace-cleanup <feature> [--force]` | Remove worktrees after merge or worker FAIL |
+| `execution-policy status` | Budget, scope, and runtime counters |
+| `execution-policy check-path <path>` | Scope check (exit 1 when denied) |
+| `execution-policy record-retry <task>` | Increment per-task retry counter |
+| `execution-policy record-run` | Increment agent-run counter |
+| `memory-index rebuild` | Rebuild SQLite index from `.specs/` artifacts |
+| `memory-query --from <id> [--depth N]` | Bounded context package from the knowledge graph |
 
 Full CLI list: `npx @luizsantiago/spec-guardrails --help`.
 

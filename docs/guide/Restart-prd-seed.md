@@ -181,7 +181,7 @@ Continue on the **Spec Guardrails** repository. The items below ship incremental
 | P1 | Adapter registry abstraction | Shipped (`lib/adapter-registry.js`) |
 | P1 | SQLite memory index + rebuild | Shipped (`memory-index rebuild`) |
 | P1 | Knowledge graph traversal | Shipped (`memory-query --from …`) |
-| P1 | Intent/effect policy (READ/WRITE/DELETE) | Planned |
+| P1 | Intent/effect policy (READ/WRITE/DELETE) | Shipped (`check-path --op`, `effects` config) |
 | P2 | Contextual auto-guards | Planned |
 | P2 | Solution exploration | Planned |
 | P2 | Semantic retrieval | Planned |

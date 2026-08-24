@@ -72,6 +72,7 @@ npx @luizsantiago/spec-guardrails execution-policy check-path src/auth.ts
 ```
 
 - **Scope:** denied paths block with exit 1; allowed_paths (when set) restrict edits to listed globs.
+- **Intent/effect:** pass `--op read|write|delete` to `check-path`; configure `effects.deny_*` and `effects.warn_*` globs per operation in `.specs/config.yaml`.
 - **Retries:** after a task gate failure, run `execution-policy record-retry Tn`; stop at `max_retries_per_task` (default 3) and escalate per the Execute playbook — do not bypass with `--no-verify`.
 - **Agent runs:** orchestrators may call `execution-policy record-run` when dispatching sub-agents; stop when budgets exhaust.
 

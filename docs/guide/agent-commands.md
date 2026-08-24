@@ -214,7 +214,7 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `workspace-list <feature>` | List isolated worktrees for a feature |
 | `workspace-cleanup <feature> [--force]` | Remove worktrees after merge or worker FAIL |
 | `execution-policy status` | Budget, scope, and runtime counters |
-| `execution-policy check-path <path>` | Scope check (exit 1 when denied) |
+| `execution-policy check-path <path>` | Scope + intent/effect check (use `--op read|write|delete`) |
 | `execution-policy record-retry <task>` | Increment per-task retry counter |
 | `execution-policy record-run` | Increment agent-run counter |
 | `memory-index rebuild` | Rebuild SQLite index from `.specs/` artifacts |

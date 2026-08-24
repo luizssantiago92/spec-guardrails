@@ -41,9 +41,12 @@ npx @luizsantiago/spec-guardrails workspace-cleanup [feature] --tasks T1,T2 --fo
 7. Consult execution policy before touching files outside the task list:
 
 ```bash
-npx @luizsantiago/spec-guardrails execution-policy check-path src/auth.ts
+npx @luizsantiago/spec-guardrails execution-policy check-path src/auth.ts --op write
+npx @luizsantiago/spec-guardrails execution-policy check-path README.md --op read
 npx @luizsantiago/spec-guardrails execution-policy status
 ```
+
+Declare the intended operation (`read`, `write`, or `delete`). When `--op` is omitted, the CLI infers `read` for common doc/config extensions and `write` otherwise. Effect rules in `.specs/config.yaml` (`effects.deny_*`, `effects.warn_*`) apply after scope checks.
 
 Record gate retries with `execution-policy record-retry T1` when a task fails its gate (respects `max_retries_per_task` in `.specs/config.yaml`).
 

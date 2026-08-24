@@ -8,6 +8,10 @@ import {
   checkTaskRetries,
   mergeExecutionPolicy,
   parseExecutionPolicySections,
+  previewAgentRun,
+  recordAgentRun,
+  recordTaskRetry,
+  resolvePathCheck,
 } from "../lib/execution-policy.js";
 
 describe("execution policy", () => {
@@ -58,5 +62,52 @@ escalation:
     assert.equal(checkBudget(state, policy).ok, false);
     assert.equal(checkTaskRetries("T1", state, policy).ok, false);
     assert.equal(checkTaskRetries("T2", state, policy).ok, true);
+  });
+
+  it("blocks record-retry at the configured limit", () => {
+    const policy = mergeExecutionPolicy(DEFAULT_POLICY, {
+      budget: { max_iterations: 5, max_agent_runs: 5, max_retries_per_task: 2 },
+    });
+    const state = { iterations: 0, agent_runs: 0, retries: { T1: 2 } };
+
+    const blocked = recordTaskRetry(state, "T1", policy);
+    assert.equal(blocked.ok, false);
+    assert.equal(blocked.retries, 2);
+    assert.match(blocked.message ?? "", /exhausted/);
+  });
+
+  it("increments retries when under the limit", () => {
+    const policy = DEFAULT_POLICY;
+    const state = { iterations: 0, agent_runs: 0, retries: { T1: 1 } };
+
+    const recorded = recordTaskRetry(state, "T1", policy);
+    assert.equal(recorded.ok, true);
+    assert.equal(recorded.retries, 2);
+    assert.equal(recorded.state.iterations, 1);
+  });
+
+  it("blocks record-run when agent budget is exhausted", () => {
+    const policy = mergeExecutionPolicy(DEFAULT_POLICY, {
+      budget: { max_iterations: 5, max_agent_runs: 1, max_retries_per_task: 3 },
+    });
+    const state = { iterations: 0, agent_runs: 1, retries: {} };
+
+    assert.equal(previewAgentRun(state, policy).ok, false);
+    assert.equal(recordAgentRun(state, policy).ok, false);
+  });
+
+  it("honors warn escalation for denied paths", () => {
+    const policy = mergeExecutionPolicy(DEFAULT_POLICY, {
+      scope: {
+        allowed_paths: [],
+        denied_paths: ["secrets/**"],
+      },
+      escalation: { on_policy_violation: "warn" },
+    });
+
+    const result = resolvePathCheck("secrets/api.key", policy);
+    assert.equal(result.allowed, false);
+    assert.equal(result.severity, "warning");
+    assert.equal(result.exitCode, 0);
   });
 });

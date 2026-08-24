@@ -9,10 +9,12 @@ import { PACKAGE_VERSION, CLI_NAME } from "./lib/constants.js";
 import { phaseContext } from "./lib/config.js";
 import { doctor } from "./lib/doctor.js";
 import {
-  checkPathScope,
   formatPolicyStatus,
   loadExecutionPolicy,
   loadPolicyState,
+  recordAgentRun,
+  recordTaskRetry,
+  resolvePathCheck,
   savePolicyState,
 } from "./lib/execution-policy.js";
 import { featureInit } from "./lib/feature.js";
@@ -21,7 +23,9 @@ import { GATE_COMMANDS, AUX_COMMANDS, runGate, runGuardrailsScript } from "./lib
 import { install } from "./lib/install.js";
 import {
   cleanupWorkspaces,
+  formatWorkspaceList,
   formatWorkspaceResults,
+  listWorkspaces,
   prepareWorkspaces,
 } from "./lib/workspace-isolation.js";
 import {
@@ -70,13 +74,20 @@ Commands:
     [--json]                         Machine-readable output
   workspace-cleanup <feature>        Remove isolated worktrees for a feature
     [--tasks T1,T2]                  Limit cleanup to specific tasks
-    [--force]                        Force-remove dirty worktrees
+    [--force]                        Force-remove dirty worktrees (recovery after worker FAIL)
+    [--json]                         Machine-readable output
+  workspace-list <feature>           List isolated worktrees for a feature
     [--json]                         Machine-readable output
   execution-policy status            Show configured budgets, scope, and runtime counters
     [--json]                         Machine-readable output
   execution-policy check-path <path> Check whether a relative path is allowed by scope policy
     [--json]                         Machine-readable output
-  execution-policy record-retry <task>  Increment retry counter for a task id
+  execution-policy record-retry <task>  Increment retry counter for a task id (blocks at limit)
+  execution-policy record-run        Increment agent-run counter (blocks at budget)
+  memory-index rebuild               Rebuild SQLite memory index from .specs/ artifacts
+  memory-query --from <id>           Bounded context package from the knowledge graph
+    [--depth N]                      Traversal depth (default 2)
+    [--json]                         Machine-readable output
   validate-spec [spec.md|feature]    Closure gate for a feature spec
   analyze-artifacts [feature]        Cross-artifact consistency before task approval
   validate-tasks [tasks.md|feature]  Granularity gate for a task breakdown
@@ -86,7 +97,7 @@ Commands:
   validate-quick [quick-folder]      Quick-mode TASK.md / SUMMARY.md structural gate
   validate-state [feature]           Completion gate before declaring a feature done
   check-commit --message "<msg>"     Conventional Commits gate
-  lessons <add|list|penalize|prune|status>  Lessons engine
+  lessons <add|list|penalize|prune|promote|graduate|status>  Lessons engine
   --help                             Show this message
   --version                          Print the package version
 `;
@@ -426,6 +437,30 @@ if (command === "--version" || command === "-v" || command === "version") {
     console.error(`❌ ${err.message}`);
     process.exit(1);
   }
+} else if (command === "workspace-list") {
+  try {
+    let json = false;
+    const positional = [];
+
+    for (const arg of args) {
+      if (arg === "--json") {
+        json = true;
+      } else {
+        positional.push(arg);
+      }
+    }
+
+    const featureId = positional[0];
+    if (!featureId) {
+      throw new Error("Usage: workspace-list <feature> [--json]");
+    }
+
+    const workspaces = await listWorkspaces(process.cwd(), featureId);
+    process.stdout.write(formatWorkspaceList(workspaces, { json, featureId }));
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
 } else if (command === "execution-policy") {
   try {
     const sub = args[0];
@@ -451,33 +486,57 @@ if (command === "--version" || command === "-v" || command === "version") {
       if (!relativePath) {
         throw new Error("Usage: execution-policy check-path <relative-path>");
       }
-      const result = checkPathScope(relativePath, policy);
+      const result = resolvePathCheck(relativePath, policy);
       if (json) {
         console.log(JSON.stringify({ path: relativePath, ...result }, null, 2));
       } else {
-        console.log(
-          `${relativePath}: ${result.allowed ? "allowed" : "blocked"} (${result.reason})`,
-        );
+        const label = result.allowed
+          ? "allowed"
+          : result.severity === "warning"
+            ? "blocked (warn)"
+            : "blocked";
+        console.log(`${relativePath}: ${label} (${result.reason})`);
       }
-      if (!result.allowed) {
-        process.exit(1);
+      if (result.exitCode !== 0) {
+        process.exit(result.exitCode);
       }
     } else if (sub === "record-retry") {
       const taskId = rest[0];
       if (!taskId) {
         throw new Error("Usage: execution-policy record-retry <task-id>");
       }
-      state.retries[taskId] = (state.retries[taskId] ?? 0) + 1;
-      state.iterations += 1;
-      await savePolicyState(cwd, state);
+      const recorded = recordTaskRetry(state, taskId, policy);
+      if (!recorded.ok) {
+        console.error(`❌ ${recorded.message}`);
+        process.exit(1);
+      }
+      await savePolicyState(cwd, recorded.state);
       if (json) {
-        console.log(JSON.stringify({ taskId, retries: state.retries[taskId], state }, null, 2));
+        console.log(
+          JSON.stringify({ taskId, retries: recorded.retries, state: recorded.state }, null, 2),
+        );
       } else {
-        console.log(`Recorded retry for ${taskId}: ${state.retries[taskId]}`);
+        console.log(`Recorded retry for ${taskId}: ${recorded.retries}`);
+      }
+    } else if (sub === "record-run") {
+      const recorded = recordAgentRun(state, policy);
+      if (!recorded.ok) {
+        console.error(`❌ ${recorded.message}`);
+        process.exit(1);
+      }
+      await savePolicyState(cwd, recorded.state);
+      if (json) {
+        console.log(
+          JSON.stringify({ agent_runs: recorded.state.agent_runs, state: recorded.state }, null, 2),
+        );
+      } else {
+        console.log(
+          `Recorded agent run: ${recorded.state.agent_runs}/${policy.budget.max_agent_runs}`,
+        );
       }
     } else {
       throw new Error(
-        "Usage: execution-policy status | check-path <path> | record-retry <task>",
+        "Usage: execution-policy status | check-path <path> | record-retry <task> | record-run",
       );
     }
   } catch (err) {
@@ -536,7 +595,8 @@ if (command === "--version" || command === "-v" || command === "version") {
     console.error(`❌ ${err.message}`);
     process.exit(1);
   }
-} else if (AUX_COMMANDS.includes(command)) {  try {
+} else if (AUX_COMMANDS.includes(command)) {
+  try {
     const code = await runGuardrailsScript(command, args);
     process.exit(code);
   } catch (err) {

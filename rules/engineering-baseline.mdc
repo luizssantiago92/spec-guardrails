@@ -47,8 +47,10 @@ Gates live in `.specs/guardrails/scripts/` (Python 3). **The agent runs them** a
 | `feature-init "…"` | Optional — or ask the agent to `/specify` |
 | `project-init` | Optional — brownfield repo with existing code |
 | `doctor` | Install looks broken |
+| `workspace-list <feature>` | Inspect parallel worktrees before cleanup |
+| `execution-policy status` | Check budgets and scope before expanding Execute |
 
-Everything else (`validate-spec`, `validate-tasks`, `check-commit`, …) is normally run **by the agent**, not memorized from this file. Full list: `npx @luizsantiago/spec-guardrails --help` or `.specs/GETTING_STARTED.md`.
+Everything else (`validate-spec`, `validate-tasks`, `check-commit`, `workspace-prepare`, `execution-policy check-path`, …) is normally run **by the agent**, not memorized from this file. Full list: `npx @luizsantiago/spec-guardrails --help` or `.specs/GETTING_STARTED.md`.
 
 Non-zero gate exit = STOP. Without Python, the agent performs the same checks manually.
 

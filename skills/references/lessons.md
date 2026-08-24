@@ -1,18 +1,20 @@
 # Lessons
 
-How to record, promote, and load grounded lessons. The engine owns the files; this reference owns the judgment.
+How to record, promote, graduate, and load grounded lessons. The engine owns the files; this reference owns the judgment.
 
 ## When to Use
 
 - The last step of `/verify` when the verdict is FAIL for a grounded reason
-- The first step of `/specify` and `/plan`, loading only confirmed lessons
-- After a confirmed lesson was loaded and the same failure still happened (`penalize`)
+- The first step of `/specify` and `/plan`, loading only approved lessons
+- After a approved lesson was loaded and the same failure still happened (`penalize`)
+- When a stable approved rule should become an engineering standard (`graduate` — human only)
 
 ## When NOT to Use
 
 - A clean PASS — record nothing
 - A preference, a style nit, or anything not evidenced in `validation.md`
 - Hand-editing `.specs/LESSONS.md` or `.specs/lessons.json`
+- **Auto-graduation** — agents must never graduate without explicit human approval
 
 ## Files
 
@@ -20,7 +22,7 @@ How to record, promote, and load grounded lessons. The engine owns the files; th
 | --- | --- | --- |
 | `.specs/lessons.json` | `lessons.py` | Canonical store |
 | `.specs/LESSONS.md` | `lessons.py` | Rendered playbook — read, never write |
-| `.specs/guardrails/scripts/lessons.py` | Harness | `add`, `list`, `penalize`, `prune`, `status` |
+| `.specs/guardrails/scripts/lessons.py` | Harness | `add`, `list`, `promote`, `graduate`, `penalize`, `prune`, `status` |
 
 ## How to Phrase
 
@@ -42,25 +44,29 @@ Titles and rules are deduped after normalization (casefold, accents stripped, pu
 
 ```
 FAIL with evidence → add (candidate)
-candidate seen in 2 distinct features → confirmed (guidance)
-confirmed loaded but the same failure recurs → penalize
+observed → repeated → candidate → approved → graduated → deprecated
+candidate seen in 2 distinct features → approved (automatic)
+approved loaded but the same failure recurs → penalize
 2 penalties → quarantined (stop loading)
 candidate idle 90 days → prune
+graduate (human) → approved → graduated with --evidence + validation.md
 ```
 
-Same-feature recurrence does not promote. One noisy feature must not turn a guess into a house rule.
+Same-feature recurrence does not promote. One noisy feature must not turn a guess into a house rule. **Never auto-graduate** — use `graduate` only after human review.
+
+Manual promotion (`promote --id L-001`) advances one step along `observed → repeated → candidate → approved` when corroboration is incomplete.
 
 ## When to Load
 
 At the start of Specify and Design:
 
 ```bash
-python3 .specs/guardrails/scripts/lessons.py list --status confirmed
+python3 .specs/guardrails/scripts/lessons.py list --status approved
 ```
 
-Apply every confirmed rule that matches this work. Candidates are not guidance — they live in `lessons.json` until a second feature corroborates them.
+Apply every approved rule that matches this work. Candidates are not guidance — they live in `lessons.json` until a second feature corroborates them or a human promotes them.
 
-If a confirmed lesson was in the working set and the same gap still appears in `/verify`, penalize it with the new `validation.md` as `--source`. Two penalties quarantine it.
+If an approved lesson was in the working set and the same gap still appears in `/verify`, penalize it with the new `validation.md` as `--source`. Two penalties quarantine it.
 
 ## Degraded mode
 

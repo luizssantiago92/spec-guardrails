@@ -311,6 +311,7 @@ def build_report(target: str, text: str) -> Report:
             "MODIFIED",
         )
         validate_removed_section(report, visible)
+        validate_out_of_scope(report, visible)
     else:
         for section in REQUIRED_SECTIONS:
             if has_section(visible, section):

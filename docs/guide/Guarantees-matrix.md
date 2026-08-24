@@ -27,6 +27,8 @@ Run `npx @luizsantiago/spec-guardrails doctor` to see whether Brakes (Python) ar
 | Task shape is buildable | `validate-tasks` | Brakes | Hard gate |
 | Dependencies respected in Execute | `loop-plan` | Brakes | Hard gate |
 | Parallel work is file-safe | `task-graph.md` + graph rules in `validate-tasks` | Process + Brakes | Artifact (skill) + gate (overlap / cycles) |
+| Parallel work uses isolated trees | `workspace-prepare` / `workspace-cleanup` | Process | CLI + skill protocol (git worktrees) |
+| Execution stays within bounds | `execution-policy` + `.specs/config.yaml` | Process | CLI (budget, scope, retries) |
 | Quick changes stay bounded | `validate-quick` | Brakes | Hard gate |
 | Completion cites evidence | `validate-state` | Brakes | Hard gate |
 | Commits follow policy | `check-commit` | Brakes | Hard gate |

@@ -46,6 +46,15 @@ STATE_FEATURE = re.compile(
     r"^\s*-\s*Feature:\s*(.+)$",
     re.IGNORECASE | re.MULTILINE,
 )
+TASK_HEADING = re.compile(
+    r"^#{2,6}\s*(?P<id>T\d{1,6})\s*[:\-–]?\s*(?P<title>.*)$",
+    re.MULTILINE | re.IGNORECASE,
+)
+VERIFY_HINT = re.compile(
+    r"\b(test strategy|verification|validate\.md|/verify|acceptance test)\b",
+    re.IGNORECASE,
+)
+MEDIUM_TASK_FLOOR = 5
 
 
 def git_branch(root: Path) -> str | None:
@@ -120,6 +129,20 @@ def build_report(feature_dir: Path, root: Path) -> Report:
                 )
     else:
         report.warn("tasks.md missing or empty — task coverage checks skipped")
+
+    task_count = len(TASK_HEADING.findall(tasks_text or ""))
+    medium_plus = task_count >= MEDIUM_TASK_FLOOR
+
+    if medium_plus and design_text is None:
+        report.warn(
+            f"{task_count} tasks — design.md recommended for Medium+ features"
+        )
+
+    plan_text = "\n".join(filter(None, [spec_text, design_text]))
+    if medium_plus and plan_text and not VERIFY_HINT.search(plan_text):
+        report.warn(
+            "no verification or test strategy mention in spec/design — add verify plan before Execute"
+        )
 
     if design_text is not None and tasks_text:
         visible_design = visible_markdown(design_text).strip()

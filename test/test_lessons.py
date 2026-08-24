@@ -142,14 +142,14 @@ class LessonsEngineTest(unittest.TestCase):
         self.assertEqual(store["lessons"][0]["status"], "candidate")
         self.assertEqual(store["lessons"][0]["features"], ["auth"])
 
-    def test_second_feature_promotes_to_confirmed(self):
+    def test_second_feature_promotes_to_approved(self):
         self._add("auth")
         code, output = self._add("billing")
         self.assertEqual(code, 0, output)
-        self.assertIn("confirmed", output)
+        self.assertIn("approved", output)
         store = json.loads((self.root / ".specs" / "lessons.json").read_text())
         lesson = store["lessons"][0]
-        self.assertEqual(lesson["status"], "confirmed")
+        self.assertEqual(lesson["status"], "approved")
         self.assertEqual(set(lesson["features"]), {"auth", "billing"})
         markdown = (self.root / ".specs" / "LESSONS.md").read_text()
         self.assertIn("L-001", markdown)
@@ -166,15 +166,15 @@ class LessonsEngineTest(unittest.TestCase):
             ".specs/features/auth/validation.md:24",
         )
 
-    def test_list_defaults_to_confirmed(self):
-        self._add("auth")
+    def test_list_defaults_to_approved(self):
         code, output = _run(["list"])
         self.assertEqual(code, 0)
-        self.assertIn("0 confirmed", output)
+        self.assertIn("0 approved", output)
+        self._add("auth")
         self._add("billing")
         code, output = _run(["list"])
         self.assertEqual(code, 0)
-        self.assertIn("1 confirmed", output)
+        self.assertIn("1 approved", output)
         self.assertIn("L-001", output)
 
     def test_penalize_twice_quarantines(self):

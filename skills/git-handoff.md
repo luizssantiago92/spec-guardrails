@@ -62,6 +62,21 @@ node_modules/
 
 Follow `engineering-standards.md` — separate commits for code vs docs when possible.
 
+## Execution policy (scope and budgets)
+
+When `.specs/config.yaml` defines `budget`, `scope`, or `escalation`, consult policy before expanding edits:
+
+```bash
+npx @luizsantiago/spec-guardrails execution-policy status
+npx @luizsantiago/spec-guardrails execution-policy check-path src/auth.ts
+```
+
+- **Scope:** denied paths block with exit 1; allowed_paths (when set) restrict edits to listed globs.
+- **Retries:** after a task gate failure, run `execution-policy record-retry Tn`; stop at `max_retries_per_task` (default 3) and escalate per the Execute playbook — do not bypass with `--no-verify`.
+- **Agent runs:** orchestrators may call `execution-policy record-run` when dispatching sub-agents; stop when budgets exhaust.
+
+Policy is soft-enforced via CLI + skills — not an OS sandbox. Escalation defaults: scope expansion → human review; budget exhaustion → stop.
+
 ## Git Blast Radius (Tiers)
 
 Structural gates enforce artifact quality. Git tiers enforce **what leaves the machine**.

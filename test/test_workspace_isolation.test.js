@@ -8,6 +8,7 @@ import { describe, it } from "node:test";
 import {
   cleanupWorkspaces,
   listWorkspacePaths,
+  listWorkspaces,
   prepareWorkspaces,
   workspacePath,
 } from "../lib/workspace-isolation.js";
@@ -49,5 +50,32 @@ describe("workspace isolation", () => {
     const cleaned = await cleanupWorkspaces(cwd, { featureId, force: true });
     assert.equal(cleaned.length, 2);
     assert.ok(cleaned.every((item) => item.status === "removed"));
+  });
+
+  it("returns exists when prepare is called twice for the same task", async () => {
+    const cwd = await createTempDir("ws-idem-");
+    await initGitRepo(cwd);
+
+    const featureId = "002-chat";
+    const first = await prepareWorkspaces(cwd, { featureId, taskIds: ["T1"] });
+    const second = await prepareWorkspaces(cwd, { featureId, taskIds: ["T1"] });
+
+    assert.equal(first[0].status, "created");
+    assert.equal(second[0].status, "exists");
+  });
+
+  it("lists prepared workspaces by task id", async () => {
+    const cwd = await createTempDir("ws-list-");
+    await initGitRepo(cwd);
+
+    const featureId = "003-billing";
+    await prepareWorkspaces(cwd, { featureId, taskIds: ["T1", "T2"] });
+    const listed = await listWorkspaces(cwd, featureId);
+
+    assert.equal(listed.length, 2);
+    assert.deepEqual(
+      listed.map((item) => item.taskId).sort(),
+      ["T1", "T2"],
+    );
   });
 });

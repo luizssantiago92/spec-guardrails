@@ -6,6 +6,16 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.6.0 — Hybrid memory retrieval + optional semantic embeddings
+
+### Added
+
+- **Chunk index** — `memory-index rebuild` indexes requirement bodies, validation, exploration, and approved lessons (not just entity metadata)
+- **`memory-search` v2** — FTS over artifact chunks with entity fallback
+- **`memory-retrieve`** — hybrid ranked package (FTS + graph expansion + optional semantic fusion)
+- **`memory-index embed`** — optional embeddings (`provider: none|hash|openai|ollama`; default semantic **off**)
+- **Config block** — `memory.retrieval` in `.specs/config.yaml` example
+
 ## 3.5.0 — Solution exploration mode
 
 ### Added

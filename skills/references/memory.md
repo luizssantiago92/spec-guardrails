@@ -93,6 +93,38 @@ Lessons are owned by `lessons.py`, not by hand. See `lessons.md`.
 - Lazy artifacts: never scaffold empty files to look organized.
 - `STATE.md` has exactly one "Next Step" item. A list of five is not a handoff.
 
+## Retrieval ladder
+
+Rebuild the derived index after meaningful `.specs/` changes:
+
+```bash
+npx @luizsantiago/spec-guardrails memory-index rebuild
+```
+
+| Need | Command |
+| --- | --- |
+| Exact entity + neighbors | `memory-query --from T1 --depth 2` |
+| Keyword search in artifact bodies | `memory-search "oauth session"` |
+| Ranked hybrid package (FTS + graph + optional semantic) | `memory-retrieve "silent session expiry"` |
+
+Optional semantic retrieval stays **off** by default in `.specs/config.yaml`. Enable only when FTS + graph are not enough:
+
+```yaml
+memory:
+  retrieval:
+    semantic: true
+    provider: openai   # or ollama | hash (local/testing)
+    model: text-embedding-3-small
+```
+
+Then embed after rebuild:
+
+```bash
+npx @luizsantiago/spec-guardrails memory-index embed
+```
+
+Markdown under `.specs/` remains the source of truth; the SQLite index is rebuildable.
+
 ## Next
 
 `git-handoff.md` — what to stage, how to word the commit, and why no auto-push.

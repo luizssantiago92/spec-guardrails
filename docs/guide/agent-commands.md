@@ -219,7 +219,9 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `execution-policy record-run` | Increment agent-run counter |
 | `memory-index rebuild` | Rebuild SQLite index from `.specs/` artifacts |
 | `memory-query --from <id> [--depth N]` | Bounded context package from the knowledge graph |
-| `memory-search <query>` | Full-text search over indexed artifacts (FTS5) |
+| `memory-search <query>` | Full-text search over indexed artifact chunks (FTS5) |
+| `memory-retrieve "<query>"` | Hybrid retrieval (FTS + graph + optional semantic) |
+| `memory-index embed [--force]` | Build optional embeddings (requires config) |
 | `context-guard status` | Execute readiness (STATE + open tasks) |
 | `context-guard check-edit <path>` | Contextual guard before editing (scope + task Files) |
 | `context-guard check-complete [feature]` | Guard before claiming completion (tasks + validation PASS) |

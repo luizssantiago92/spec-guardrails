@@ -1,9 +1,9 @@
-"""Tests for SQLite memory index and knowledge-graph query."""
+"""Tests for SQLite memory index, search, and hybrid retrieval."""
 
 from __future__ import annotations
 
 import json
-import shutil
+import os
 import sys
 import tempfile
 import unittest
@@ -15,6 +15,7 @@ if str(ROOT / "scripts") not in sys.path:
 
 import memory_index  # noqa: E402
 import memory_query  # noqa: E402
+import memory_retrieve  # noqa: E402
 
 
 class MemoryIndexTests(unittest.TestCase):
@@ -30,7 +31,7 @@ class MemoryIndexTests(unittest.TestCase):
                 [
                     "## Requirements",
                     "### REQ-001: Login",
-                    "Users can sign in.",
+                    "Users can sign in with OAuth credentials.",
                     "## Assumptions",
                     "- OAuth provider exists",
                     "## Out of Scope",
@@ -58,8 +59,6 @@ class MemoryIndexTests(unittest.TestCase):
         self.temp.cleanup()
 
     def test_rebuild_indexes_entities_and_relations(self) -> None:
-        import os
-
         os.chdir(self.root)
         try:
             code = memory_index.main(["rebuild"])
@@ -73,8 +72,6 @@ class MemoryIndexTests(unittest.TestCase):
             os.chdir(self.previous)
 
     def test_query_reports_missing_database(self) -> None:
-        import os
-
         os.chdir(self.root)
         try:
             code = memory_query.main(["--from", "T1"])
@@ -82,15 +79,65 @@ class MemoryIndexTests(unittest.TestCase):
         finally:
             os.chdir(self.previous)
 
-    def test_search_finds_indexed_entities(self) -> None:
-        import os
+    def test_search_finds_chunk_body_text(self) -> None:
+        import memory_search
 
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            code = memory_search.main(["OAuth", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
+    def test_search_finds_indexed_entities(self) -> None:
         import memory_search
 
         os.chdir(self.root)
         try:
             self.assertEqual(memory_index.main(["rebuild"]), 0)
             code = memory_search.main(["login", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
+    def test_retrieve_hybrid_expands_graph(self) -> None:
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            code = memory_retrieve.main(["OAuth", "--mode", "hybrid", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
+    def test_embed_skips_when_semantic_disabled(self) -> None:
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            code = memory_index.main(["embed"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
+    def test_embed_with_hash_provider(self) -> None:
+        config = self.specs / "config.yaml"
+        config.write_text(
+            "\n".join(
+                [
+                    "schema: spec-driven",
+                    "memory:",
+                    "  retrieval:",
+                    "    semantic: true",
+                    "    provider: hash",
+                ]
+            ),
+            encoding="utf-8",
+        )
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            self.assertEqual(memory_index.main(["embed"]), 0)
+            code = memory_retrieve.main(["OAuth credentials", "--mode", "semantic", "--json"])
             self.assertEqual(code, 0)
         finally:
             os.chdir(self.previous)

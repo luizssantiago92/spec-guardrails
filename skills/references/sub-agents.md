@@ -35,11 +35,14 @@ Hand each worker exactly this and nothing else from sibling features:
 - Feature: [feature]
 - Batch: B[n] of [total]
 - Tasks: T[a] … T[b] (in order)
+- Workspace: `.specs/workspaces/[feature]/T[n]` (git worktree — do not edit the main tree)
 - Spec excerpt: only the REQ IDs those tasks name
 - Files ownership: the union of those tasks' Files fields (exclusive)
 - Constraints: AD-NNN that apply; confirmed lessons that apply
 - Forbidden: git push, deploy, editing files outside ownership, spawning further sub-agents
 ```
+
+Before dispatch, the orchestrator runs `workspace-prepare [feature] --tasks …`. Each worker verifies and commits inside its worktree only. The merge owner integrates into the main tree, runs the project harness once, then `workspace-cleanup [feature] --force`.
 
 Load per `context-limits.md`. Do not paste the author's chat.
 

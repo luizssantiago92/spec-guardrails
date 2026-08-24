@@ -8,10 +8,22 @@ import { classifyChange, formatClassifyChange } from "./lib/classify-change.js";
 import { PACKAGE_VERSION, CLI_NAME } from "./lib/constants.js";
 import { phaseContext } from "./lib/config.js";
 import { doctor } from "./lib/doctor.js";
+import {
+  checkPathScope,
+  formatPolicyStatus,
+  loadExecutionPolicy,
+  loadPolicyState,
+  savePolicyState,
+} from "./lib/execution-policy.js";
 import { featureInit } from "./lib/feature.js";
 import { featureStatus, formatFeatureStatus } from "./lib/feature-status.js";
 import { GATE_COMMANDS, AUX_COMMANDS, runGate, runGuardrailsScript } from "./lib/gates.js";
 import { install } from "./lib/install.js";
+import {
+  cleanupWorkspaces,
+  formatWorkspaceResults,
+  prepareWorkspaces,
+} from "./lib/workspace-isolation.js";
 import {
   initProjectConfig,
   listPresets,
@@ -50,10 +62,21 @@ Commands:
     [--json]                         Machine-readable output
   phase-context <phase>              Print .specs/config.yaml context + rules for a phase
   doctor [path]                      Audit guardrails readiness (score + next actions)
-                                      When Atlas companions are installed, also probes their
-                                      gates, rules, and PROJECT.md registry via INDEX.json
     [--json]                         Machine-readable output
     [--no-suggest]                   Hide per-check remediation hints
+  workspace-prepare <feature>        Create isolated git worktrees for parallel tasks
+    --tasks T1,T2                    Task ids to isolate (required)
+    [--base-ref HEAD]                Base ref for new worktrees
+    [--json]                         Machine-readable output
+  workspace-cleanup <feature>        Remove isolated worktrees for a feature
+    [--tasks T1,T2]                  Limit cleanup to specific tasks
+    [--force]                        Force-remove dirty worktrees
+    [--json]                         Machine-readable output
+  execution-policy status            Show configured budgets, scope, and runtime counters
+    [--json]                         Machine-readable output
+  execution-policy check-path <path> Check whether a relative path is allowed by scope policy
+    [--json]                         Machine-readable output
+  execution-policy record-retry <task>  Increment retry counter for a task id
   validate-spec [spec.md|feature]    Closure gate for a feature spec
   analyze-artifacts [feature]        Cross-artifact consistency before task approval
   validate-tasks [tasks.md|feature]  Granularity gate for a task breakdown
@@ -319,6 +342,144 @@ if (command === "--version" || command === "-v" || command === "version") {
 
     const target = positional[0] ? path.resolve(positional[0]) : process.cwd();
     await doctor(target, doctorOptions);
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "workspace-prepare") {
+  try {
+    let json = false;
+    let baseRef = "HEAD";
+    let tasksRaw = "";
+    const positional = [];
+
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i];
+      if (arg === "--json") {
+        json = true;
+      } else if (arg === "--base-ref") {
+        baseRef = args[++i];
+        if (!baseRef) {
+          throw new Error("--base-ref requires a git ref");
+        }
+      } else if (arg === "--tasks") {
+        tasksRaw = args[++i] ?? "";
+        if (!tasksRaw) {
+          throw new Error("--tasks requires a comma-separated list (e.g. T1,T2)");
+        }
+      } else {
+        positional.push(arg);
+      }
+    }
+
+    const featureId = positional[0];
+    if (!featureId) {
+      throw new Error("Usage: workspace-prepare <feature> --tasks T1,T2");
+    }
+
+    const taskIds = tasksRaw.split(",").map((item) => item.trim()).filter(Boolean);
+    const results = await prepareWorkspaces(process.cwd(), { featureId, taskIds, baseRef });
+    process.stdout.write(formatWorkspaceResults(results, { json }));
+
+    if (results.some((item) => item.status === "failed")) {
+      process.exit(1);
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "workspace-cleanup") {
+  try {
+    let json = false;
+    let force = false;
+    let tasksRaw = "";
+    const positional = [];
+
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i];
+      if (arg === "--json") {
+        json = true;
+      } else if (arg === "--force") {
+        force = true;
+      } else if (arg === "--tasks") {
+        tasksRaw = args[++i] ?? "";
+      } else {
+        positional.push(arg);
+      }
+    }
+
+    const featureId = positional[0];
+    if (!featureId) {
+      throw new Error("Usage: workspace-cleanup <feature> [--tasks T1,T2] [--force]");
+    }
+
+    const taskIds = tasksRaw
+      ? tasksRaw.split(",").map((item) => item.trim()).filter(Boolean)
+      : undefined;
+    const results = await cleanupWorkspaces(process.cwd(), { featureId, taskIds, force });
+    process.stdout.write(formatWorkspaceResults(results, { json }));
+
+    if (results.some((item) => item.status === "failed")) {
+      process.exit(1);
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "execution-policy") {
+  try {
+    const sub = args[0];
+    let json = false;
+    const rest = [];
+
+    for (let i = 1; i < args.length; i++) {
+      if (args[i] === "--json") {
+        json = true;
+      } else {
+        rest.push(args[i]);
+      }
+    }
+
+    const cwd = process.cwd();
+    const policy = await loadExecutionPolicy(cwd);
+    const state = await loadPolicyState(cwd);
+
+    if (sub === "status") {
+      process.stdout.write(formatPolicyStatus(policy, state, { json }));
+    } else if (sub === "check-path") {
+      const relativePath = rest[0];
+      if (!relativePath) {
+        throw new Error("Usage: execution-policy check-path <relative-path>");
+      }
+      const result = checkPathScope(relativePath, policy);
+      if (json) {
+        console.log(JSON.stringify({ path: relativePath, ...result }, null, 2));
+      } else {
+        console.log(
+          `${relativePath}: ${result.allowed ? "allowed" : "blocked"} (${result.reason})`,
+        );
+      }
+      if (!result.allowed) {
+        process.exit(1);
+      }
+    } else if (sub === "record-retry") {
+      const taskId = rest[0];
+      if (!taskId) {
+        throw new Error("Usage: execution-policy record-retry <task-id>");
+      }
+      state.retries[taskId] = (state.retries[taskId] ?? 0) + 1;
+      state.iterations += 1;
+      await savePolicyState(cwd, state);
+      if (json) {
+        console.log(JSON.stringify({ taskId, retries: state.retries[taskId], state }, null, 2));
+      } else {
+        console.log(`Recorded retry for ${taskId}: ${state.retries[taskId]}`);
+      }
+    } else {
+      throw new Error(
+        "Usage: execution-policy status | check-path <path> | record-retry <task>",
+      );
+    }
   } catch (err) {
     console.error(`❌ ${err.message}`);
     process.exit(1);

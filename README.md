@@ -11,7 +11,7 @@
 | **Solution** | One kit, two deliberate modes: **Process** (Node only) for a flexible spec-driven workflow; **Brakes** (Node + Python) for the **full product** — structural gates that exit non-zero when paperwork or evidence is missing. You approve specs/tasks in both. |
 | **Result** | Traceable `.specs/` memory, fewer fake finishes, cheaper turns (~70% less skill text on planning). Choose Process for light ceremony; add Python when you want the [Guarantees matrix](#guarantees-matrix) enforced automatically. |
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.1.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.2.x**
 
 ---
 
@@ -41,13 +41,16 @@ npx @luizsantiago/spec-guardrails install
 
 Re-run `install` anytime to refresh skills; your `.specs/` decisions and `STATE.md` are kept.
 
-### Optional Atlas companions (Lego)
+### Governance focus (3.2+)
 
-Spec Guardrails is a **complete product alone**. Optional **Atlas** packages add domain specialization (Path Domains, catalogs). The first is [**Tech Atlas**](https://github.com/luizssantiago92/tech-atlas) (`@luizsantiago/tech-atlas` **0.6.x**) — tech engineering context routing.
+Spec Guardrails is a **single product**: governance, evidence, verification, and controlled execution for agentic software development — not a bundle of companion packages.
 
-When paired, install Guardrails first, then the Atlas. Each Atlas registers in **`.specs/companions/INDEX.json`** on `install`. Re-running Guardrails `install` **preserves** companion assets: Atlas skills/catalog, `.specs/tech-atlas/` (legacy `.specs/atlas/` still honored), namespaced gate mirror `validate_tech_atlas_routing.py`, and `.specs/desks/` if present. `doctor` lists installed companions from the INDEX when paired.
-
-Contracts: [Companion: Atlas family](docs/guide/Companion-atlas-family.md) · [Companion: Tech Atlas](docs/guide/Companion-tech-atlas.md).
+| Capability | What it does |
+| --- | --- |
+| **Artifact gates** | Structural quality for spec, tasks, and cross-artifact consistency — with **blocking / warning / info** severity |
+| **Parallel waves** | `loop-plan` computes safe parallel groups; `workspace-prepare` isolates tasks in git worktrees |
+| **Execution policy** | Budgets, path scope, and escalation rules in `.specs/config.yaml` — consult via `execution-policy` |
+| **Independent verify** | Fresh-context verification with evidence-or-zero (`validate-state`) |
 
 | Need | Command |
 | --- | --- |
@@ -198,7 +201,7 @@ Full reference: **[Gates](docs/guide/gates.md)** · [Guarantees matrix](docs/gui
 | [Skills and hub](docs/guide/skills-and-hub.md) | What each skill file does |
 | [Gates](docs/guide/gates.md) | How each gate works |
 | [Platform parity](docs/guide/Platform-parity.md) | Shipped adapters (Cursor, Claude, Copilot, Codex) — core works with any agent |
-| [Companion: Atlas family](docs/guide/Companion-atlas-family.md) | Optional Lego companions (Tech Atlas first) |
+| [Restart PRD seed](docs/guide/Restart-prd-seed.md) | Clean-project PRD template for a single-package restart |
 | [FAQ](docs/guide/FAQ.md) | Common questions |
 | [Changelog](docs/CHANGELOG.md) | Full version history |
 
@@ -214,7 +217,8 @@ npx @luizsantiago/spec-guardrails install
 
 | Version | What you gain |
 | --- | --- |
-| **3.1.x** | Copilot/Codex/AGENTS.md adapters; doctor Process + Brakes scores; Atlas companion INDEX + probes; `validate-traceability` / `validate-quick`; `classify-change` / `feature-status` |
+| **3.2.x** | Single-package focus; artifact gate severity labels; git worktree isolation CLI; execution policy (budget/scope/escalation) |
+| **3.1.x** | Copilot/Codex/AGENTS.md adapters; doctor Process + Brakes scores; `validate-traceability` / `validate-quick`; `classify-change` / `feature-status` |
 | **3.0.x** | Final name Spec Guardrails; `.specs/guardrails/`; no dual-path ([Migration](docs/guide/Migration.md)) |
 | **2.2.x** | Seatbelt-era paths & markers; `doctor` Execute hints; docs split from README |
 | **2.1.x** | `loop-plan` + parallel `/loop` waves |

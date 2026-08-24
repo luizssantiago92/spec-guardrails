@@ -45,7 +45,7 @@ Inspired by loop-engineering’s Loop Ready score — scoped to **this package�
 
 ## Combining with external loop tools
 
-Optional companions (not bundled):
+Optional external tools (not bundled):
 
 - [loop-engineering](https://github.com/cobusgreyling/loop-engineering) — `loop init`, `loop doctor`, patterns, cost estimator
 - [harness-foundry](https://github.com/cobusgreyling/harness-foundry) — versioned harness runtime (sessions, traces)

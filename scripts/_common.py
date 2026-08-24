@@ -74,14 +74,14 @@ class Report:
         print(f"[{self.gate}] {status} - {self.target}")
 
         for check in self.checks:
-            print(f"  ok      {check}")
+            print(f"  info      {check}")
         for warning in self.warnings:
-            print(f"  warn    {warning}")
+            print(f"  warning   {warning}")
         for error in self.errors:
-            print(f"  error   {error}")
+            print(f"  blocking  {error}")
 
         if strict and self.warnings and self.passed:
-            print("  error   strict mode: warnings are treated as failures")
+            print("  blocking  strict mode: warnings are treated as failures")
             return EXIT_FAILED
 
         if not self.passed:
@@ -90,6 +90,12 @@ class Report:
                 "Fix the artifact and re-run this gate before proceeding."
             )
             return EXIT_FAILED
+
+        if self.warnings:
+            print(
+                f"\n{len(self.warnings)} warning(s), 0 blocking — gate passed "
+                "(use --strict to treat warnings as blocking)"
+            )
 
         return EXIT_OK
 

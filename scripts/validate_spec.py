@@ -71,6 +71,14 @@ DELTA_SECTIONS = (
     ("REMOVED Requirements", "removed"),
 )
 CLARIFICATION = re.compile(r"\[NEEDS CLARIFICATION(?:\s*:\s*[^\]]+)?\]", re.IGNORECASE)
+AMBIGUOUS_TERMS = re.compile(
+    r"\b(etc\.?|and so on|as appropriate|as needed|somehow|maybe|when possible)\b",
+    re.IGNORECASE,
+)
+OUT_OF_SCOPE_HEADING = re.compile(
+    r"^(?P<level>#{2,6})\s*Out of Scope\b",
+    re.MULTILINE | re.IGNORECASE,
+)
 REMOVED_ID = re.compile(r"^\s*(?:-\s*)?(?P<id>[A-Z][A-Z0-9]{1,9}-\d{2,4})\b", re.MULTILINE)
 
 
@@ -159,6 +167,11 @@ def validate_requirement_block(
 
         for item in criteria:
             excerpt = item if len(item) <= 70 else f"{item[:67]}..."
+            if AMBIGUOUS_TERMS.search(item):
+                report.warn(
+                    f"{label} {requirement_id}: ambiguous acceptance criterion "
+                    f"(prefer concrete, testable language): '{excerpt}'"
+                )
             if not NORMATIVE_VERB.search(item):
                 report.error(
                     f"{label} {requirement_id}: criterion is not testable, it states no "
@@ -248,6 +261,21 @@ def acceptance_lines(body: str) -> list[str]:
     return lines
 
 
+def validate_out_of_scope(report: Report, text: str) -> None:
+    body = section_body(text, OUT_OF_SCOPE_HEADING)
+    if body is None:
+        return
+
+    stripped = body.strip()
+    if not stripped or re.fullmatch(r"-\s*(none|n/a)\s*", stripped, re.IGNORECASE):
+        report.warn(
+            "Out of Scope section is empty or 'none' — explicit scope boundaries are recommended"
+        )
+        return
+
+    report.ok("Out of Scope section documents explicit boundaries")
+
+
 def build_report(target: str, text: str) -> Report:
     report = Report(gate=GATE, target=target)
     visible = visible_markdown(text)
@@ -298,6 +326,8 @@ def build_report(target: str, text: str) -> Report:
             )
         else:
             validate_requirement_block(report, requirements, "Requirements")
+
+        validate_out_of_scope(report, visible)
 
     for malformed in MALFORMED_ID.finditer(visible):
         raw = malformed.group(0).lstrip("# ").strip()

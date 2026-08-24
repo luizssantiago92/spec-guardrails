@@ -30,9 +30,10 @@ KG and RepoGraph attack (2) and (3) with graphs. Spec Guardrails already covers 
 
 - `project-init` → `PROJECT.md` + optional domain stubs
 - `archive-feature` → merge verified specs into `.specs/domains/`
+- **`code-index rebuild`** → lightweight `.specs/memory/code-index.json` (files, symbols, imports) — **shipped in 3.9.0**
 - Manual **REQ → file → test** links in specs and validation (gate-enforced)
 
-A future **lightweight domain index** (markdown tables, not a triple store) is the likely middle ground — not the full 9-stage pipeline.
+A future **optional plugin** could still add full RepoGraph or a triple-store KG — the core package stops at the markdown + shallow index middle ground.
 
 ## RepoGraph
 

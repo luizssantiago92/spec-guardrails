@@ -7,6 +7,12 @@
         "matcher": "Write|StrReplace|search_replace|EditNotebook|ApplyPatch",
         "failClosed": false
       }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/sandbox-shell.mjs",
+        "failClosed": false
+      }
     ]
   }
 }

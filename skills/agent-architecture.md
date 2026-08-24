@@ -50,6 +50,9 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | After parallel wave merge | `npx @luizsantiago/spec-guardrails workspace-cleanup [feature] --force` |
 | Before editing paths outside task Files | `npx @luizsantiago/spec-guardrails context-guard check-edit <path> [--op write]` — **Cursor:** also auto-runs via `.cursor/hooks/` on write/edit tools |
 | Before claiming feature complete | `npx @luizsantiago/spec-guardrails context-guard check-complete [feature]` |
+| Session episodic note | `npx @luizsantiago/spec-guardrails episodes record --summary "…"` |
+| Brownfield code lookup | `npx @luizsantiago/spec-guardrails code-index rebuild` · `code-index search "…"` |
+| Shell safety check | `npx @luizsantiago/spec-guardrails sandbox check-command "<cmd>"` |
 | Solution exploration (explicit) | `npx @luizsantiago/spec-guardrails solution-explore init <feature> --candidates A,B` |
 | Before exploration decision | `npx @luizsantiago/spec-guardrails solution-explore validate [feature]` |
 | Retrieve related context | `npx @luizsantiago/spec-guardrails memory-retrieve "<query>"` |

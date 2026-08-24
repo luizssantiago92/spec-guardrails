@@ -5,7 +5,7 @@
 
 **Keep AI coding agents honest — specify the work, prove each step, verify independently.**
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.8.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.9.x**
 
 ---
 
@@ -106,7 +106,10 @@ Most projects start with Specify → Tasks → Loop → Verify only. Turn these 
 | Capability | Plain purpose | Learn more |
 | --- | --- | --- |
 | **Memory search** | Find text in past specs and validations | [Memory guide](docs/guide/Memory.md) |
-| **Context guards** | Check scope before edit or “done” | [Agent commands](docs/guide/agent-commands.md) · **Cursor:** auto via hooks (3.8+) |
+| **Context guards** | Check scope before edit or “done” | [Agent commands](docs/guide/agent-commands.md) · **Cursor:** auto via hooks |
+| **Episodic memory** | Session notes → episodic → lessons | [Memory → Episodes](docs/guide/Memory.md#episodic-memory-lifecycle) |
+| **Code index** | Lightweight brownfield file/symbol map | [Brownfield context](docs/guide/brownfield-context.md) |
+| **Sandbox policy** | Block/warn destructive shell commands | [Overview → Safety](docs/guide/Overview.md#safety-and-limits) |
 | **Execution policy** | Limit paths, retries, dangerous ops | [Overview → Safety](docs/guide/Overview.md#safety-and-limits) |
 | **Solution exploration** | Compare two+ implementations before committing | [Overview → Exploration](docs/guide/Overview.md#optional-exploration-mode) |
 | **Semantic retrieval** | Search by meaning (needs OpenAI or Ollama) | [Memory → Semantic](docs/guide/Memory.md#semantic-search-optional) |

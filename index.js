@@ -46,6 +46,11 @@ import {
   validateExplorationArtifact,
 } from "./lib/solution-exploration.js";
 import {
+  checkSandboxCommand,
+  formatSandboxCheck,
+  loadSandboxPolicy,
+} from "./lib/sandbox-policy.js";
+import {
   initProjectConfig,
   listPresets,
   loadPresetText,
@@ -112,6 +117,13 @@ Commands:
     [--json]                         Machine-readable output
   memory-retrieve "<query>"          Hybrid retrieval (FTS + graph + optional semantic)
     [--mode fts|hybrid|semantic]     Strategy (default: hybrid)
+    [--json]                         Machine-readable output
+  episodes record --summary "…"      Capture working-session episodic memory
+  episodes list|archive|prune|promote  Episodic lifecycle (working → episodic → promoted)
+  code-index rebuild [--roots src,lib] Lightweight brownfield code map (not full RepoGraph)
+  code-index search "<query>"        Search indexed files/symbols/imports
+  sandbox status                     Show sandbox policy mode (off|warn|strict)
+  sandbox check-command "<cmd>"      Soft OS sandbox — block/warn destructive shell commands
     [--json]                         Machine-readable output
   context-guard status               Execute readiness from STATE + tasks.md
     [--json]                         Machine-readable output
@@ -609,6 +621,58 @@ if (command === "--version" || command === "-v" || command === "version") {
       throw new Error(
         "Usage: execution-policy status | check-path <path> | record-retry <task> | record-run",
       );
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "sandbox") {
+  try {
+    const sub = args[0];
+    let json = false;
+    /** @type {string[]} */
+    const rest = [];
+
+    for (let i = 1; i < args.length; i++) {
+      if (args[i] === "--json") {
+        json = true;
+      } else {
+        rest.push(args[i]);
+      }
+    }
+
+    const cwd = process.cwd();
+    const policy = await loadSandboxPolicy(cwd);
+
+    if (sub === "status") {
+      if (json) {
+        console.log(
+          JSON.stringify(
+            {
+              mode: policy.mode,
+              deny_rules: policy.deny_patterns.map((rule) => rule.id),
+            },
+            null,
+            2,
+          ),
+        );
+      } else {
+        console.log(
+          `Sandbox mode: ${policy.mode} (${policy.deny_patterns.length} deny rule(s))`,
+        );
+      }
+    } else if (sub === "check-command") {
+      const shellCommand = rest.join(" ").trim();
+      if (!shellCommand) {
+        throw new Error('Usage: sandbox check-command "<shell command>" [--json]');
+      }
+      const result = checkSandboxCommand(shellCommand, policy);
+      process.stdout.write(formatSandboxCheck(result, shellCommand, { json }));
+      if (!result.allowed) {
+        process.exit(1);
+      }
+    } else {
+      throw new Error('Usage: sandbox status | check-command "<cmd>" [--json]');
     }
   } catch (err) {
     console.error(`❌ ${err.message}`);

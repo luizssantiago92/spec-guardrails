@@ -89,22 +89,21 @@ execution-policy status | check-path | record-retry
 
 ---
 
-## Roadmap (v2+ — do not block v1)
+## Roadmap (v2+ — shipped on main)
 
-From the strategic upgrade plan — implement only after v1 is stable and dogfooded:
+| Priority | Capability | Status |
+| --- | --- | --- |
+| P1 | Agent adapter abstraction (capability model) | Shipped (`lib/adapter-registry.js`) |
+| P1 | SQLite memory index (rebuildable from artifacts) | Shipped (`memory-index rebuild`) |
+| P1 | SQLite-backed knowledge graph (entities + relations) | Shipped (`memory-query --from …`) |
+| P1 | Lesson graduation (observation → approved rule) | Shipped (`promote`, `graduate`) |
+| P1 | Intent/effect policy (beyond path allowlists) | Shipped (`check-path --op`, `effects` config) |
+| P2 | Contextual automatic guards | Shipped (`context-guard` CLI) |
+| P2 | Solution exploration mode | Shipped (`solution-explore` CLI) |
+| P2 | Optional semantic retrieval | Shipped (`memory-retrieve`, optional `embed`) |
+| P2+ | Memory polish (design/tasks chunks, doctor hints, embed preservation) | Shipped (3.7.0) |
 
-| Priority | Capability |
-| --- | --- |
-| P1 | Agent adapter abstraction (capability model) |
-| P1 | SQLite memory index (rebuildable from artifacts) |
-| P1 | SQLite-backed knowledge graph (entities + relations) |
-| P1 | Lesson graduation (observation → approved rule) |
-| P1 | Intent/effect policy (beyond path allowlists) |
-| P2 | Contextual automatic guards |
-| P2 | Solution exploration mode |
-| P2 | Optional semantic retrieval |
-
----
+Optional next waves (not scheduled): Cursor hooks for auto `context-guard`, episodic memory lifecycle, brownfield code graph, OS sandbox.
 
 ## Architecture principles
 
@@ -175,7 +174,7 @@ Do **not** claim features from external repos unless verified against their curr
 
 Continue on the **Spec Guardrails** repository. The items below ship incrementally on `main` — not via a new repo or rename:
 
-| Phase | Capability | Status in 3.2.1 |
+| Phase | Capability | Status |
 | --- | --- | --- |
 | P1 | Lesson graduation lifecycle | Shipped (`promote`, `graduate`) |
 | P1 | Adapter registry abstraction | Shipped (`lib/adapter-registry.js`) |
@@ -185,6 +184,7 @@ Continue on the **Spec Guardrails** repository. The items below ship incremental
 | P2 | Contextual auto-guards | Shipped (`context-guard` CLI) |
 | P2 | Solution exploration | Shipped (`solution-explore` CLI) |
 | P2 | Semantic retrieval (FTS foundation) | Shipped (`memory-retrieve`, optional `embed`) |
+| P2+ | Memory polish | Shipped (3.7.0 — design/tasks chunks, doctor hints, embed preservation) |
 
 Use this seed as a **product north star**, not a migration checklist. For day-to-day work, stay on `@luizsantiago/spec-guardrails` and ship small semver releases.
 

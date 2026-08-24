@@ -92,11 +92,24 @@ Yes at a high level: ask your agent to **install Spec Guardrails**, then to **sp
 
 ## Where should I start reading?
 
-1. [Home](Home.md)  
+1. **[Overview](Overview.md)** — complete simple picture  
 2. [Quick start](Quick-start.md)  
 3. [How it works](How-it-works.md)  
+4. [Memory](Memory.md) — if you care about search or team handoff  
 
-Then [Guarantees matrix](Guarantees-matrix.md) / [Gates and guarantees](Gates-and-guarantees.md) / [Token efficiency](Token-efficiency.md) when you care about promises, enforcement, or cost.
+Then [Guarantees matrix](Guarantees-matrix.md) / [Gates](gates.md) when you need enforcement detail.
+
+## Does `doctor` tell me when to use memory or semantic search?
+
+**Partially.** Since 3.7.0, `doctor` may print a **Memory hint** when the index is missing, stale, or semantic is on without enough embeddings. It does **not** enable semantic search for you.
+
+For memory: see **[Memory](Memory.md)** — rebuild after `.specs/` artifact changes; semantic stays **off** until FTS is not enough and you have OpenAI or Ollama.
+
+## What is semantic search and do I need it?
+
+**Optional.** Default is **off**. It helps find past specs/lessons when **words differ** but meaning is similar. It needs **OpenAI or Ollama** for embeddings. It does **not** prevent coding errors — it helps **find old context**.
+
+Most teams use `memory-search` / `memory-retrieve` without semantic first. Details: [Memory → Semantic](Memory.md#semantic-search-optional).
 
 ## Something looks wrong after install?
 

@@ -77,8 +77,9 @@ It **does** stop the agent from skipping the boring-but-important paperwork that
 
 ## Next
 
-- New here? → [Quick start](Quick-start.md)  
+- New here? → [Overview](Overview.md)  
+- [Quick start](Quick-start.md)  
 - Want the product promises? → [Guarantees matrix](Guarantees-matrix.md)  
 - Want the “stop rules”? → [Gates and guarantees](Gates-and-guarantees.md)  
-- Care about cost? → [Token efficiency](Token-efficiency.md)  
+- Memory and search → [Memory](Memory.md)  
 - Back → [Home](Home.md)

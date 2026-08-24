@@ -6,6 +6,14 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.3.0 — Intent/effect policy
+
+### Added
+
+- **Intent/effect classification** — `execution-policy check-path` accepts `--op read|write|delete` and infers operation from path when omitted
+- **`effects` config block** — per-operation deny/warn globs (`deny_delete`, `warn_write`, …) in `.specs/config.yaml`
+- **Default guard** — DELETE denied under `**/.git/**` unless overridden
+
 ## 3.2.1 — P0 parity + P1 foundations
 
 ### Fixed

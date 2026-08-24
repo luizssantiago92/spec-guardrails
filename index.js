@@ -81,6 +81,7 @@ Commands:
   execution-policy status            Show configured budgets, scope, and runtime counters
     [--json]                         Machine-readable output
   execution-policy check-path <path> Check whether a relative path is allowed by scope policy
+    [--op read|write|delete]         Intended operation (default: inferred from path)
     [--json]                         Machine-readable output
   execution-policy record-retry <task>  Increment retry counter for a task id (blocks at limit)
   execution-policy record-run        Increment agent-run counter (blocks at budget)
@@ -482,20 +483,41 @@ if (command === "--version" || command === "-v" || command === "version") {
     if (sub === "status") {
       process.stdout.write(formatPolicyStatus(policy, state, { json }));
     } else if (sub === "check-path") {
-      const relativePath = rest[0];
-      if (!relativePath) {
-        throw new Error("Usage: execution-policy check-path <relative-path>");
+      let operation;
+      const positional = [];
+
+      for (let i = 0; i < rest.length; i++) {
+        const arg = rest[i];
+        if (arg === "--op") {
+          operation = rest[++i];
+          if (!operation) {
+            throw new Error("--op requires read, write, or delete");
+          }
+        } else {
+          positional.push(arg);
+        }
       }
-      const result = resolvePathCheck(relativePath, policy);
+
+      const relativePath = positional[0];
+      if (!relativePath) {
+        throw new Error(
+          "Usage: execution-policy check-path <relative-path> [--op read|write|delete]",
+        );
+      }
+      const result = resolvePathCheck(relativePath, policy, { operation });
       if (json) {
         console.log(JSON.stringify({ path: relativePath, ...result }, null, 2));
       } else {
         const label = result.allowed
-          ? "allowed"
+          ? result.severity === "warning"
+            ? "allowed (warn)"
+            : "allowed"
           : result.severity === "warning"
             ? "blocked (warn)"
             : "blocked";
-        console.log(`${relativePath}: ${label} (${result.reason})`);
+        console.log(
+          `${relativePath} [${result.operation}]: ${label} (${result.reason})`,
+        );
       }
       if (result.exitCode !== 0) {
         process.exit(result.exitCode);

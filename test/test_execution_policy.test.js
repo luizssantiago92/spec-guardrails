@@ -4,9 +4,12 @@ import { describe, it } from "node:test";
 import {
   DEFAULT_POLICY,
   checkBudget,
+  checkPathEffect,
   checkPathScope,
   checkTaskRetries,
+  inferPathOperation,
   mergeExecutionPolicy,
+  normalizePathOperation,
   parseExecutionPolicySections,
   previewAgentRun,
   recordAgentRun,
@@ -109,5 +112,50 @@ escalation:
     assert.equal(result.allowed, false);
     assert.equal(result.severity, "warning");
     assert.equal(result.exitCode, 0);
+  });
+
+  it("parses effects rules from config text", () => {
+    const text = `
+effects:
+  deny_delete:
+    - "**/migrations/**"
+  warn_write:
+    - "**/docs/**"
+`;
+    const parsed = parseExecutionPolicySections(text);
+    const policy = mergeExecutionPolicy(DEFAULT_POLICY, parsed);
+    assert.deepEqual(policy.effects.deny_delete, ["**/migrations/**"]);
+    assert.deepEqual(policy.effects.warn_write, ["**/docs/**"]);
+  });
+
+  it("infers read vs write operations from path extensions", () => {
+    assert.equal(inferPathOperation("README.md"), "read");
+    assert.equal(inferPathOperation("src/auth.ts"), "write");
+  });
+
+  it("blocks delete operations on configured effect paths", () => {
+    const policy = mergeExecutionPolicy(DEFAULT_POLICY, {
+      effects: {
+        deny_delete: ["**/package.json"],
+        deny_write: [],
+        deny_read: [],
+        warn_read: [],
+        warn_write: [],
+        warn_delete: [],
+      },
+    });
+
+    const blocked = resolvePathCheck("src/package.json", policy, { operation: "delete" });
+    assert.equal(blocked.allowed, false);
+    assert.equal(blocked.operation, "delete");
+    assert.match(blocked.reason, /DELETE denied/);
+
+    const allowed = resolvePathCheck("src/package.json", policy, { operation: "read" });
+    assert.equal(allowed.allowed, true);
+    assert.equal(checkPathEffect("src/package.json", "delete", policy).allowed, false);
+  });
+
+  it("rejects unknown operations", () => {
+    assert.throws(() => normalizePathOperation("patch"), /unknown operation/);
   });
 });

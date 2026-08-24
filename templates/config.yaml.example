@@ -39,6 +39,16 @@ escalation:
   on_budget_exhaustion: stop
   on_policy_violation: block
 
+# Intent/effect rules (optional — pair with check-path --op read|write|delete)
+effects:
+  deny_delete:
+    - "**/.git/**"
+  deny_write: []
+  deny_read: []
+  warn_write: []
+  warn_read: []
+  warn_delete: []
+
 # Project-specific overrides (appended on top of preset + rules above):
 # overrides:
 #   rules:

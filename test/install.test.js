@@ -619,6 +619,26 @@ keep me
       await fs.rm(cwd, { recursive: true, force: true });
     }
   });
+
+  it("refuses to install when .specs is a symlinked directory", async (t) => {
+    if (process.platform === "win32" || !(await canCreateSymlinks())) {
+      t.skip("Symlink security checks are not reliable in this environment");
+      return;
+    }
+    const cwd = await createTempDir("ah-specs-parent-symlink-");
+    const outside = path.join(cwd, "outside");
+    await fs.mkdir(outside, { recursive: true });
+    await fs.symlink(outside, path.join(cwd, ".specs"));
+
+    try {
+      await assert.rejects(
+        () => install({ cwd, silent: true }),
+        /symlinked directory/,
+      );
+    } finally {
+      await fs.rm(cwd, { recursive: true, force: true });
+    }
+  });
 });
 
 describe("asset source safety", () => {

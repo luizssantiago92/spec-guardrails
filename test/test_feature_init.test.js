@@ -6,6 +6,7 @@ import path from "node:path";
 import { describe, it } from "node:test";
 
 import {
+  allocateFeatureWorkspace,
   featureInit,
   formatFeatureId,
   nextFeatureNumber,
@@ -81,5 +82,16 @@ describe("feature init", () => {
       encoding: "utf8",
     });
     assert.equal(branch.stdout.trim(), "feat/001-dark-mode-toggle");
+  });
+
+  it("retries allocation when the feature directory already exists", async () => {
+    const cwd = await createTempDir("feature-race-");
+    await fs.mkdir(path.join(cwd, ".specs/features/001-chat"), { recursive: true });
+
+    const first = await allocateFeatureWorkspace(cwd, "chat");
+    assert.equal(first.featureId, "002-chat");
+
+    const second = await allocateFeatureWorkspace(cwd, "chat");
+    assert.equal(second.featureId, "003-chat");
   });
 });

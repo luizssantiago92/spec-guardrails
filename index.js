@@ -5,6 +5,13 @@ import path from "node:path";
 import { archiveFeature } from "./lib/archive.js";
 import { projectInit } from "./lib/brownfield.js";
 import { classifyChange, formatClassifyChange } from "./lib/classify-change.js";
+import {
+  checkBeforeComplete,
+  checkBeforeEdit,
+  evaluateExecuteContext,
+  formatCheckBeforeEdit,
+  formatContextGuardStatus,
+} from "./lib/context-guard.js";
 import { PACKAGE_VERSION, CLI_NAME } from "./lib/constants.js";
 import { phaseContext } from "./lib/config.js";
 import { doctor } from "./lib/doctor.js";
@@ -88,6 +95,18 @@ Commands:
   memory-index rebuild               Rebuild SQLite memory index from .specs/ artifacts
   memory-query --from <id>           Bounded context package from the knowledge graph
     [--depth N]                      Traversal depth (default 2)
+    [--json]                         Machine-readable output
+  memory-search <query>              Full-text search over the memory index (FTS5)
+    [--limit N]                      Max results (default 10)
+    [--json]                         Machine-readable output
+  context-guard status               Execute readiness from STATE + tasks.md
+    [--json]                         Machine-readable output
+  context-guard check-edit <path>    Contextual guard before editing a file
+    [--op read|write|delete]         Intended operation (default: inferred)
+    [--no-strict-files]              Skip task Files allowlist check
+    [--json]                         Machine-readable output
+  context-guard check-complete       Contextual guard before claiming feature done
+    [feature]                        Feature id (default: active in STATE)
     [--json]                         Machine-readable output
   validate-spec [spec.md|feature]    Closure gate for a feature spec
   analyze-artifacts [feature]        Cross-artifact consistency before task approval
@@ -559,6 +578,83 @@ if (command === "--version" || command === "-v" || command === "version") {
     } else {
       throw new Error(
         "Usage: execution-policy status | check-path <path> | record-retry <task> | record-run",
+      );
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "context-guard") {
+  try {
+    const sub = args[0];
+    let json = false;
+    const rest = [];
+
+    for (let i = 1; i < args.length; i++) {
+      if (args[i] === "--json") {
+        json = true;
+      } else {
+        rest.push(args[i]);
+      }
+    }
+
+    const cwd = process.cwd();
+
+    if (sub === "status") {
+      const context = await evaluateExecuteContext(cwd);
+      process.stdout.write(formatContextGuardStatus(context, { json }));
+      if (!context.ok && context.severity === "blocking") {
+        process.exit(1);
+      }
+    } else if (sub === "check-edit") {
+      let operation;
+      let strictFiles = true;
+      const positional = [];
+
+      for (let i = 0; i < rest.length; i++) {
+        const arg = rest[i];
+        if (arg === "--no-strict-files") {
+          strictFiles = false;
+        } else if (arg === "--op") {
+          operation = rest[++i];
+          if (!operation) {
+            throw new Error("--op requires read, write, or delete");
+          }
+        } else {
+          positional.push(arg);
+        }
+      }
+
+      const relativePath = positional[0];
+      if (!relativePath) {
+        throw new Error(
+          "Usage: context-guard check-edit <relative-path> [--op read|write|delete] [--no-strict-files]",
+        );
+      }
+
+      const result = await checkBeforeEdit(cwd, relativePath, { operation, strictFiles });
+      process.stdout.write(formatCheckBeforeEdit(result, relativePath, { json }));
+      if (result.exitCode !== 0) {
+        process.exit(result.exitCode);
+      }
+    } else if (sub === "check-complete") {
+      const featureId = rest[0];
+      const result = await checkBeforeComplete(cwd, featureId);
+      if (json) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        const label = result.allowed ? "ready" : "blocked";
+        console.log(`Feature ${result.featureId}: ${label}`);
+        for (const message of result.messages) {
+          console.log(`  ${message}`);
+        }
+      }
+      if (result.exitCode !== 0) {
+        process.exit(result.exitCode);
+      }
+    } else {
+      throw new Error(
+        "Usage: context-guard status | check-edit <path> | check-complete [feature]",
       );
     }
   } catch (err) {

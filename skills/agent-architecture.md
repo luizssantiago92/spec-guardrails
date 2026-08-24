@@ -52,7 +52,8 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | Before claiming feature complete | `npx @luizsantiago/spec-guardrails context-guard check-complete [feature]` |
 | Solution exploration (explicit) | `npx @luizsantiago/spec-guardrails solution-explore init <feature> --candidates A,B` |
 | Before exploration decision | `npx @luizsantiago/spec-guardrails solution-explore validate [feature]` |
-| Retrieve related context | `npx @luizsantiago/spec-guardrails memory-search "<terms>"` |
+| Retrieve related context | `npx @luizsantiago/spec-guardrails memory-retrieve "<query>"` |
+| Rebuild / embed memory index | `npx @luizsantiago/spec-guardrails memory-index rebuild` · `memory-index embed` |
 | On gate retry (Execute playbook) | `npx @luizsantiago/spec-guardrails execution-policy record-retry Tn` |
 | On each commit | `python3 .specs/guardrails/scripts/check_commit.py --message "<message>"` |
 | Before declaring a feature done | `python3 .specs/guardrails/scripts/validate_state.py [feature]` |

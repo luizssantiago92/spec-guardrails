@@ -5,6 +5,7 @@ Source of truth remains markdown under `.specs/`. The database is a derived inde
 
     python3 memory_index.py rebuild
     python3 memory_index.py rebuild --json
+    python3 memory_index.py embed [--force]
 
 Exit codes: 0 ok, 1 failure, 2 usage error.
 """
@@ -12,6 +13,7 @@ Exit codes: 0 ok, 1 failure, 2 usage error.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 import sqlite3
@@ -20,12 +22,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from _common import EXIT_FAILED, EXIT_OK, EXIT_USAGE, requirement_ids
+from _memory_config import DB_PATH, FEATURES_DIR, MEMORY_DIR, SPECS_DIR, load_memory_retrieval_config
+from _memory_embed import get_embed_fn, pack_vector
 
 GATE = "memory-index"
-SPECS_DIR = Path(".specs")
-FEATURES_DIR = SPECS_DIR / "features"
-MEMORY_DIR = SPECS_DIR / "memory"
-DB_PATH = MEMORY_DIR / "memory.db"
 
 TASK_HEADING = re.compile(
     r"^#{2,6}\s*(?P<id>T\d{1,6})\s*[:\-–]?\s*(?P<title>.*)$",
@@ -35,7 +35,11 @@ TASK_FIELD = re.compile(
     r"^\s*[-*]?\s*\*{0,2}(?P<key>[A-Za-z][A-Za-z ]+?)\*{0,2}\s*:\s*(?P<value>.+?)\s*$",
     re.MULTILINE,
 )
+REQ_HEADING = re.compile(r"^#{2,6}\s*(?P<id>REQ-\d+)\b.*$", re.MULTILINE | re.IGNORECASE)
 REQ_REF = re.compile(r"\b[A-Z][A-Z0-9]{1,9}-\d{2,4}\b")
+SECTION_HEADING = re.compile(r"^##\s+(.+)$", re.MULTILINE)
+
+LESSON_STATUSES = {"approved", "graduated", "confirmed"}
 
 
 def fail(message: str, code: int = EXIT_FAILED) -> int:
@@ -51,6 +55,10 @@ def ok(message: str) -> int:
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
+
+
+def text_hash(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
 def init_schema(conn: sqlite3.Connection) -> None:
@@ -75,6 +83,31 @@ def init_schema(conn: sqlite3.Connection) -> None:
             label,
             source_path,
             tokenize='porter'
+        );
+        CREATE TABLE IF NOT EXISTS chunks (
+            id TEXT PRIMARY KEY,
+            entity_id TEXT,
+            kind TEXT NOT NULL,
+            source_path TEXT,
+            text TEXT NOT NULL,
+            text_hash TEXT NOT NULL,
+            updated_at TEXT NOT NULL
+        );
+        CREATE VIRTUAL TABLE IF NOT EXISTS chunk_fts USING fts5(
+            id UNINDEXED,
+            kind,
+            source_path,
+            text,
+            tokenize='porter'
+        );
+        CREATE TABLE IF NOT EXISTS embeddings (
+            chunk_id TEXT PRIMARY KEY,
+            model TEXT NOT NULL,
+            provider TEXT NOT NULL,
+            dims INTEGER NOT NULL,
+            text_hash TEXT NOT NULL,
+            vector BLOB NOT NULL,
+            updated_at TEXT NOT NULL
         );
         """
     )
@@ -104,6 +137,41 @@ def upsert_entity(
     conn.execute(
         "INSERT INTO entity_fts (id, kind, label, source_path) VALUES (?, ?, ?, ?)",
         (entity_id, kind, label, source_path or ""),
+    )
+
+
+def upsert_chunk(
+    conn: sqlite3.Connection,
+    chunk_id: str,
+    entity_id: str | None,
+    kind: str,
+    source_path: str,
+    text: str,
+    now: str,
+) -> None:
+    normalized = text.strip()
+    if len(normalized) < 8:
+        return
+
+    digest = text_hash(normalized)
+    conn.execute(
+        """
+        INSERT INTO chunks (id, entity_id, kind, source_path, text, text_hash, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET
+            entity_id=excluded.entity_id,
+            kind=excluded.kind,
+            source_path=excluded.source_path,
+            text=excluded.text,
+            text_hash=excluded.text_hash,
+            updated_at=excluded.updated_at
+        """,
+        (chunk_id, entity_id, kind, source_path, normalized, digest, now),
+    )
+    conn.execute("DELETE FROM chunk_fts WHERE id = ?", (chunk_id,))
+    conn.execute(
+        "INSERT INTO chunk_fts (id, kind, source_path, text) VALUES (?, ?, ?, ?)",
+        (chunk_id, kind, source_path, normalized),
     )
 
 
@@ -170,27 +238,94 @@ def task_file_paths(tasks_text: str) -> dict[str, set[str]]:
     return mapping
 
 
-def index_lessons(conn: sqlite3.Connection, now: str) -> int:
+def chunk_spec_requirements(
+    conn: sqlite3.Connection,
+    feature_id: str,
+    spec_path: Path,
+    spec_text: str,
+    now: str,
+) -> int:
+    count = 0
+    matches = list(REQ_HEADING.finditer(spec_text))
+    for index, match in enumerate(matches):
+        req_id = match.group("id").upper()
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(spec_text)
+        body = spec_text[start:end].strip()
+        if not body:
+            continue
+        chunk_id = f"chunk:{feature_id}:requirement:{req_id}"
+        upsert_chunk(conn, chunk_id, req_id, "requirement", str(spec_path), body, now)
+        count += 1
+    return count
+
+
+def chunk_markdown_sections(
+    conn: sqlite3.Connection,
+    feature_id: str,
+    path: Path,
+    text: str,
+    kind: str,
+    entity_id: str | None,
+    now: str,
+) -> int:
+    count = 0
+    matches = list(SECTION_HEADING.finditer(text))
+    if not matches:
+        chunk_id = f"chunk:{feature_id}:{kind}:body"
+        upsert_chunk(conn, chunk_id, entity_id, kind, str(path), text, now)
+        return 1
+
+    for index, match in enumerate(matches):
+        title = match.group(1).strip()
+        slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-") or "section"
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        body = f"## {title}\n{text[start:end]}".strip()
+        chunk_id = f"chunk:{feature_id}:{kind}:{slug}"
+        upsert_chunk(conn, chunk_id, entity_id, kind, str(path), body, now)
+        count += 1
+    return count
+
+
+def index_lessons(conn: sqlite3.Connection, now: str) -> tuple[int, int]:
     lessons_path = SPECS_DIR / "lessons.json"
     if not lessons_path.is_file():
-        return 0
+        return 0, 0
 
     payload = json.loads(lessons_path.read_text(encoding="utf-8"))
-    count = 0
+    entity_count = 0
+    chunk_count = 0
     for lesson in payload.get("lessons") or []:
         lesson_id = str(lesson.get("id") or "").strip()
         if not lesson_id:
             continue
+        status = str(lesson.get("status") or "").strip().lower()
+        title = str(lesson.get("title") or lesson_id)
         upsert_entity(
             conn,
             lesson_id,
             "lesson",
-            str(lesson.get("title") or lesson_id),
+            title,
             str(lesson.get("source") or ""),
             now,
         )
-        count += 1
-    return count
+        entity_count += 1
+
+        if status not in LESSON_STATUSES:
+            continue
+
+        body_parts = [title]
+        for key in ("summary", "detail", "evidence", "recommendation"):
+            value = lesson.get(key)
+            if value:
+                body_parts.append(str(value))
+        body = "\n".join(body_parts).strip()
+        chunk_id = f"chunk:lesson:{lesson_id}"
+        upsert_chunk(conn, chunk_id, lesson_id, "lesson", str(lessons_path), body, now)
+        chunk_count += 1
+
+    return entity_count, chunk_count
 
 
 def rebuild(json_output: bool = False) -> int:
@@ -206,9 +341,13 @@ def rebuild(json_output: bool = False) -> int:
         conn.execute("DELETE FROM relations")
         conn.execute("DELETE FROM entities")
         conn.execute("DELETE FROM entity_fts")
+        conn.execute("DELETE FROM chunks")
+        conn.execute("DELETE FROM chunk_fts")
+        conn.execute("DELETE FROM embeddings")
 
         entity_count = 0
         relation_count = 0
+        chunk_count = 0
 
         if FEATURES_DIR.is_dir():
             for feature_dir in sorted(FEATURES_DIR.iterdir()):
@@ -241,6 +380,35 @@ def rebuild(json_output: bool = False) -> int:
                         entity_count += 1
                         upsert_relation(conn, feature_id, req_id, "contains")
                         relation_count += 1
+                    chunk_count += chunk_spec_requirements(
+                        conn, feature_id, spec_path, spec_text, now
+                    )
+
+                validation_path = feature_dir / "validation.md"
+                if validation_path.is_file():
+                    validation_text = validation_path.read_text(encoding="utf-8")
+                    chunk_count += chunk_markdown_sections(
+                        conn,
+                        feature_id,
+                        validation_path,
+                        validation_text,
+                        "validation",
+                        feature_id,
+                        now,
+                    )
+
+                exploration_path = feature_dir / "exploration.md"
+                if exploration_path.is_file():
+                    exploration_text = exploration_path.read_text(encoding="utf-8")
+                    chunk_count += chunk_markdown_sections(
+                        conn,
+                        feature_id,
+                        exploration_path,
+                        exploration_text,
+                        "exploration",
+                        feature_id,
+                        now,
+                    )
 
                 tasks_path = feature_dir / "tasks.md"
                 if tasks_path.is_file():
@@ -280,13 +448,16 @@ def rebuild(json_output: bool = False) -> int:
                             upsert_relation(conn, task_id, file_entity, "touches")
                             relation_count += 1
 
-        entity_count += index_lessons(conn, now)
+        lesson_entities, lesson_chunks = index_lessons(conn, now)
+        entity_count += lesson_entities
+        chunk_count += lesson_chunks
         conn.commit()
 
         summary = {
             "database": str(DB_PATH),
             "entities": entity_count,
             "relations": relation_count,
+            "chunks": chunk_count,
             "updated_at": now,
         }
 
@@ -294,11 +465,84 @@ def rebuild(json_output: bool = False) -> int:
             print(json.dumps(summary, indent=2))
         else:
             return ok(
-                f"indexed {entity_count} entities and {relation_count} relations -> {DB_PATH}"
+                f"indexed {entity_count} entities, {relation_count} relations, "
+                f"{chunk_count} chunks -> {DB_PATH}"
             )
         return EXIT_OK
     finally:
         conn.close()
+
+
+def embed_chunks(force: bool = False, json_output: bool = False) -> int:
+    config = load_memory_retrieval_config()
+    if not config.get("semantic"):
+        print(f"[{GATE}] semantic retrieval disabled — embed skipped (set memory.retrieval.semantic: true)")
+        return EXIT_OK
+
+    provider = str(config.get("provider") or "none")
+    model = str(config.get("model") or "text-embedding-3-small")
+
+    if not DB_PATH.is_file():
+        return fail(f"{DB_PATH} not found — run `memory-index rebuild` first")
+
+    try:
+        embed_fn = get_embed_fn(provider, model)
+    except RuntimeError as err:
+        return fail(str(err))
+
+    now = utc_now()
+    conn = sqlite3.connect(DB_PATH)
+    embedded = 0
+    skipped = 0
+    try:
+        init_schema(conn)
+        rows = conn.execute(
+            "SELECT id, text, text_hash FROM chunks ORDER BY id"
+        ).fetchall()
+
+        for chunk_id, text, digest in rows:
+            if not force:
+                existing = conn.execute(
+                    """
+                    SELECT text_hash FROM embeddings
+                    WHERE chunk_id = ? AND provider = ? AND model = ?
+                    """,
+                    (chunk_id, provider, model),
+                ).fetchone()
+                if existing and existing[0] == digest:
+                    skipped += 1
+                    continue
+
+            vector = embed_fn(text)
+            conn.execute(
+                """
+                INSERT INTO embeddings (chunk_id, model, provider, dims, text_hash, vector, updated_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(chunk_id) DO UPDATE SET
+                    model=excluded.model,
+                    provider=excluded.provider,
+                    dims=excluded.dims,
+                    text_hash=excluded.text_hash,
+                    vector=excluded.vector,
+                    updated_at=excluded.updated_at
+                """,
+                (chunk_id, model, provider, len(vector), digest, pack_vector(vector), now),
+            )
+            embedded += 1
+
+        conn.commit()
+    finally:
+        conn.close()
+
+    summary = {"embedded": embedded, "skipped": skipped, "provider": provider, "model": model}
+    if json_output:
+        print(json.dumps(summary, indent=2))
+    else:
+        print(
+            f"[{GATE}] embedded {embedded} chunk(s), skipped {skipped} "
+            f"({provider}/{model})"
+        )
+    return EXIT_OK
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -308,6 +552,11 @@ def build_parser() -> argparse.ArgumentParser:
     rebuild_cmd = sub.add_parser("rebuild", help="rebuild index from markdown artifacts")
     rebuild_cmd.add_argument("--json", action="store_true")
     rebuild_cmd.set_defaults(func=lambda args: rebuild(json_output=args.json))
+
+    embed_cmd = sub.add_parser("embed", help="build optional semantic embeddings for chunks")
+    embed_cmd.add_argument("--force", action="store_true")
+    embed_cmd.add_argument("--json", action="store_true")
+    embed_cmd.set_defaults(func=lambda args: embed_chunks(force=args.force, json_output=args.json))
 
     return parser
 

@@ -49,6 +49,17 @@ effects:
   warn_read: []
   warn_delete: []
 
+# Memory retrieval (optional — hybrid FTS + graph + semantic)
+memory:
+  retrieval:
+    semantic: false
+    provider: none
+    model: text-embedding-3-small
+    max_chunks: 20
+    fts_weight: 0.6
+    semantic_weight: 0.4
+    graph_depth: 1
+
 # Project-specific overrides (appended on top of preset + rules above):
 # overrides:
 #   rules:

@@ -103,11 +103,15 @@ Commands:
   execution-policy record-retry <task>  Increment retry counter for a task id (blocks at limit)
   execution-policy record-run        Increment agent-run counter (blocks at budget)
   memory-index rebuild               Rebuild SQLite memory index from .specs/ artifacts
+  memory-index embed [--force]       Optional semantic embeddings (requires config + provider)
   memory-query --from <id>           Bounded context package from the knowledge graph
     [--depth N]                      Traversal depth (default 2)
     [--json]                         Machine-readable output
-  memory-search <query>              Full-text search over the memory index (FTS5)
+  memory-search <query>              Full-text search over indexed artifact chunks (FTS5)
     [--limit N]                      Max results (default 10)
+    [--json]                         Machine-readable output
+  memory-retrieve "<query>"          Hybrid retrieval (FTS + graph + optional semantic)
+    [--mode fts|hybrid|semantic]     Strategy (default: hybrid)
     [--json]                         Machine-readable output
   context-guard status               Execute readiness from STATE + tasks.md
     [--json]                         Machine-readable output

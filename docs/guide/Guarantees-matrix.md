@@ -31,6 +31,7 @@ Run `npx @luizsantiago/spec-guardrails doctor` to see whether Brakes (Python) ar
 | Execution stays within bounds | `execution-policy` + `.specs/config.yaml` | Process | CLI (budget, scope, retries, intent/effect) |
 | Contextual guards at edit/complete | `context-guard` | Process | CLI (STATE, tasks, scope, validation) |
 | Solution exploration (explicit fork) | `solution-explore` | Process | CLI (candidates, comparison, decision) |
+| Bounded memory retrieval | `memory-retrieve` | Process | CLI (FTS + graph + optional semantic) |
 | Quick changes stay bounded | `validate-quick` | Brakes | Hard gate |
 | Completion cites evidence | `validate-state` | Brakes | Hard gate |
 | Commits follow policy | `check-commit` | Brakes | Hard gate |

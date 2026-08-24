@@ -102,8 +102,9 @@ execution-policy status | check-path | record-retry
 | P2 | Solution exploration mode | Shipped (`solution-explore` CLI) |
 | P2 | Optional semantic retrieval | Shipped (`memory-retrieve`, optional `embed`) |
 | P2+ | Memory polish (design/tasks chunks, doctor hints, embed preservation) | Shipped (3.7.0) |
+| P2+ | Cursor hooks for auto `context-guard` | Shipped (3.8.0) |
 
-Optional next waves (not scheduled): Cursor hooks for auto `context-guard`, episodic memory lifecycle, brownfield code graph, OS sandbox.
+Optional next waves (not scheduled): episodic memory lifecycle, brownfield code graph, OS sandbox.
 
 ## Architecture principles
 

@@ -6,6 +6,18 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.8.0 — Cursor hooks for automatic context-guard
+
+### Added
+
+- **Cursor hooks** — `install` ships `.cursor/hooks.json` + `context-guard-edit.mjs` to run `context-guard check-edit` before Write/StrReplace/edit tools
+- **`lib/cursor-hooks.js`** — idempotent hook install and hooks.json merge (preserves user hooks)
+- **Tests** — hook path extraction, merge logic, install copies hook assets
+
+### Changed
+
+- **Hub** — notes Cursor auto-guard on file edits via hooks
+
 ## 3.7.0 — Memory polish + plain-language docs
 
 ### Added

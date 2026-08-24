@@ -171,6 +171,8 @@ Full guide: **[Memory](Memory.md)** — no project required to understand the mo
 
 **Context guards** check before edit or before claiming “feature done” (active feature, task files, validation PASS).
 
+**Cursor hooks (3.8+):** `install` adds `.cursor/hooks/` so `context-guard check-edit` runs automatically before write/edit tools — you still approve specs/tasks; the IDE blocks out-of-scope edits without the agent remembering to call the CLI.
+
 These reduce blast radius; they do not replace your review.
 
 ---

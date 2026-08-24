@@ -183,7 +183,7 @@ Continue on the **Spec Guardrails** repository. The items below ship incremental
 | P1 | Knowledge graph traversal | Shipped (`memory-query --from …`) |
 | P1 | Intent/effect policy (READ/WRITE/DELETE) | Shipped (`check-path --op`, `effects` config) |
 | P2 | Contextual auto-guards | Shipped (`context-guard` CLI) |
-| P2 | Solution exploration | Planned |
+| P2 | Solution exploration | Shipped (`solution-explore` CLI) |
 | P2 | Semantic retrieval (FTS foundation) | Shipped (`memory-search`); embeddings planned |
 
 Use this seed as a **product north star**, not a migration checklist. For day-to-day work, stay on `@luizsantiago/spec-guardrails` and ship small semver releases.

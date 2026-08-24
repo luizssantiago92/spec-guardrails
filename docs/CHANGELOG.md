@@ -6,6 +6,14 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.5.0 — Solution exploration mode
+
+### Added
+
+- **`solution-explore`** — explicit multi-candidate exploration from an approved spec: `init`, `status`, `validate`, `select` (isolated worktrees + `exploration.md` comparison matrix)
+- **`references/solution-exploration.md`** — phase procedure for architecture/strategy forks before Execute
+- **Guarantees matrix** — row for explicit solution exploration
+
 ## 3.4.0 — P2 contextual guards + FTS retrieval
 
 ### Added

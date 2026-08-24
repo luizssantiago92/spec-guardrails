@@ -36,6 +36,16 @@ import {
   prepareWorkspaces,
 } from "./lib/workspace-isolation.js";
 import {
+  formatExplorationInit,
+  formatExplorationStatus,
+  formatExplorationValidation,
+  getExplorationStatus,
+  initExploration,
+  normalizeCandidateId,
+  recordExplorationDecision,
+  validateExplorationArtifact,
+} from "./lib/solution-exploration.js";
+import {
   initProjectConfig,
   listPresets,
   loadPresetText,
@@ -107,6 +117,22 @@ Commands:
     [--json]                         Machine-readable output
   context-guard check-complete       Contextual guard before claiming feature done
     [feature]                        Feature id (default: active in STATE)
+    [--json]                         Machine-readable output
+  solution-explore init <feature>    Start solution exploration from approved spec
+    --candidates A,B[,C]             Candidate ids (required, at least two)
+    [--labels "a,b,c"]               Optional labels aligned to candidate ids
+    [--base-ref HEAD]                Base ref for candidate worktrees
+    [--force]                        Replace existing exploration.md
+    [--json]                         Machine-readable output
+  solution-explore status [feature]  Show exploration candidates and decision state
+    [--json]                         Machine-readable output
+  solution-explore validate [feature]  Gate: comparison matrix complete before select
+    [--json]                         Machine-readable output
+  solution-explore select <feature>  Record exploration decision
+    --candidate A                    Selected candidate id (required)
+    [--merge B]                      Optional secondary candidate to merge from
+    --rationale "…"                  Why this candidate won (required)
+    [--cleanup]                      Remove non-selected candidate worktrees
     [--json]                         Machine-readable output
   validate-spec [spec.md|feature]    Closure gate for a feature spec
   analyze-artifacts [feature]        Cross-artifact consistency before task approval
@@ -655,6 +681,141 @@ if (command === "--version" || command === "-v" || command === "version") {
     } else {
       throw new Error(
         "Usage: context-guard status | check-edit <path> | check-complete [feature]",
+      );
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "solution-explore") {
+  try {
+    const sub = args[0];
+    let json = false;
+    const rest = [];
+
+    for (let i = 1; i < args.length; i++) {
+      if (args[i] === "--json") {
+        json = true;
+      } else {
+        rest.push(args[i]);
+      }
+    }
+
+    const cwd = process.cwd();
+
+    if (sub === "init") {
+      let candidatesRaw = "";
+      let labelsRaw = "";
+      let baseRef = "HEAD";
+      let force = false;
+      const positional = [];
+
+      for (let i = 0; i < rest.length; i++) {
+        const arg = rest[i];
+        if (arg === "--candidates") {
+          candidatesRaw = rest[++i] ?? "";
+        } else if (arg === "--labels") {
+          labelsRaw = rest[++i] ?? "";
+        } else if (arg === "--base-ref") {
+          baseRef = rest[++i];
+          if (!baseRef) {
+            throw new Error("--base-ref requires a git ref");
+          }
+        } else if (arg === "--force") {
+          force = true;
+        } else {
+          positional.push(arg);
+        }
+      }
+
+      const featureId = positional[0];
+      if (!featureId || !candidatesRaw) {
+        throw new Error(
+          "Usage: solution-explore init <feature> --candidates A,B [--labels \"a,b\"] [--base-ref HEAD] [--force]",
+        );
+      }
+
+      const ids = candidatesRaw.split(",").map((item) => item.trim()).filter(Boolean);
+      const labels = labelsRaw
+        ? labelsRaw.split(",").map((item) => item.trim())
+        : [];
+      const candidateSpecs = ids.map((id, index) => ({
+        id: normalizeCandidateId(id),
+        label: labels[index] || undefined,
+      }));
+
+      const result = await initExploration(cwd, featureId, candidateSpecs, { baseRef, force });
+      process.stdout.write(formatExplorationInit(result, { json }));
+
+      if (result.workspaces.some((item) => item.status === "failed")) {
+        process.exit(1);
+      }
+    } else if (sub === "status") {
+      const featureId = rest[0];
+      const status = await getExplorationStatus(cwd, featureId);
+      process.stdout.write(formatExplorationStatus(status, { json }));
+    } else if (sub === "validate") {
+      const featureId = rest[0];
+      if (!featureId) {
+        throw new Error("Usage: solution-explore validate <feature>");
+      }
+      const result = await validateExplorationArtifact(cwd, featureId);
+      process.stdout.write(formatExplorationValidation(result, { json }));
+      if (!result.ok) {
+        process.exit(1);
+      }
+    } else if (sub === "select") {
+      let selected = "";
+      let mergedFrom = "";
+      let rationale = "";
+      let cleanup = false;
+      const positional = [];
+
+      for (let i = 0; i < rest.length; i++) {
+        const arg = rest[i];
+        if (arg === "--candidate") {
+          selected = rest[++i] ?? "";
+        } else if (arg === "--merge") {
+          mergedFrom = rest[++i] ?? "";
+        } else if (arg === "--rationale") {
+          rationale = rest[++i] ?? "";
+        } else if (arg === "--cleanup") {
+          cleanup = true;
+        } else {
+          positional.push(arg);
+        }
+      }
+
+      const featureId = positional[0];
+      if (!featureId || !selected || !rationale) {
+        throw new Error(
+          'Usage: solution-explore select <feature> --candidate A --rationale "…" [--merge B] [--cleanup]',
+        );
+      }
+
+      const result = await recordExplorationDecision(cwd, featureId, {
+        selected,
+        mergedFrom: mergedFrom || null,
+        rationale,
+        cleanup,
+      });
+
+      if (json) {
+        console.log(JSON.stringify(result, null, 2));
+      } else {
+        console.log(`Recorded decision for ${result.featureId}: ${result.selected}`);
+        if (result.mergedFrom) {
+          console.log(`  Merged from: ${result.mergedFrom}`);
+        }
+        if (result.cleanup?.length) {
+          for (const item of result.cleanup) {
+            console.log(`  Cleanup ${path.basename(item.path)}: ${item.status}`);
+          }
+        }
+      }
+    } else {
+      throw new Error(
+        "Usage: solution-explore init | status | validate | select",
       );
     }
   } catch (err) {

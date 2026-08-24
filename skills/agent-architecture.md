@@ -50,6 +50,8 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | After parallel wave merge | `npx @luizsantiago/spec-guardrails workspace-cleanup [feature] --force` |
 | Before editing paths outside task Files | `npx @luizsantiago/spec-guardrails context-guard check-edit <path> [--op write]` |
 | Before claiming feature complete | `npx @luizsantiago/spec-guardrails context-guard check-complete [feature]` |
+| Solution exploration (explicit) | `npx @luizsantiago/spec-guardrails solution-explore init <feature> --candidates A,B` |
+| Before exploration decision | `npx @luizsantiago/spec-guardrails solution-explore validate [feature]` |
 | Retrieve related context | `npx @luizsantiago/spec-guardrails memory-search "<terms>"` |
 | On gate retry (Execute playbook) | `npx @luizsantiago/spec-guardrails execution-policy record-retry Tn` |
 | On each commit | `python3 .specs/guardrails/scripts/check_commit.py --message "<message>"` |
@@ -89,6 +91,7 @@ EXPLORE (optional) → SPECIFY → DISCUSS (conditional) → DESIGN (optional) �
 | **Quick** | Alternative | `references/quick-mode.md` | — | `check_commit.py`, `validate_quick.py` |
 | **Context** | Always | `references/context-limits.md` | — | — |
 | **Sub-agents** | When batched | `references/sub-agents.md` | `task-graph-engineering.md` | — |
+| **Solution exploration** | Explicit fork | `references/solution-exploration.md` | — | `solution-explore validate` |
 | **Lessons** | On FAIL | `references/lessons.md` | — | `lessons.py` |
 
 Context is a load rule, not a pipeline phase. Read it when the session is long or the feature has more than a handful of tasks. Sub-agents is the Execute scaling protocol — offer only when the task graph needs more than one batch; see `references/sub-agents.md`. Lessons is a FAIL-path step, not a sequential phase — see `references/lessons.md`.
@@ -144,6 +147,7 @@ When in doubt, start at **Medium** and drop phases only with owner approval.
 | `.specs/features/[feature]/spec.md` | Requirements (use `NNN-slug` from `feature-init`) |
 | `.specs/features/[feature]/context.md` | Owner decisions for gray areas (only when Discuss ran) |
 | `.specs/features/[feature]/design.md` | Architecture (Complex tier) |
+| `.specs/features/[feature]/exploration.md` | Solution exploration candidates + comparison (explicit mode) |
 | `.specs/features/[feature]/tasks.md` | Atomic task breakdown |
 | `.specs/features/[feature]/task-graph.md` | Job DAG and parallel groups (when applicable) |
 | `.specs/features/[feature]/validation.md` | Independent verification report |

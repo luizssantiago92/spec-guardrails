@@ -1,6 +1,6 @@
 {
   "name": "@luizsantiago/spec-guardrails",
-  "version": "3.7.0",
+  "version": "3.8.0",
   "description": "Spec-driven process kit for AI coding agents: write goals in .specs/, break into tasks, implement in waves, verify with proof. Process mode (Node) or Brakes mode (Node + Python gates). Works with Cursor, Claude, Copilot, and Codex.",
   "type": "module",
   "bin": {
@@ -12,7 +12,7 @@
   "scripts": {
     "guardrails": "node index.js",
     "test": "npm run test:node && npm run test:gates",
-    "test:node": "node --test test/install.test.js test/test_feature_init.test.js test/test_config.test.js test/test_archive.test.js test/test_delta_merge.test.js test/test_presets.test.js test/test_brownfield.test.js test/test_doctor.test.js test/test_token_cost.test.js test/test_next_steps.test.js test/test_classify_change.test.js test/test_feature_status.test.js test/test_agent_contract.test.js test/test_gates_python.test.js test/test_specs_utils.test.js test/test_validation_verdict.test.js test/test_execution_policy.test.js test/test_workspace_isolation.test.js test/test_adapter_registry.test.js test/test_context_guard.test.js test/test_solution_exploration.test.js test/test_memory_doctor.test.js",
+    "test:node": "node --test test/install.test.js test/test_feature_init.test.js test/test_config.test.js test/test_archive.test.js test/test_delta_merge.test.js test/test_presets.test.js test/test_brownfield.test.js test/test_doctor.test.js test/test_token_cost.test.js test/test_next_steps.test.js test/test_classify_change.test.js test/test_feature_status.test.js test/test_agent_contract.test.js test/test_gates_python.test.js test/test_specs_utils.test.js test/test_validation_verdict.test.js test/test_execution_policy.test.js test/test_workspace_isolation.test.js test/test_adapter_registry.test.js test/test_context_guard.test.js test/test_solution_exploration.test.js test/test_memory_doctor.test.js test/test_cursor_hooks.test.js",
     "test:gates": "node test/run-gate-tests.mjs",
     "prepublishOnly": "npm test"
   },

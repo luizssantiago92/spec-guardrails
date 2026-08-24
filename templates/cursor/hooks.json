@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": ".cursor/hooks/context-guard-edit.mjs",
+        "matcher": "Write|StrReplace|search_replace|EditNotebook|ApplyPatch",
+        "failClosed": false
+      }
+    ]
+  }
+}

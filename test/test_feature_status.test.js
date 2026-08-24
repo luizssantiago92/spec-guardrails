@@ -54,4 +54,24 @@ describe("feature-status", () => {
     assert.equal(status.verdict, "PASS");
     assert.match(status.next, /archive-feature/);
   });
+
+  it("reads PASS from a ## Verdict heading", async () => {
+    const cwd = await createTempDir("feature-status-heading-");
+    const feature = "003-heading";
+    const featureDir = path.join(cwd, ".specs/features", feature);
+    await fs.mkdir(featureDir, { recursive: true });
+    await fs.writeFile(path.join(featureDir, "spec.md"), "# Spec\n");
+    await fs.writeFile(
+      path.join(featureDir, "tasks.md"),
+      "# Tasks\n\n## T1: only\n\n- [x] complete\n",
+    );
+    await fs.writeFile(
+      path.join(featureDir, "validation.md"),
+      "# Validation\n\n## Verdict\n\nPASS\n",
+    );
+
+    const status = await featureStatus(feature, { cwd });
+    assert.equal(status.verdict, "PASS");
+    assert.match(status.next, /archive-feature/);
+  });
 });

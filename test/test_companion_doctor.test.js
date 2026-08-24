@@ -79,4 +79,45 @@ describe("companion doctor probes", () => {
     const summary = summarizeCompanionChecks(report.checks);
     assert.equal(summary.ready, true);
   });
+
+  it("survives missing PROJECT.md when companions are registered", async () => {
+    const cwd = await createTempDir("companion-doc-no-project-");
+    const companionDir = path.join(cwd, ".specs/companions");
+    await fs.mkdir(companionDir, { recursive: true });
+    await fs.mkdir(path.join(cwd, ".specs/tech-atlas/scripts"), { recursive: true });
+    await fs.writeFile(
+      path.join(companionDir, "INDEX.json"),
+      JSON.stringify(
+        {
+          schemaVersion: "1.0.0",
+          generatedAt: new Date().toISOString(),
+          paired: false,
+          companions: [
+            {
+              id: "tech-atlas",
+              npm: "@luizsantiago/tech-atlas",
+              version: "0.6.0",
+              displayName: "Tech Atlas",
+              scriptsDir: ".specs/tech-atlas/scripts",
+              gates: ["validate_layer_routing.py"],
+              projectSection: "## Tech Atlas — Path Domain registry",
+              ruleFile: ".cursor/rules/tech-atlas.mdc",
+              preservePaths: [".specs/tech-atlas/scripts"],
+            },
+          ],
+        },
+        null,
+        2,
+      ),
+      "utf8",
+    );
+
+    const report = await runCompanionDoctorChecks(cwd);
+    assert.equal(report.companions.length, 1);
+    assert.ok(
+      report.checks.some(
+        (check) => check.id === "atlas-tech-atlas-registry" && check.pass === false,
+      ),
+    );
+  });
 });

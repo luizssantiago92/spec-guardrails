@@ -11,7 +11,7 @@
 | **Solution** | One kit, two deliberate modes: **Process** (Node only) for a flexible spec-driven workflow; **Brakes** (Node + Python) for the **full product** — structural gates that exit non-zero when paperwork or evidence is missing. You approve specs/tasks in both. |
 | **Result** | Traceable `.specs/` memory, fewer fake finishes, cheaper turns (~70% less skill text on planning). Choose Process for light ceremony; add Python when you want the [Guarantees matrix](#guarantees-matrix) enforced automatically. |
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.4.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.5.x**
 
 ---
 
@@ -217,6 +217,7 @@ npx @luizsantiago/spec-guardrails install
 
 | Version | What you gain |
 | --- | --- |
+| **3.5.x** | Solution exploration (`solution-explore`) — compare candidates from approved spec |
 | **3.4.x** | Contextual guards (`context-guard`); FTS memory search (`memory-search`) |
 | **3.3.x** | Intent/effect policy — `check-path --op read|write|delete` and `effects` config block |
 | **3.2.x** | Single-package focus; artifact gate severity labels; git worktree isolation CLI; execution policy (budget/scope/escalation) |

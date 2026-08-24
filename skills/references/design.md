@@ -81,6 +81,7 @@ Skipping Design is the default for Simple and Medium tiers.
 
 - No implementation code in `design.md` — interfaces and signatures only when they clarify a contract.
 - If the design reveals that the spec is wrong or incomplete, stop and update `spec.md` first; re-run the spec gate.
+- When multiple defensible implementations exist for the same spec, use explicit **solution exploration** (`references/solution-exploration.md`) before Execute — not parallel ad-hoc spikes.
 - Prefer the smallest design that satisfies the spec. Extensibility that no requirement asks for is speculation.
 
 ## Next

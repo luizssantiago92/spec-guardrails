@@ -223,6 +223,9 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `context-guard status` | Execute readiness (STATE + open tasks) |
 | `context-guard check-edit <path>` | Contextual guard before editing (scope + task Files) |
 | `context-guard check-complete [feature]` | Guard before claiming completion (tasks + validation PASS) |
+| `solution-explore init <feature> --candidates A,B` | Start explicit solution exploration (worktrees + exploration.md) |
+| `solution-explore validate [feature]` | Comparison matrix complete before decision |
+| `solution-explore select <feature> --candidate A --rationale "…"` | Record exploration winner |
 
 Full CLI list: `npx @luizsantiago/spec-guardrails --help`.
 

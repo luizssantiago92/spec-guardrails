@@ -5,8 +5,9 @@ import path from "node:path";
 import { describe, it } from "node:test";
 
 import {
-  CURSOR_HOOK_SCRIPT,
+  CURSOR_HOOK_EDIT,
   CURSOR_HOOKS_JSON,
+  CURSOR_HOOK_SANDBOX,
   mergeCursorHooksConfig,
 } from "../lib/cursor-hooks.js";
 import {
@@ -92,9 +93,11 @@ describe("context-guard edit hook", () => {
     const cwd = await createTempDir("hook-install-");
     await install({ cwd, silent: true });
 
-    assert.equal(await fs.access(path.join(cwd, CURSOR_HOOK_SCRIPT)).then(() => true, () => false), true);
+    assert.equal(await fs.access(path.join(cwd, CURSOR_HOOK_EDIT)).then(() => true, () => false), true);
+    assert.equal(await fs.access(path.join(cwd, CURSOR_HOOK_SANDBOX)).then(() => true, () => false), true);
     const hooksJson = JSON.parse(await fs.readFile(path.join(cwd, CURSOR_HOOKS_JSON), "utf8"));
     assert.ok(Array.isArray(hooksJson.hooks.preToolUse));
+    assert.ok(Array.isArray(hooksJson.hooks.beforeShellExecution));
     assert.ok(
       hooksJson.hooks.preToolUse.some(
         (entry) => entry.command === ".cursor/hooks/context-guard-edit.mjs",

@@ -144,6 +144,30 @@ After rebuild, unchanged chunks keep their embeddings — run `embed` when `doct
 
 ---
 
+## Episodic memory lifecycle
+
+Between chat sessions and formal lessons, use **episodes** for short-lived context:
+
+```text
+working   →  episodic  →  promoted (→ lessons when grounded)
+   │              │
+ record         archive        promote
+                  │
+                prune (after retention_days)
+```
+
+| Command | When |
+| --- | --- |
+| `episodes record --summary "…"` | End of session — capture what happened |
+| `episodes archive EP-001` | Move working → episodic |
+| `episodes prune` | Drop old episodic entries (default 90 days) |
+| `episodes promote EP-001 --rule "…"` | Mark for lesson graduation |
+| `memory-index rebuild` | Index episodic/promoted episodes for search |
+
+Config: `memory.lifecycle.retention_days` in `.specs/config.yaml`.
+
+---
+
 ## Does `doctor` tell me to use memory?
 
 **Partially (since 3.7.0).** `doctor` may print a **Memory hint** when:

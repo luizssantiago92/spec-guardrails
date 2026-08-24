@@ -21,6 +21,11 @@ DEFAULT_RETRIEVAL = {
     "graph_depth": 1,
 }
 
+DEFAULT_LIFECYCLE = {
+    "retention_days": 90,
+    "auto_archive_on_handoff": False,
+}
+
 BOOL = {"true", "false", "yes", "no", "on", "off"}
 
 
@@ -91,6 +96,63 @@ def load_memory_retrieval_config() -> dict:
         if key not in config:
             continue
         if raw_value == "":
+            continue
+        config[key] = _parse_scalar(raw_value)
+
+    return config
+
+
+def load_memory_lifecycle_config() -> dict:
+    """Return memory.lifecycle settings with defaults."""
+
+    config = dict(DEFAULT_LIFECYCLE)
+    if not CONFIG_PATH.is_file():
+        return config
+
+    lines = CONFIG_PATH.read_text(encoding="utf-8").splitlines()
+    in_memory = False
+    in_lifecycle = False
+    memory_indent = 0
+    lifecycle_indent = 0
+
+    for line in lines:
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+
+        indent = len(line) - len(line.lstrip())
+        stripped = line.strip()
+
+        if stripped == "memory:":
+            in_memory = True
+            in_lifecycle = False
+            memory_indent = indent
+            continue
+
+        if not in_memory:
+            continue
+
+        if indent <= memory_indent and stripped != "memory:":
+            in_memory = False
+            in_lifecycle = False
+            continue
+
+        if stripped == "lifecycle:":
+            in_lifecycle = True
+            lifecycle_indent = indent
+            continue
+
+        if in_lifecycle and indent <= lifecycle_indent and not stripped.startswith("lifecycle:"):
+            in_lifecycle = False
+
+        if not in_lifecycle:
+            continue
+
+        match = re.match(r"^([a-z_]+):\s*(.*)$", stripped)
+        if not match:
+            continue
+
+        key, raw_value = match.group(1), match.group(2)
+        if key not in config or raw_value == "":
             continue
         config[key] = _parse_scalar(raw_value)
 

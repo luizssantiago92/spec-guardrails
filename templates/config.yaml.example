@@ -51,6 +51,9 @@ effects:
 
 # Memory retrieval (optional — hybrid FTS + graph + semantic)
 memory:
+  lifecycle:
+    retention_days: 90
+    auto_archive_on_handoff: false
   retrieval:
     semantic: false
     provider: none
@@ -59,6 +62,13 @@ memory:
     fts_weight: 0.6
     semantic_weight: 0.4
     graph_depth: 1
+
+# Soft OS sandbox (optional — policy, not containers)
+sandbox:
+  mode: warn
+  deny_patterns:
+    - "rm\\s+-rf"
+    - "curl.*\\|.*sh"
 
 # Project-specific overrides (appended on top of preset + rules above):
 # overrides:

@@ -173,6 +173,8 @@ Full guide: **[Memory](Memory.md)** — no project required to understand the mo
 
 **Cursor hooks (3.8+):** `install` adds `.cursor/hooks/` so `context-guard check-edit` runs automatically before write/edit tools — you still approve specs/tasks; the IDE blocks out-of-scope edits without the agent remembering to call the CLI.
 
+**Sandbox policy (3.9+):** same install adds a shell hook for destructive commands (`rm -rf`, `curl | bash`, force-push to main, …). This is policy enforcement, not a container sandbox — configure `sandbox.mode` in `.specs/config.yaml`.
+
 These reduce blast radius; they do not replace your review.
 
 ---

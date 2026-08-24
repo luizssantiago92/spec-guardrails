@@ -1,6 +1,6 @@
 # Documentation
 
-Plain-language guides for **Spec Guardrails 3.7.x**.  
+Plain-language guides for **Spec Guardrails 3.9.x**.  
 **New here?** Read **[Overview](Overview.md)** first, then [Quick start](Quick-start.md).
 
 ---

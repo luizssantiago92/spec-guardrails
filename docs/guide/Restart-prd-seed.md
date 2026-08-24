@@ -103,8 +103,11 @@ execution-policy status | check-path | record-retry
 | P2 | Optional semantic retrieval | Shipped (`memory-retrieve`, optional `embed`) |
 | P2+ | Memory polish (design/tasks chunks, doctor hints, embed preservation) | Shipped (3.7.0) |
 | P2+ | Cursor hooks for auto `context-guard` | Shipped (3.8.0) |
+| P2+ | Episodic memory lifecycle | Shipped (3.9.0 — `episodes` CLI) |
+| P2+ | Brownfield code index | Shipped (3.9.0 — `code-index` CLI) |
+| P2+ | Soft OS sandbox policy | Shipped (3.9.0 — `sandbox` + Cursor shell hook) |
 
-Optional next waves (not scheduled): episodic memory lifecycle, brownfield code graph, OS sandbox.
+**Strategic roadmap (core package): complete.** Future work is optional plugins (full RepoGraph, container sandbox), not blocking the product loop.
 
 ## Architecture principles
 

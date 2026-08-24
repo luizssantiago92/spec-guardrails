@@ -6,6 +6,20 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.9.0 — Roadmap complete: episodes, code index, sandbox policy
+
+### Added
+
+- **Episodic memory lifecycle** — `episodes record|list|archive|prune|promote` with store at `.specs/state/episodes.json`; indexed by `memory-index rebuild`
+- **Lightweight code index** — `code-index rebuild|search` for brownfield navigation (shallow file/symbol map, not RepoGraph)
+- **Soft OS sandbox** — `sandbox status|check-command` with configurable deny patterns (`off|warn|strict`)
+- **Cursor sandbox hook** — `beforeShellExecution` runs sandbox checks automatically on install
+
+### Changed
+
+- **Config example** — `memory.lifecycle` and `sandbox` blocks documented
+- **Roadmap** — P2+ optional waves marked shipped; strategic roadmap complete for core package
+
 ## 3.8.0 — Cursor hooks for automatic context-guard
 
 ### Added

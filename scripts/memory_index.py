@@ -404,6 +404,52 @@ def index_lessons(conn: sqlite3.Connection, now: str) -> tuple[int, int]:
     return entity_count, chunk_count
 
 
+def index_episodes(conn: sqlite3.Connection, now: str) -> tuple[int, int]:
+    episodes_path = SPECS_DIR / "state" / "episodes.json"
+    if not episodes_path.is_file():
+        return 0, 0
+
+    payload = json.loads(episodes_path.read_text(encoding="utf-8"))
+    entity_count = 0
+    chunk_count = 0
+
+    for episode in payload.get("episodes") or []:
+        episode_id = str(episode.get("id") or "").strip()
+        if not episode_id:
+            continue
+        status = str(episode.get("status") or "").strip().lower()
+        if status not in {"episodic", "archived", "promoted"}:
+            continue
+
+        feature_id = str(episode.get("feature_id") or "").strip() or None
+        summary = str(episode.get("summary") or episode_id)
+        upsert_entity(
+            conn,
+            episode_id,
+            "episode",
+            summary[:120],
+            str(episodes_path),
+            now,
+        )
+        entity_count += 1
+
+        if feature_id:
+            upsert_relation(conn, feature_id, episode_id, "contains")
+            upsert_relation(conn, episode_id, feature_id, "documents")
+
+        body_parts = [summary]
+        for key in ("phase", "lesson_title", "lesson_rule"):
+            value = episode.get(key)
+            if value:
+                body_parts.append(f"{key}: {value}")
+        body = "\n".join(body_parts).strip()
+        chunk_id = f"chunk:episode:{episode_id}"
+        upsert_chunk(conn, chunk_id, episode_id, "episode", str(episodes_path), body, now)
+        chunk_count += 1
+
+    return entity_count, chunk_count
+
+
 def rebuild(json_output: bool = False) -> int:
     if not SPECS_DIR.is_dir():
         return fail(".specs/ not found — run install first")
@@ -543,6 +589,9 @@ def rebuild(json_output: bool = False) -> int:
         lesson_entities, lesson_chunks = index_lessons(conn, now)
         entity_count += lesson_entities
         chunk_count += lesson_chunks
+        episode_entities, episode_chunks = index_episodes(conn, now)
+        entity_count += episode_entities
+        chunk_count += episode_chunks
         prune_embeddings(conn)
         conn.commit()
 

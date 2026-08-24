@@ -6,6 +6,19 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.2.0 — Single package + strategic P0
+
+### Breaking / removal
+
+- **Removed Atlas companion integration** — no `.specs/companions/INDEX.json` probes in `doctor`; companion docs and preserve-path logic removed. Spec Guardrails is a single product again.
+
+### Added
+
+- **Artifact gate severity labels** — gate output uses `blocking`, `warning`, and `info`; spec gate warns on empty Out of Scope and ambiguous acceptance criteria
+- **Workspace isolation** — `workspace-prepare` / `workspace-cleanup` create and remove git worktrees under `.specs/workspaces/` for parallel Execute waves
+- **Execution policy** — configure `budget`, `scope`, and `escalation` in `.specs/config.yaml`; CLI: `execution-policy status`, `check-path`, `record-retry`
+- **Docs:** [Restart PRD seed](guide/Restart-prd-seed.md) for clean-project reboot
+
 ## 3.1.11 — Atlas companion doctor (Lego stack)
 
 - **Companion doctor:** reads `.specs/companions/INDEX.json` (written by Atlas `install`); probes gate mirror, rule, registry section, and preserve paths per companion

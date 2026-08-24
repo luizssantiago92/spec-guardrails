@@ -26,8 +26,29 @@ Orchestrate tasks from `tasks.md` and `task-graph.md`: **parallel waves with sub
 3. Run `python3 .specs/guardrails/scripts/validate_tasks.py` when a formal `tasks.md` exists.
 4. If Tasks was skipped, list the atomic steps inline now. More than 5 steps or real dependencies means the Tasks phase was skipped in error — stop and create `tasks.md`.
 5. **Plan the wave** — run `python3 .specs/guardrails/scripts/loop_plan.py [feature]` (or `loop-plan --json`) at the start of Execute and after every batch completes. It lists the next runnable tasks and marks **parallel groups** (disjoint `Files`) vs inline work.
-6. When `loop-plan` shows a **parallel group** (2+ tasks), offer sub-agent dispatch per `task-graph-engineering.md` and `sub-agents.md`. Offer and wait; never auto-spawn. Large features (roughly 8+ tasks total) also warrant batching across waves.
-7. Confirm you are the only writer for each file this task names. Two parallel tasks never share a file in the same round.
+6. When `loop-plan` shows a **parallel group** (2+ tasks), prepare isolated workspaces before dispatch:
+
+```bash
+npx @luizsantiago/spec-guardrails workspace-prepare [feature] --tasks T1,T2
+```
+
+Each worker runs in its own git worktree under `.specs/workspaces/[feature]/`. After local verification and merge, clean up:
+
+```bash
+npx @luizsantiago/spec-guardrails workspace-cleanup [feature] --tasks T1,T2 --force
+```
+
+7. Consult execution policy before touching files outside the task list:
+
+```bash
+npx @luizsantiago/spec-guardrails execution-policy check-path src/auth.ts
+npx @luizsantiago/spec-guardrails execution-policy status
+```
+
+Record gate retries with `execution-policy record-retry T1` when a task fails its gate (respects `max_retries_per_task` in `.specs/config.yaml`).
+
+8. When `loop-plan` shows a **parallel group** (2+ tasks), offer sub-agent dispatch per `task-graph-engineering.md` and `sub-agents.md`. Offer and wait; never auto-spawn. Large features (roughly 8+ tasks total) also warrant batching across waves.
+9. Confirm you are the only writer for each file this task names. Two parallel tasks never share a file in the same round.
 
 ## Orchestration (each /loop round)
 

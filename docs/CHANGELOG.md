@@ -6,6 +6,14 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.4.0 — P2 contextual guards + FTS retrieval
+
+### Added
+
+- **`context-guard`** — contextual enforcement at Execute boundaries: `status`, `check-edit`, `check-complete` (STATE, tasks, scope, task Files, validation PASS)
+- **`memory-search`** — FTS5 full-text search over `.specs/memory/memory.db` (foundation before optional embeddings)
+- **Guarantees matrix** — row for contextual guards at edit/complete
+
 ## 3.3.0 — Intent/effect policy
 
 ### Added

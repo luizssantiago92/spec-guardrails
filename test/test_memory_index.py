@@ -82,6 +82,19 @@ class MemoryIndexTests(unittest.TestCase):
         finally:
             os.chdir(self.previous)
 
+    def test_search_finds_indexed_entities(self) -> None:
+        import os
+
+        import memory_search
+
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            code = memory_search.main(["login", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
 
 if __name__ == "__main__":
     unittest.main()

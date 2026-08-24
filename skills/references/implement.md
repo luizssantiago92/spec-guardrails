@@ -38,11 +38,12 @@ Each worker runs in its own git worktree under `.specs/workspaces/[feature]/`. A
 npx @luizsantiago/spec-guardrails workspace-cleanup [feature] --tasks T1,T2 --force
 ```
 
-7. Consult execution policy before touching files outside the task list:
+7. Consult execution policy and contextual guards before touching files:
 
 ```bash
+npx @luizsantiago/spec-guardrails context-guard status
+npx @luizsantiago/spec-guardrails context-guard check-edit src/auth.ts --op write
 npx @luizsantiago/spec-guardrails execution-policy check-path src/auth.ts --op write
-npx @luizsantiago/spec-guardrails execution-policy check-path README.md --op read
 npx @luizsantiago/spec-guardrails execution-policy status
 ```
 

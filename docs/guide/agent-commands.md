@@ -1,5 +1,7 @@
 # Agent commands (chat — not the terminal)
 
+> **New to Spec Guardrails?** Start with [Overview](Overview.md) — this page is the full command reference.
+
 **Agent commands** are phrases you type in **your AI coding agent’s chat** (Cursor, Claude Code, or any environment that loads project skills) — not in your shell.
 They tell the agent which **phase procedure** to load from the hub references (e.g. `.cursor/skills/references/` on Cursor).
 The agent runs Python gates and CLI helpers (`validate-spec`, `loop-plan`, …) for you when **Brakes mode** (Python) is available.

@@ -142,6 +142,75 @@ class MemoryIndexTests(unittest.TestCase):
         finally:
             os.chdir(self.previous)
 
+    def test_search_finds_task_chunk_body(self) -> None:
+        import memory_search
+
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            code = memory_search.main(["Done when", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
+    def test_search_finds_design_chunk(self) -> None:
+        import memory_search
+
+        feature = self.specs / "features" / "001-auth"
+        (feature / "design.md").write_text(
+            "## API\nUse JWT access tokens with short TTL.\n",
+            encoding="utf-8",
+        )
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            code = memory_search.main(["JWT access tokens", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
+    def test_rebuild_preserves_embeddings_for_unchanged_chunks(self) -> None:
+        config = self.specs / "config.yaml"
+        config.write_text(
+            "\n".join(
+                [
+                    "schema: spec-driven",
+                    "memory:",
+                    "  retrieval:",
+                    "    semantic: true",
+                    "    provider: hash",
+                ]
+            ),
+            encoding="utf-8",
+        )
+        os.chdir(self.root)
+        try:
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            self.assertEqual(memory_index.main(["embed"]), 0)
+            db_path = self.root / ".specs" / "memory" / "memory.db"
+            import sqlite3
+
+            conn = sqlite3.connect(db_path)
+            before = conn.execute("SELECT COUNT(*) FROM embeddings").fetchone()[0]
+            conn.close()
+            self.assertGreater(before, 0)
+
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            conn = sqlite3.connect(db_path)
+            after = conn.execute("SELECT COUNT(*) FROM embeddings").fetchone()[0]
+            conn.close()
+            self.assertEqual(before, after)
+        finally:
+            os.chdir(self.previous)
+
+    def test_status_reports_missing_database(self) -> None:
+        os.chdir(self.root)
+        try:
+            code = memory_index.main(["status", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
 
 if __name__ == "__main__":
     unittest.main()

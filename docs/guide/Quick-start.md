@@ -85,6 +85,8 @@ More gates (tasks, loop-plan, “are we actually done?”): [Gates reference](ga
 
 ## Next
 
+- **Full picture** → [Overview](Overview.md)  
 - Save money on context → [Token efficiency](Token-efficiency.md)  
 - Common questions → [FAQ](FAQ.md)  
+- Memory and search → [Memory](Memory.md)  
 - Back → [Home](Home.md)

@@ -6,6 +6,20 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 3.7.0 — Memory polish + plain-language docs
+
+### Added
+
+- **Plain-language docs** — [Overview](guide/Overview.md) and [Memory](guide/Memory.md); simplified README and guide index
+- **Doctor memory hints** — suggests `memory-index rebuild` / `embed` when the index is missing, stale, or semantic is enabled without embeddings
+- **`memory-index status --json`** — chunk, embedding, and staleness stats for tooling and doctor
+- **More indexed chunks** — `design.md` and per-task bodies in `tasks.md` join spec, validation, and exploration in search
+
+### Changed
+
+- **`memory-index rebuild`** — preserves embeddings when chunk text is unchanged (prunes orphans and stale hashes instead of wiping all embeddings)
+- **npm description** — shorter product definition (≤350 characters)
+
 ## 3.6.0 — Hybrid memory retrieval + optional semantic embeddings
 
 ### Added

@@ -260,6 +260,82 @@ def chunk_spec_requirements(
     return count
 
 
+def chunk_task_bodies(
+    conn: sqlite3.Connection,
+    feature_id: str,
+    tasks_path: Path,
+    tasks_text: str,
+    now: str,
+) -> int:
+    count = 0
+    matches = list(TASK_HEADING.finditer(tasks_text))
+    for index, match in enumerate(matches):
+        task_id = match.group("id").upper()
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(tasks_text)
+        body = tasks_text[start:end].strip()
+        if not body:
+            body = match.group("title").strip() or task_id
+        chunk_id = f"chunk:{feature_id}:task:{task_id}"
+        upsert_chunk(conn, chunk_id, task_id, "task", str(tasks_path), body, now)
+        count += 1
+    return count
+
+
+def prune_embeddings(conn: sqlite3.Connection) -> None:
+    conn.execute(
+        """
+        DELETE FROM embeddings
+        WHERE chunk_id NOT IN (SELECT id FROM chunks)
+           OR chunk_id IN (
+               SELECT e.chunk_id
+               FROM embeddings e
+               JOIN chunks c ON c.id = e.chunk_id
+               WHERE e.text_hash != c.text_hash
+           )
+        """
+    )
+
+
+def latest_artifact_mtime() -> float | None:
+    latest: float | None = None
+    candidates = [SPECS_DIR / "lessons.json", SPECS_DIR / "STATE.md"]
+    if FEATURES_DIR.is_dir():
+        for feature_dir in FEATURES_DIR.iterdir():
+            if not feature_dir.is_dir():
+                continue
+            for name in (
+                "spec.md",
+                "tasks.md",
+                "design.md",
+                "validation.md",
+                "exploration.md",
+            ):
+                path = feature_dir / name
+                if path.is_file():
+                    candidates.append(path)
+
+    for path in candidates:
+        if path.is_file():
+            mtime = path.stat().st_mtime
+            latest = mtime if latest is None else max(latest, mtime)
+    return latest
+
+
+def has_indexable_artifacts() -> bool:
+    if (SPECS_DIR / "lessons.json").is_file():
+        return True
+    if not FEATURES_DIR.is_dir():
+        return False
+    for feature_dir in FEATURES_DIR.iterdir():
+        if not feature_dir.is_dir():
+            continue
+        for name in ("spec.md", "tasks.md", "design.md", "validation.md", "exploration.md"):
+            if (feature_dir / name).is_file():
+                return True
+    return False
+
+
 def chunk_markdown_sections(
     conn: sqlite3.Connection,
     feature_id: str,
@@ -343,7 +419,6 @@ def rebuild(json_output: bool = False) -> int:
         conn.execute("DELETE FROM entity_fts")
         conn.execute("DELETE FROM chunks")
         conn.execute("DELETE FROM chunk_fts")
-        conn.execute("DELETE FROM embeddings")
 
         entity_count = 0
         relation_count = 0
@@ -393,6 +468,19 @@ def rebuild(json_output: bool = False) -> int:
                         validation_path,
                         validation_text,
                         "validation",
+                        feature_id,
+                        now,
+                    )
+
+                design_path = feature_dir / "design.md"
+                if design_path.is_file():
+                    design_text = design_path.read_text(encoding="utf-8")
+                    chunk_count += chunk_markdown_sections(
+                        conn,
+                        feature_id,
+                        design_path,
+                        design_text,
+                        "design",
                         feature_id,
                         now,
                     )
@@ -448,9 +536,14 @@ def rebuild(json_output: bool = False) -> int:
                             upsert_relation(conn, task_id, file_entity, "touches")
                             relation_count += 1
 
+                    chunk_count += chunk_task_bodies(
+                        conn, feature_id, tasks_path, tasks_text, now
+                    )
+
         lesson_entities, lesson_chunks = index_lessons(conn, now)
         entity_count += lesson_entities
         chunk_count += lesson_chunks
+        prune_embeddings(conn)
         conn.commit()
 
         summary = {
@@ -545,6 +638,46 @@ def embed_chunks(force: bool = False, json_output: bool = False) -> int:
     return EXIT_OK
 
 
+def memory_status(json_output: bool = False) -> int:
+    config = load_memory_retrieval_config()
+    latest = latest_artifact_mtime()
+    summary = {
+        "database": str(DB_PATH),
+        "exists": DB_PATH.is_file(),
+        "semantic_enabled": bool(config.get("semantic")),
+        "provider": str(config.get("provider") or "none"),
+        "entities": 0,
+        "chunks": 0,
+        "embeddings": 0,
+        "has_artifacts": has_indexable_artifacts(),
+        "stale": False,
+    }
+
+    if DB_PATH.is_file():
+        conn = sqlite3.connect(DB_PATH)
+        try:
+            init_schema(conn)
+            summary["entities"] = conn.execute("SELECT COUNT(*) FROM entities").fetchone()[0]
+            summary["chunks"] = conn.execute("SELECT COUNT(*) FROM chunks").fetchone()[0]
+            summary["embeddings"] = conn.execute("SELECT COUNT(*) FROM embeddings").fetchone()[0]
+        finally:
+            conn.close()
+        if latest is not None:
+            summary["stale"] = DB_PATH.stat().st_mtime < latest
+    else:
+        summary["stale"] = summary["has_artifacts"]
+
+    if json_output:
+        print(json.dumps(summary, indent=2))
+    else:
+        state = "ready" if summary["exists"] and not summary["stale"] else "needs attention"
+        print(
+            f"[{GATE}] memory index {state} — "
+            f"{summary['chunks']} chunk(s), {summary['embeddings']} embedding(s)"
+        )
+    return EXIT_OK
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Rebuild SQLite memory index from .specs/")
     sub = parser.add_subparsers(dest="command")
@@ -557,6 +690,10 @@ def build_parser() -> argparse.ArgumentParser:
     embed_cmd.add_argument("--force", action="store_true")
     embed_cmd.add_argument("--json", action="store_true")
     embed_cmd.set_defaults(func=lambda args: embed_chunks(force=args.force, json_output=args.json))
+
+    status_cmd = sub.add_parser("status", help="report index stats for doctor and tooling")
+    status_cmd.add_argument("--json", action="store_true")
+    status_cmd.set_defaults(func=lambda args: memory_status(json_output=args.json))
 
     return parser
 

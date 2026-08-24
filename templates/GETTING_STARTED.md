@@ -16,6 +16,8 @@ You installed the **Spec Guardrails**. You do **not** need to memorize CLI comma
 
 3. Review `.specs/features/…/spec.md` and **approve** before implementation.
 
+**Plain-language guide:** [Overview](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Overview.md) · [Memory](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Memory.md)
+
 ---
 
 ## Agent commands (chat — not terminal)

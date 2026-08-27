@@ -34,6 +34,18 @@ Full story: [How it works](How-it-works.md)
 
 ---
 
+## Three ways to start (pick one)
+
+| Path | You have | Flow |
+| --- | --- | --- |
+| **A — Kickoff brief** | Product notes, `prd.md`, or paste in chat | `/elicit` (project) → ROADMAP → `/specify` per feature |
+| **B — Brownfield** | Existing code, Guardrails just installed | `/project-init` → `/elicit` (project)? → `/specify` |
+| **C — Chat direct** | Clear one-line request in chat | `/specify` — or `/elicit` (feature) if still vague |
+
+**`/elicit` is always optional.** The agent may suggest it; it never blocks `/specify`.
+
+---
+
 ## How you interact (chat vs terminal)
 
 ### Chat — your main interface
@@ -43,6 +55,7 @@ Use **agent commands** in Cursor (or your agent’s chat):
 | Command | Use when |
 | --- | --- |
 | `/specify` | Starting any non-trivial feature |
+| `/elicit` | Kickoff or request is vague — structured Q&A before Specify (optional) |
 | `/tasks` | You approved the spec and need a job list |
 | `/loop` | Implementation time |
 | `/verify` | All jobs done — ask for proof |

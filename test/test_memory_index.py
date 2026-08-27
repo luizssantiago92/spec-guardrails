@@ -16,6 +16,7 @@ if str(ROOT / "scripts") not in sys.path:
 import memory_index  # noqa: E402
 import memory_query  # noqa: E402
 import memory_retrieve  # noqa: E402
+import memory_search  # noqa: E402
 
 
 class MemoryIndexTests(unittest.TestCase):
@@ -67,6 +68,25 @@ class MemoryIndexTests(unittest.TestCase):
             self.assertTrue(db_path.is_file())
 
             code = memory_query.main(["--from", "T1", "--depth", "1", "--json"])
+            self.assertEqual(code, 0)
+        finally:
+            os.chdir(self.previous)
+
+    def test_rebuild_indexes_kickoff_docs(self) -> None:
+        os.chdir(self.root)
+        try:
+            (self.root / "prd.md").write_text(
+                "## Goal\nBuild a login portal for OAuth users.\n",
+                encoding="utf-8",
+            )
+            project = self.specs / "project"
+            project.mkdir(parents=True)
+            (project / "kickoff.md").write_text(
+                "## Notes\nKickoff from chat paste.\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(memory_index.main(["rebuild"]), 0)
+            code = memory_search.main(["Kickoff", "--json"])
             self.assertEqual(code, 0)
         finally:
             os.chdir(self.previous)

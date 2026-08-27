@@ -1,6 +1,31 @@
 # Contributing
 
-Thanks for improving the Spec Guardrails.
+Thanks for improving Spec Guardrails.
+
+## Use the product to build the product
+
+The most reliable way to contribute is to **run Spec Guardrails on your own change** — stable release for app projects, local CLI when hacking this repository.
+
+### Your project or fork (stable npm)
+
+```bash
+npx @luizsantiago/spec-guardrails@latest install
+npx @luizsantiago/spec-guardrails doctor
+```
+
+In agent chat: `/specify` → `/tasks` → `/loop` → `/verify`. Keep artifacts in `.specs/` as the source of truth for what you built and how you proved it.
+
+### This source repository (local CLI)
+
+Do **not** use `npx @luizsantiago/spec-guardrails install` here — it can resolve to the local package name incorrectly. Use:
+
+```bash
+npm install
+npm run guardrails -- install
+npm run guardrails -- doctor
+```
+
+After editing `skills/`, `scripts/`, or gates, re-run `npm run guardrails -- install` before dogfooding. Run `npm test` before opening a PR.
 
 ## Basics
 
@@ -37,13 +62,4 @@ npm install
 npm test
 ```
 
-When developing **inside this source repository**, do **not** run `npx @luizsantiago/spec-guardrails install` — `npx` can resolve to the local package name and fail. Use the local CLI entrypoint instead:
-
-```bash
-npm install
-npm run guardrails -- install   # only when testing the installer itself
-npm run guardrails -- --help
-npm run guardrails -- doctor
-```
-
-Consumers install in **their own** project with `npx @luizsantiago/spec-guardrails install`.
+See **Use the product to build the product** above for install and dogfood commands. Consumer projects use `npx @luizsantiago/spec-guardrails install` in their own repo root.

@@ -1026,6 +1026,7 @@ describe("reference catalog", () => {
   it("includes v0.8 phase procedures and gate scripts", () => {
     for (const file of [
       "explore.md",
+      "elicitation.md",
       "project-init.md",
       "constitution.md",
       "analyze.md",
@@ -1043,7 +1044,7 @@ describe("reference catalog", () => {
       );
     }
 
-    assert.equal(REFERENCE_ASSETS.length, 18);
+    assert.equal(REFERENCE_ASSETS.length, 19);
     assert.equal(
       SCRIPT_ASSETS.some((asset) => asset.file === "lessons.py"),
       true,

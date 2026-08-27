@@ -36,6 +36,11 @@ import {
   prepareWorkspaces,
 } from "./lib/workspace-isolation.js";
 import {
+  formatDiscoverReport,
+  formatPromoteMessage,
+  reqAnalysisInit,
+} from "./lib/req-analysis.js";
+import {
   formatExplorationInit,
   formatExplorationStatus,
   formatExplorationValidation,
@@ -76,6 +81,12 @@ Commands:
   feature-init "<description>"       Allocate NNN-slug feature, STATE, local branch (Tier 0)
     [--no-branch]                    Skip git checkout -b
     [--no-spec]                      Skip spec.md stub
+  req-analysis init "<description>"    Scaffold requirements brief (/elicit phase)
+    [--scope project|feature]          project = macro brief; feature = one delivery (default: feature)
+    [--force]                          Replace existing brief scaffold
+  req-analysis discover                List local kickoff sources (prd.md, kickoff.md, …)
+  req-analysis promote                 Print next steps after brief approval
+    [--scope project|feature]          Match the brief scope
   archive-feature [feature]          Fold verified feature into ROADMAP + domain spec; reset STATE
     [--domain <slug>]                Domain folder under .specs/domains/ (default: feature slug)
     [--skip-verify]                  Skip validate-state (tests / recovery only)
@@ -885,6 +896,65 @@ if (command === "--version" || command === "-v" || command === "version") {
       throw new Error(
         "Usage: solution-explore init | status | validate | select",
       );
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "req-analysis") {
+  try {
+    const sub = args[0];
+    const rest = args.slice(1);
+
+    if (sub === "init") {
+      let scope = "feature";
+      let force = false;
+      const positional = [];
+      for (let i = 0; i < rest.length; i += 1) {
+        const arg = rest[i];
+        if (arg === "--force") {
+          force = true;
+        } else if (arg === "--scope" && rest[i + 1]) {
+          scope = rest[i + 1];
+          i += 1;
+        } else if (arg.startsWith("--scope=")) {
+          scope = arg.slice("--scope=".length);
+        } else if (!arg.startsWith("--")) {
+          positional.push(arg);
+        }
+      }
+      const description = positional.join(" ").trim();
+      if (scope === "feature" && !description) {
+        throw new Error(
+          'Usage: req-analysis init "<description>" [--scope project|feature] [--force]',
+        );
+      }
+      const result = await reqAnalysisInit(description, { scope, force });
+      console.log(`✅ Elicitation scaffold (${result.scope})`);
+      for (const briefPath of result.paths) {
+        console.log(`   ${briefPath}`);
+      }
+      console.log("");
+      console.log(await formatDiscoverReport(process.cwd()));
+    } else if (sub === "discover") {
+      console.log(await formatDiscoverReport(process.cwd()));
+    } else if (sub === "promote") {
+      let scope = "feature";
+      let description = "";
+      for (let i = 0; i < rest.length; i += 1) {
+        const arg = rest[i];
+        if (arg.startsWith("--scope=")) {
+          scope = arg.slice("--scope=".length);
+        } else if (arg === "--scope" && rest[i + 1]) {
+          scope = rest[i + 1];
+          i += 1;
+        } else if (!arg.startsWith("--")) {
+          description = `${description} ${arg}`.trim();
+        }
+      }
+      console.log(formatPromoteMessage({ scope, description }));
+    } else {
+      throw new Error("Usage: req-analysis init | discover | promote");
     }
   } catch (err) {
     console.error(`❌ ${err.message}`);

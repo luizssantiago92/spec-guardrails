@@ -14,6 +14,7 @@ Capture WHAT to build as testable, traceable requirements. Always required (exce
 ## Inputs
 
 - Owner's request, in their own words
+- `.specs/project/requirements-brief.md` or `.specs/project/feature-briefs/*/requirements-brief.md` when `/elicit` ran — do not re-ask resolved questions
 - `.specs/STATE.md` decisions (`AD-NNN`) relevant to this area
 - `.specs/project/CONSTITUTION.md` when present
 - `.specs/LESSONS.md` entries that apply — load them with `python3 .specs/guardrails/scripts/lessons.py list --status confirmed`

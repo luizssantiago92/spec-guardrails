@@ -10,7 +10,8 @@ The agent runs Python gates and CLI helpers (`validate-spec`, `loop-plan`, …) 
 | --- | --- | --- | --- |
 | `/quick` | Tiny fix without full spec | ≤3 files, no new deps, no auth/payments | `/quick` + one-line description |
 | `/explore` | Research and compare options | Idea is unclear; no production code yet | `/explore` + question or spike goal |
-| `/specify` | Written requirements (`spec.md`) | **Start here** for any real feature | `/specify` + what to build + out of scope |
+| `/elicit` | Structured requirements Q&A | Kickoff or request vague; before Specify | `/elicit` + scope (project or feature) |
+| `/specify` | Written requirements (`spec.md`) | **Start here** when the goal is already clear | `/specify` + what to build + out of scope |
 | `/discuss` | Lock gray product decisions | Auth, payments, ambiguity during Specify | `/discuss` + questions to settle |
 | `/plan` | Technical design (`design.md`) | Complex tier — APIs, architecture, new patterns | `/plan` + design questions |
 | `/tasks` | Atomic job list (`tasks.md`) | Medium+ after approved spec | `/tasks` + “break into tasks” |
@@ -28,7 +29,7 @@ The agent runs Python gates and CLI helpers (`validate-spec`, `loop-plan`, …) 
 **Typical pipeline** (optional steps marked with `?`):
 
 ```
-/explore? → /specify → /discuss? → /plan? → /tasks? → /task-graph? → /analyze → /loop → /verify → /archive
+/explore? → /elicit? → /specify → /discuss? → /plan? → /tasks? → /task-graph? → /analyze → /loop → /verify → /archive
 ```
 
 Each section below uses: **Purpose · When · How · What the agent does · CLI · Skip when**.
@@ -96,6 +97,36 @@ Out of scope: PDF export and scheduled emails.
 | `check-commit --message "…"` | Conventional Commits before landing |
 
 **Skip when:** More than 3 files, new dependencies, auth/payments/data — use `/specify` instead.
+
+---
+
+## `/elicit` — structured Q&A before Specify (optional)
+
+| | |
+| --- | --- |
+| **Type** | Agent command — loads `references/elicitation.md` |
+| **Purpose** | Read kickoff brief + repo; ask **≤5 objective questions per round**; write `requirements-brief.md` |
+| **When** | Kickoff exists but details missing; or request is vague ("add interface", "improve login") |
+| **How** | `/elicit` + project or feature scope; paste kickoff in chat if no file yet |
+
+**Not the same as `/analyze`** — `/analyze` checks spec ↔ tasks consistency **after** tasks exist.
+
+**Scopes:**
+
+| Scope | Artifact | Next |
+| --- | --- | --- |
+| **project** | `.specs/project/requirements-brief.md` | ROADMAP candidates → `/specify` per feature |
+| **feature** | `.specs/project/feature-briefs/[slug]/requirements-brief.md` | `feature-init` → `/specify` |
+
+**CLI (agent runs):**
+
+| Command | Role |
+| --- | --- |
+| `req-analysis init "…" --scope project\|feature` | Scaffold brief template |
+| `req-analysis discover` | List local kickoff files (`prd.md`, `kickoff.md`, …) |
+| `req-analysis promote --scope …` | Print next steps after owner approves brief |
+
+**Skip when:** Request is already testable — go to `/specify`. Owner can always refuse Elicitation.
 
 ---
 

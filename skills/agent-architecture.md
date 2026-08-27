@@ -1,6 +1,6 @@
 ---
 name: agent-architecture
-description: Spec-Driven Development hub for AI-assisted engineering. Progressive disclosure (~70% fewer skill tokens vs dumping the full kit). Adaptive phases with Python gates, independent verifier, discrimination sensor, evidence-or-zero, and .specs/ memory. Triggers on "specify feature", "design", "break into tasks", "implement", "verify", "quick fix", "resume work", "handoff".
+description: Spec-Driven Development hub for AI-assisted engineering. Progressive disclosure (~70% fewer skill tokens vs dumping the full kit). Adaptive phases with Python gates, independent verifier, discrimination sensor, evidence-or-zero, and .specs/ memory. Triggers on "specify feature", "elicit", "design", "break into tasks", "implement", "verify", "quick fix", "resume work", "handoff".
 ---
 
 # Agent Architecture (Hub)
@@ -41,6 +41,7 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | When | Command |
 | --- | --- |
 | Before `/specify` (Medium+) | `npx @luizsantiago/spec-guardrails feature-init "<description>"` (Tier 0) |
+| Optional elicitation (vague kickoff or request) | `/elicit` → `req-analysis init` — **suggested only**, never blocks Specify |
 | Optional project config | `init-config --preset node-ts` or `install --preset python` (see `preset list`) |
 | Before confirming a spec | `python3 .specs/guardrails/scripts/validate_spec.py [feature]` |
 | Before approving tasks | `python3 .specs/guardrails/scripts/analyze_artifacts.py [feature]` |
@@ -75,12 +76,13 @@ A **non-zero exit means STOP** — fix the artifact, then re-run the gate. Never
 ## Phase Map
 
 ```
-EXPLORE (optional) → SPECIFY → DISCUSS (conditional) → DESIGN (optional) → TASKS (optional) → ANALYZE → EXECUTE (loop) → VERIFY → ARCHIVE
+EXPLORE (optional) → ELICIT (optional) → SPECIFY → DISCUSS (conditional) → DESIGN (optional) → TASKS (optional) → ANALYZE → EXECUTE (loop) → VERIFY → ARCHIVE
 ```
 
 | Phase | Required | Reference | Sister skill | Gate |
 | --- | --- | --- | --- | --- |
 | **Explore** | Optional | `references/explore.md` | — | — |
+| **Elicit** | Optional | `references/elicitation.md` | — | — (v1 skill checklist; gate in 4.x wave 2) |
 | **Constitution** | Once per project | `references/constitution.md` | — | — |
 | **Specify** | Yes | `references/specify.md` | — | `validate_spec.py` |
 | **Discuss** | Conditional | `references/discuss.md` | — | — |
@@ -131,6 +133,7 @@ Complexity determines depth. Do not run every phase on every change.
 - **Design is skipped** when there are no architectural decisions and no new patterns.
 - **Tasks is skipped** when there are ≤3 obvious steps.
 - **Discuss is triggered inside Specify** when the feature touches persistence, external calls, auth, payments, concurrency, or state transitions, or when the owner's intent is ambiguous.
+- **Elicit is suggested (never required)** when a kickoff brief exists without an approved project brief, or when the owner's request is vague ("add interface", "improve X") — see `references/elicitation.md`. If the owner chooses `/specify` directly, proceed.
 - **Safety valve** — Even when Tasks is skipped, Execute starts by listing atomic steps inline. If that listing reveals more than 5 steps or real dependencies, STOP and create a formal `tasks.md`; the Tasks phase was skipped in error.
 
 When in doubt, start at **Medium** and drop phases only with owner approval.
@@ -145,6 +148,9 @@ When in doubt, start at **Medium** and drop phases only with owner approval.
 | `.specs/project/PROJECT.md` | Vision, stack, constraints (when the project defines them) |
 | `.specs/project/CONSTITUTION.md` | Governing principles (when Constitution ran) |
 | `.specs/project/ROADMAP.md` | Milestones and feature status |
+| `.specs/project/kickoff.md` | Owner kickoff brief (paste or file — optional) |
+| `.specs/project/requirements-brief.md` | Project-level elicitation output (when `/elicit` project ran) |
+| `.specs/project/feature-briefs/[slug]/requirements-brief.md` | Feature-level elicitation (when `/elicit` feature ran) |
 | `.specs/config.yaml` | Optional project context and per-phase rules |
 | `.specs/domains/[domain]/spec.md` | Long-lived domain truth after Archive |
 | `.specs/quick/NNN-slug/` | Quick-mode tasks and summaries |
@@ -212,6 +218,7 @@ Project rules: `.cursor/rules/engineering-baseline.mdc` (always applied in Curso
 | Command | Reference | Action |
 | --- | --- | --- |
 | `/explore` | `references/explore.md` | Think through ideas before Specify |
+| `/elicit` | `references/elicitation.md` | Structured Q&A before Specify — project or feature scope |
 | `/project-init` | `references/project-init.md` | Brownfield: map repo → PROJECT + domain stubs |
 | `/constitution` | `references/constitution.md` | Create project governing principles |
 | `/specify` | `references/specify.md` | `feature-init` then requirements; EARS; delta specs |

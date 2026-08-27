@@ -57,5 +57,6 @@ None required. Optionally capture decisions in chat. When the idea crystallizes,
 ## Next
 
 - Scope is clear → `feature-init` then `specify.md`
+- Details missing but direction chosen → `elicitation.md` (feature scope)
 - Gray areas remain → `discuss.md` inside Specify
 - Back → `agent-architecture.md`

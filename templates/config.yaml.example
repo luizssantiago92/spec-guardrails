@@ -63,6 +63,15 @@ memory:
     semantic_weight: 0.4
     graph_depth: 1
 
+# Elicitation (/elicit — optional, before Specify)
+elicitation:
+  max_questions_per_turn: 5
+  kickoff_discovery_paths:
+    - prd.md
+    - docs/brief.md
+    - docs/prd.md
+    - .specs/project/kickoff.md
+
 # Soft OS sandbox (optional — policy, not containers)
 sandbox:
   mode: warn

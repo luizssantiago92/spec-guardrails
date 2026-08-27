@@ -5,7 +5,7 @@
 
 **Keep AI coding agents honest — specify the work, prove each step, verify independently.**
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **3.9.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.0.x**
 
 ---
 
@@ -39,6 +39,7 @@ Details: [Process vs Brakes](docs/guide/FAQ.md#process-vs-brakes) · [CHANGELOG]
 | Command | When to use |
 | --- | --- |
 | `/specify` | Start a feature — written requirements first |
+| `/elicit` | Optional — structured Q&A when kickoff or request is vague |
 | `/tasks` | Job list after you approve the spec |
 | `/loop` | Implement — one wave at a time |
 | `/verify` | Proof after the last job — fresh chat when possible |

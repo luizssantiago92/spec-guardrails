@@ -6,6 +6,20 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.0.0 — Elicitation phase (`/elicit`) wave 1
+
+### Added
+
+- **`/elicit` phase** — `references/elicitation.md`: structured requirements discovery before `/specify` (project or feature scope); suggest-only router, never blocks Specify
+- **`req-analysis` CLI** — `init`, `discover`, `promote` scaffolds `.specs/project/requirements-brief.md` and feature briefs
+- **Kickoff indexing** — `memory-index rebuild` indexes `prd.md`, `.specs/project/kickoff.md`, requirements briefs, and feature briefs
+- **Docs** — three entry paths in [Overview](guide/Overview.md); `/elicit` vs `/analyze` clarified in [agent commands](guide/agent-commands.md)
+
+### Changed
+
+- **Hub** — phase map includes optional Elicit; Specify reads approved requirements briefs when present
+- **README** — **4.0.x** series
+
 ## 3.9.0 — Roadmap complete: episodes, code index, sandbox policy
 
 ### Added

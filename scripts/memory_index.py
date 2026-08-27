@@ -41,6 +41,15 @@ SECTION_HEADING = re.compile(r"^##\s+(.+)$", re.MULTILINE)
 
 LESSON_STATUSES = {"approved", "graduated", "confirmed"}
 
+PROJECT_DIR = SPECS_DIR / "project"
+KICKOFF_DISCOVERY_PATHS = (
+    Path("prd.md"),
+    Path("docs/brief.md"),
+    Path("docs/prd.md"),
+    PROJECT_DIR / "kickoff.md",
+    PROJECT_DIR / "requirements-brief.md",
+)
+
 
 def fail(message: str, code: int = EXIT_FAILED) -> int:
     print(f"[{GATE}] FAIL - {DB_PATH}")
@@ -404,6 +413,58 @@ def index_lessons(conn: sqlite3.Connection, now: str) -> tuple[int, int]:
     return entity_count, chunk_count
 
 
+def index_kickoff_docs(conn: sqlite3.Connection, now: str) -> tuple[int, int]:
+    entity_count = 0
+    chunk_count = 0
+    seen: set[str] = set()
+
+    for rel_path in KICKOFF_DISCOVERY_PATHS:
+        path_key = str(rel_path).replace("\\", "/")
+        if path_key in seen:
+            continue
+        seen.add(path_key)
+
+        doc_path = Path(path_key)
+        if not doc_path.is_file():
+            continue
+
+        entity_id = f"kickoff:{path_key.replace('/', ':')}"
+        label = path_key
+        text = doc_path.read_text(encoding="utf-8")
+        upsert_entity(conn, entity_id, "kickoff", label, path_key, now)
+        entity_count += 1
+        chunk_count += chunk_markdown_sections(
+            conn,
+            "project",
+            doc_path,
+            text,
+            "kickoff",
+            entity_id,
+            now,
+        )
+
+    feature_briefs_root = PROJECT_DIR / "feature-briefs"
+    if feature_briefs_root.is_dir():
+        for brief_path in sorted(feature_briefs_root.rglob("requirements-brief.md")):
+            rel = brief_path.as_posix()
+            slug = brief_path.parent.name
+            entity_id = f"feature-brief:{slug}"
+            text = brief_path.read_text(encoding="utf-8")
+            upsert_entity(conn, entity_id, "feature-brief", slug, rel, now)
+            entity_count += 1
+            chunk_count += chunk_markdown_sections(
+                conn,
+                slug,
+                brief_path,
+                text,
+                "feature-brief",
+                entity_id,
+                now,
+            )
+
+    return entity_count, chunk_count
+
+
 def index_episodes(conn: sqlite3.Connection, now: str) -> tuple[int, int]:
     episodes_path = SPECS_DIR / "state" / "episodes.json"
     if not episodes_path.is_file():
@@ -586,6 +647,9 @@ def rebuild(json_output: bool = False) -> int:
                         conn, feature_id, tasks_path, tasks_text, now
                     )
 
+        kickoff_entities, kickoff_chunks = index_kickoff_docs(conn, now)
+        entity_count += kickoff_entities
+        chunk_count += kickoff_chunks
         lesson_entities, lesson_chunks = index_lessons(conn, now)
         entity_count += lesson_entities
         chunk_count += lesson_chunks

@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { after, describe, it } from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   briefPathForScope,
@@ -107,7 +108,7 @@ describe("req-analysis CLI", () => {
   it("lists req-analysis in help", async () => {
     const { spawnSync } = await import("node:child_process");
     const result = spawnSync(process.execPath, ["index.js", "--help"], {
-      cwd: path.resolve(import.meta.dirname, ".."),
+      cwd: path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
       encoding: "utf8",
     });
     assert.equal(result.status, 0);

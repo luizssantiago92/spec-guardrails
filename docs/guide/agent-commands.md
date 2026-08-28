@@ -277,5 +277,5 @@ Full CLI list: `npx @luizsantiago/spec-guardrails --help`.
 - [Skills and hub](skills-and-hub.md) — what each skill file does
 - [Gates reference](gates.md) — what the agent runs at each phase
 - [Platform parity](Platform-parity.md) — Cursor, Claude Code, Copilot, Codex, and AGENTS.md
-- [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md) — automatic IDE protection, tuning, performance
+- [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md) — optional Cursor IDE hooks (off by default), enable/disable, tuning
 - [Quick start](Quick-start.md) — first ten minutes

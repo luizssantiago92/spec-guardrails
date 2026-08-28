@@ -6,6 +6,15 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.2.0 — Cursor hooks opt-in (off by default)
+
+### Changed
+
+- **`install`** — Cursor hooks are **not** registered unless `--with-cursor-hooks` or `cursor.hooks: true` in `.specs/config.yaml`
+- **`install --without-cursor-hooks`** — removes shipped hook entries and sets `cursor.hooks: false`
+- **`/elicit`** — may ask once (Cursor) whether to enable IDE hooks; hub documents chat enable/disable
+- **Docs** — [Cursor hooks and sandbox](guide/Cursor-hooks-and-sandbox.md), FAQ, Overview, config template updated for opt-in default
+
 ## 4.1.1 — README rewrite for first-time readers + npm description
 
 ### Changed

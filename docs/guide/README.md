@@ -1,6 +1,6 @@
 # Documentation
 
-Plain-language guides for **Spec Guardrails 4.1.x**.  
+Plain-language guides for **Spec Guardrails 4.2.x**.  
 **New here?** Read **[Overview](Overview.md)** first, then [Quick start](Quick-start.md).
 
 ---

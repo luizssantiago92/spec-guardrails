@@ -6,6 +6,18 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.1.1 — README rewrite for first-time readers + npm description
+
+### Changed
+
+- **README** — restructured around what the kit solves rather than internals: plain-language problem statement, a drawn feature flow, how complexity sizing loads only what a change needs, and a layer-by-layer section (artifacts, skills, gates, requirements analysis, loops, memory) each linking to its guide
+- **README** — phase command table removed; those are agent-facing and read as chat/terminal commands to newcomers
+- **README** — credits now name the four upstream projects actually shipped in the package, with full lineage kept in [credits](guide/credits.md)
+- **README** — contributing trimmed to setup and PR expectations; dogfooding workflow lives in [CONTRIBUTING.md](../CONTRIBUTING.md)
+- **README** — Cursor hooks marked optional with disable steps when the IDE feels heavy (Windows / `node.exe`)
+- **Credits** — separates what ships in the package from what is referenced but not vendored
+- **npm description** — ≤350 characters; hooks optional and tunable
+
 ## 4.1.0 — Elicitation wave 2 (gate + context)
 
 ### Added

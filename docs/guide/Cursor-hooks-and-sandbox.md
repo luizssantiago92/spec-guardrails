@@ -2,6 +2,8 @@
 
 This page explains what **automatic IDE protection** does after `install`, what you will see in Cursor, and how to tune it — so hooks feel like governance, not a surprise.
 
+> **Performance:** On long agent sessions, hooks spawn a new Node process on every file edit and shell command. If Cursor or `node.exe` feels heavy — common on Windows — remove the shell hook first or disable hooks entirely (see [Tuning or disabling](#tuning-or-disabling)). The core Spec Guardrails loop does not require hooks.
+
 **Cursor only.** Other adapters (Claude Code, Copilot, Codex) use the same CLI helpers when the agent calls them; only Cursor runs these hooks automatically today.
 
 ---

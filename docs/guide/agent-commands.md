@@ -131,6 +131,8 @@ Out of scope: PDF export and scheduled emails.
 
 **Skip when:** Request is already testable — go to `/specify`. Owner can always refuse Elicitation.
 
+**Guide:** [Requirements analysis](requirements-analysis.md)
+
 ---
 
 ## `/explore` — think before you commit (optional)
@@ -277,5 +279,5 @@ Full CLI list: `npx @luizsantiago/spec-guardrails --help`.
 - [Skills and hub](skills-and-hub.md) — what each skill file does
 - [Gates reference](gates.md) — what the agent runs at each phase
 - [Platform parity](Platform-parity.md) — Cursor, Claude Code, Copilot, Codex, and AGENTS.md
-- [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md) — automatic IDE protection, tuning, performance
+- [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md) — optional Cursor IDE hooks (off by default), enable/disable, tuning
 - [Quick start](Quick-start.md) — first ten minutes

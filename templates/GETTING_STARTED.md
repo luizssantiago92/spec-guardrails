@@ -16,17 +16,18 @@ You installed the **Spec Guardrails**. You do **not** need to memorize CLI comma
 
 3. Review `.specs/features/…/spec.md` and **approve** before implementation.
 
-**Plain-language guide:** [Overview](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Overview.md) · [Memory](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Memory.md)
+**Plain-language guide:** [Overview](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Overview.md) · [Requirements analysis](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/requirements-analysis.md) · [Memory](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Memory.md)
 
 ---
 
 ## Agent commands (chat — not terminal)
 
-Type these in **chat** in your agent environment. They load phase procedures from the installed skills tree (e.g. `.cursor/skills/references/`, `.github/skills/references/`, `.codex/skills/references/` — use the tree your agent loads). In **Brakes mode**, the agent runs Python gates for you.
+Type these in **chat** in your agent environment. They load phase procedures from the installed skills tree (e.g. `.cursor/skills/references/`, `.github/skills/references/`, `.codex/skills/references/` — use the tree your agent loads). With **Python 3.10+**, the agent runs automatic gates at each step; without Python, the same checks are done manually (Process mode).
 
 | Command | When |
 | --- | --- |
-| `/specify` | **Start here** — written requirements |
+| `/elicit` | Request is vague — structured Q&A before Specify (optional) |
+| `/specify` | **Start here** when the goal is clear — written requirements |
 | `/tasks` | Break into jobs after spec approval |
 | `/loop` | Implement — agent runs `loop-plan` each wave |
 | `/verify` | Fresh-context proof after last task |
@@ -43,6 +44,7 @@ Type these in **chat** in your agent environment. They load phase procedures fro
 | Command | When |
 | --- | --- |
 | `install` | First time or upgrade |
+| `install --with-cursor-hooks` | Optional — enable Cursor IDE hooks (off by default on 4.2+) |
 | `project-init` | Brownfield repo (optional) |
 | `doctor` | Install looks broken |
 | `classify-change` / `feature-status` | Pick a tier or see next step |

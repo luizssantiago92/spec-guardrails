@@ -1,7 +1,7 @@
 {
   "name": "@luizsantiago/spec-guardrails",
-  "version": "4.1.1",
-  "description": "Governed spec-driven process kit for AI agents: phase guides, .specs/ memory, optional Python gates. Loop: specify, tasks, execute, verify. Cursor hooks (scope + shell policy) are optional; disable on lighter machines. Node 18+; Python 3.10+ for Brakes. Cursor, Claude, Copilot, Codex.",
+  "version": "4.2.0",
+  "description": "Governed spec-driven process kit for AI agents: phase guides, .specs/ memory, optional Python gates. Loop: specify, tasks, execute, verify. Cursor hooks opt-in (off by default). Node 18+; Python 3.10+ for Brakes. Cursor, Claude, Copilot, Codex.",
   "type": "module",
   "bin": {
     "spec-guardrails": "./index.js"

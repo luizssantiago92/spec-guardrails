@@ -52,11 +52,17 @@ No. It stops many **incomplete** finishes and empty stubs. Judgment, product tas
 
 ## What are Cursor hooks and why do I see extra Node processes?
 
-Since **3.8.0**, `install` registers **Cursor hooks** that run **context-guard** before file edits and **sandbox policy** before shell commands — automatically, without you calling the CLI.
+**Optional Cursor-only feature — off by default.** Hooks auto-run scope checks before edits and shell policy before terminal commands **only after you opt in**:
 
-You may notice hook activity in the Cursor UI or many short-lived `node.exe` processes on busy agent sessions (especially on Windows with `npx`). That is expected. Hooks are **soft governance**, not an OS container.
+```bash
+npx @luizsantiago/spec-guardrails install --with-cursor-hooks
+```
 
-Full guide: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)** — symptoms, modes (`warn` / `strict`), tuning, and disabling.
+`/elicit` may ask once whether to enable them. You can also say "enable Cursor hooks" or "disable Cursor hooks" in chat.
+
+When enabled, you may notice hook activity or many short-lived `node.exe` processes on busy sessions (especially on Windows). That is expected. Hooks are **soft governance**, not an OS container.
+
+Full guide: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)** — enable/disable, modes, tuning.
 
 ## Why not load security and QA every time?
 

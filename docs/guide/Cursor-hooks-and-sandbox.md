@@ -1,16 +1,41 @@
 # Cursor hooks and sandbox policy
 
-This page explains what **automatic IDE protection** does after `install`, what you will see in Cursor, and how to tune it — so hooks feel like governance, not a surprise.
-
-> **Performance:** On long agent sessions, hooks spawn a new Node process on every file edit and shell command. If Cursor or `node.exe` feels heavy — common on Windows — remove the shell hook first or disable hooks entirely (see [Tuning or disabling](#tuning-or-disabling)). The core Spec Guardrails loop does not require hooks.
-
-**Cursor only.** Other adapters (Claude Code, Copilot, Codex) use the same CLI helpers when the agent calls them; only Cursor runs these hooks automatically today.
+Optional **Cursor-only** automation: scope check before file edits and shell-command policy before the agent runs terminal commands. **Off by default** — enable only when you want the extra safety net and your machine can handle the extra Node processes.
 
 ---
 
-## What you might notice
+## Default: hooks are not installed
 
-After `npx @luizsantiago/spec-guardrails install`, Cursor registers two hooks under `.cursor/hooks.json`. During an active agent session you may see:
+`install` **does not** register Cursor hooks unless you opt in:
+
+```bash
+npx @luizsantiago/spec-guardrails install --with-cursor-hooks
+```
+
+Or set in `.specs/config.yaml`:
+
+```yaml
+cursor:
+  hooks: true
+```
+
+Then re-run `install` (or run with `--with-cursor-hooks` once).
+
+**Disable again:**
+
+```bash
+npx @luizsantiago/spec-guardrails install --without-cursor-hooks
+```
+
+During **`/elicit`**, the agent may ask once (Cursor only) whether to enable hooks. You can also say **"enable Cursor hooks"** or **"disable Cursor hooks"** in chat anytime — the agent runs the matching `install` flag above.
+
+> **Performance:** When enabled, hooks spawn a new Node process on every file edit and shell command. If Cursor or `node.exe` feels heavy — common on Windows — keep hooks off or use `SPEC_GUARDRAILS_CLI` (see [Performance](#performance-especially-windows)). The core Spec Guardrails loop does not require hooks.
+
+**Cursor only.** Other adapters use the same CLI helpers when the agent calls them; only Cursor can auto-run these hooks.
+
+---
+
+## What you might notice (when enabled)
 
 | Symptom | Cause | Action needed? |
 | --- | --- | --- |
@@ -37,7 +62,7 @@ Hooks **reduce blast radius**; they do **not** remove human review, `/verify`, o
 
 ---
 
-## Two layers installed by `install`
+## Two layers (when enabled)
 
 ### 1. Context guard — “stay inside task Files”
 
@@ -145,7 +170,7 @@ Stops warnings and strict blocks. The shell hook **still runs** (CLI cost remain
 
 ### Disable sandbox hook only
 
-Edit `.cursor/hooks.json` — remove the `beforeShellExecution` entry for `sandbox-shell.mjs`. User hooks and the context-guard entry are preserved on reinstall merge unless you removed them yourself; re-run `install` merges shipped entries idempotently.
+Edit `.cursor/hooks.json` — remove the `beforeShellExecution` entry for `sandbox-shell.mjs`. User hooks and the context-guard entry are preserved unless you removed them yourself. To re-enable shipped hooks later, run `install --with-cursor-hooks`.
 
 ### Disable context guard hook
 
@@ -153,7 +178,11 @@ Remove the `preToolUse` entry for `context-guard-edit.mjs` from `.cursor/hooks.j
 
 ### Disable all Spec Guardrails hooks
 
-Clear the shipped entries from `.cursor/hooks.json` (or delete the file). The rest of Spec Guardrails (skills, `.specs/`, gates) continues to work.
+```bash
+npx @luizsantiago/spec-guardrails install --without-cursor-hooks
+```
+
+Or clear shipped entries from `.cursor/hooks.json` manually. The rest of Spec Guardrails (skills, `.specs/`, gates) continues to work.
 
 ---
 

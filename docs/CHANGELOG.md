@@ -6,16 +6,22 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.2.0 — Cursor hooks opt-in (off by default)
+
+### Changed
+
+- **`install`** — Cursor hooks are **not** registered unless `--with-cursor-hooks` or `cursor.hooks: true` in `.specs/config.yaml`
+- **`install --without-cursor-hooks`** — removes shipped hook entries and sets `cursor.hooks: false`
+- **`/elicit`** — may ask once (Cursor) whether to enable IDE hooks; hub documents chat enable/disable
+- **Docs** — [Cursor hooks and sandbox](guide/Cursor-hooks-and-sandbox.md), FAQ, Overview, config template, [Migration](guide/Migration.md), GETTING_STARTED, and doc index updated for opt-in default; fixed stale README anchor links
+
 ## 4.1.1 — README rewrite for first-time readers + npm description
 
 ### Changed
 
-- **README** — restructured around what the kit solves rather than internals: plain-language problem statement, a drawn feature flow, how complexity sizing loads only what a change needs, and a layer-by-layer section (artifacts, skills, gates, requirements analysis, loops, memory) each linking to its guide
-- **README** — phase command table removed; those are agent-facing and read as chat/terminal commands to newcomers
-- **README** — credits now name the four upstream projects actually shipped in the package, with full lineage kept in [credits](guide/credits.md)
-- **README** — contributing trimmed to setup and PR expectations; dogfooding workflow lives in [CONTRIBUTING.md](../CONTRIBUTING.md)
-- **README** — Cursor hooks marked optional with disable steps when the IDE feels heavy (Windows / `node.exe`)
-- **Credits** — separates what ships in the package from what is referenced but not vendored
+- **README** — install explains Python as optional (Node-only works; Python adds automatic proof); user-experience flow, five complexity tiers with artifacts/approvals, concrete kit inventory (12 artifacts, 28 skills, 9 gates, 6 memory commands), optional capabilities off by default
+- **README** — requirements analysis guide linked; hooks cited as optional item, not a dedicated section
+- **Docs** — [Requirements analysis](guide/requirements-analysis.md) guide for `/elicit` and requirements briefs
 - **npm description** — ≤350 characters; hooks optional and tunable
 
 ## 4.1.0 — Elicitation wave 2 (gate + context)

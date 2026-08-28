@@ -67,6 +67,8 @@ Commands:
   install                            Install skills, references, gates and .specs/ memory
     [--preset <name>]                Seed .specs/config.yaml from a built-in preset
     [--force-config]                 Replace existing config.yaml when using --preset
+    [--with-cursor-hooks]            Register Cursor IDE hooks (off by default)
+    [--without-cursor-hooks]         Remove shipped Cursor hooks and set cursor.hooks: false
   init-config [--preset <name>]      Create .specs/config.yaml (default preset: default)
     [--force]                        Replace existing config.yaml
   preset list                        List built-in config presets
@@ -202,6 +204,10 @@ if (command === "--version" || command === "-v" || command === "version") {
         }
       } else if (arg === "--force-config") {
         installOptions.forceConfig = true;
+      } else if (arg === "--with-cursor-hooks") {
+        installOptions.withCursorHooks = true;
+      } else if (arg === "--without-cursor-hooks") {
+        installOptions.withoutCursorHooks = true;
       } else {
         throw new Error(`Unknown install flag: ${arg}`);
       }

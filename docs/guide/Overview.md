@@ -182,9 +182,9 @@ Full guide: **[Memory](Memory.md)** — no project required to understand the mo
 - retry and run budgets
 - read / write / delete rules (e.g. deny DELETE under `.git/`)
 
-**Context guards** check before edit or before claiming “feature done” (active feature, task files, validation PASS). On **Cursor**, `install` registers hooks so these checks run automatically — see **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)** for what you will see in the IDE and how to tune it.
+**Context guards** check before edit or before claiming “feature done” (active feature, task files, validation PASS). On **Cursor**, you can optionally enable hooks so these checks run automatically — **off by default**; see **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)**.
 
-**Sandbox policy (3.9+):** a shell hook blocks or warns on destructive commands (`rm -rf`, `curl | bash`, force-push to main, …). Policy only — not a container sandbox. Configure `sandbox.mode` in `.specs/config.yaml`. Full behavior: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)**.
+**Sandbox policy (optional):** when hooks are enabled, a shell hook blocks or warns on destructive commands (`rm -rf`, `curl | bash`, force-push to main, …). Policy only — not a container sandbox. Configure `sandbox.mode` in `.specs/config.yaml`. Full behavior: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)**.
 
 These reduce blast radius; they do not replace your review.
 
@@ -227,6 +227,7 @@ Semantic search is **optional** — useful with **lots** of archived features an
 | I want to… | Read |
 | --- | --- |
 | Install and try in 10 minutes | [Quick start](Quick-start.md) |
+| Vague request — Q&A before Specify | [Requirements analysis](requirements-analysis.md) |
 | Understand memory and search | [Memory](Memory.md) |
 | See every chat command | [Agent commands](agent-commands.md) |
 | See product promises | [Guarantees matrix](Guarantees-matrix.md) |

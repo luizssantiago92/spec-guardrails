@@ -74,11 +74,11 @@ Replace `auth` with your feature folder name under `.specs/features/`. A non-zer
 | `check-commit` | The commit title looks Conventional (type, length, no trailing period) |
 | `lessons list` | Show rules the team already promoted — candidates stay hidden |
 
-More gates (tasks, loop-plan, “are we actually done?”): [Gates reference](gates.md) · [README Gates section](https://github.com/luizssantiago92/spec-guardrails#gates-summary).
+More gates (tasks, loop-plan, “are we actually done?”): [Gates reference](gates.md) · [Guarantees matrix](Guarantees-matrix.md).
 
 ## If something feels stuck
 
-- **No Python?** The playbook still guides the agent; install Python 3 when you want the automatic stop checks.  
+- **No Python?** Node alone is enough — the agent follows the same phases and checklists manually. Install Python 3.10+ when you want automatic proof at each step (Brakes mode).  
 - **Agent ignores the guardrails?** Point it at `.cursor/skills/agent-architecture.md` and say “follow this”.  
 - **Want the big picture?** → [How it works](How-it-works.md)  
 - **Want the brakes explained?** → [Gates and guarantees](Gates-and-guarantees.md)  

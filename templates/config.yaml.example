@@ -72,7 +72,13 @@ elicitation:
     - docs/prd.md
     - .specs/project/kickoff.md
 
-# Soft OS sandbox (optional — policy, not containers)
+# Cursor IDE hooks (optional — off by default; Cursor only)
+# Enable: install --with-cursor-hooks  or  hooks: true  then re-run install
+# Disable: install --without-cursor-hooks
+cursor:
+  hooks: false
+
+# Soft OS sandbox (optional — policy, not containers; used when hooks are enabled)
 sandbox:
   mode: warn
   deny_patterns:

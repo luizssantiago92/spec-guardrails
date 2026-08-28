@@ -9,6 +9,7 @@ import {
   CURSOR_HOOKS_JSON,
   CURSOR_HOOK_SANDBOX,
   mergeCursorHooksConfig,
+  parseCursorHooksFromConfigText,
 } from "../lib/cursor-hooks.js";
 import {
   evaluateHookInput,
@@ -21,6 +22,18 @@ async function createTempDir(prefix) {
 }
 
 describe("cursor hooks config merge", () => {
+  it("reads cursor.hooks from config yaml", () => {
+    assert.equal(
+      parseCursorHooksFromConfigText("cursor:\n  hooks: true\n"),
+      true,
+    );
+    assert.equal(
+      parseCursorHooksFromConfigText("cursor:\n  hooks: false\n"),
+      false,
+    );
+    assert.equal(parseCursorHooksFromConfigText("sandbox:\n  mode: off\n"), false);
+  });
+
   it("adds shipped hook entries without removing user hooks", () => {
     const merged = mergeCursorHooksConfig(
       {
@@ -88,10 +101,10 @@ describe("context-guard edit hook", () => {
     }
   });
 
-  it("install copies hook script and merges hooks.json", async () => {
+  it("install copies hook script and merges hooks.json when --with-cursor-hooks", async () => {
     const { install } = await import("../lib/install.js");
     const cwd = await createTempDir("hook-install-");
-    await install({ cwd, silent: true });
+    await install({ cwd, silent: true, withCursorHooks: true });
 
     assert.equal(await fs.access(path.join(cwd, CURSOR_HOOK_EDIT)).then(() => true, () => false), true);
     assert.equal(await fs.access(path.join(cwd, CURSOR_HOOK_SANDBOX)).then(() => true, () => false), true);
@@ -102,6 +115,31 @@ describe("context-guard edit hook", () => {
       hooksJson.hooks.preToolUse.some(
         (entry) => entry.command === ".cursor/hooks/context-guard-edit.mjs",
       ),
+    );
+  });
+
+  it("install does not register hooks by default", async () => {
+    const { install } = await import("../lib/install.js");
+    const cwd = await createTempDir("hook-install-default-");
+    await install({ cwd, silent: true });
+
+    assert.equal(await fs.access(path.join(cwd, CURSOR_HOOKS_JSON)).then(() => true, () => false), false);
+    assert.equal(await fs.access(path.join(cwd, CURSOR_HOOK_EDIT)).then(() => true, () => false), false);
+  });
+
+  it("install --without-cursor-hooks removes shipped hook entries", async () => {
+    const { install } = await import("../lib/install.js");
+    const cwd = await createTempDir("hook-install-remove-");
+    await install({ cwd, silent: true, withCursorHooks: true });
+    await install({ cwd, silent: true, withoutCursorHooks: true });
+
+    assert.equal(await fs.access(path.join(cwd, CURSOR_HOOK_EDIT)).then(() => true, () => false), false);
+    const hooksJson = JSON.parse(await fs.readFile(path.join(cwd, CURSOR_HOOKS_JSON), "utf8"));
+    assert.equal(
+      hooksJson.hooks.preToolUse.some(
+        (entry) => entry.command === ".cursor/hooks/context-guard-edit.mjs",
+      ),
+      false,
     );
   });
 });

@@ -1,6 +1,6 @@
 # Documentation
 
-Plain-language guides for **Spec Guardrails 4.1.x**.  
+Plain-language guides for **Spec Guardrails 4.2.x**.  
 **New here?** Read **[Overview](Overview.md)** first, then [Quick start](Quick-start.md).
 
 ---
@@ -13,8 +13,9 @@ Plain-language guides for **Spec Guardrails 4.1.x**.
 | [Home.md](Home.md) | Short hub and install |
 | [Quick-start.md](Quick-start.md) | First ten minutes |
 | [How-it-works.md](How-it-works.md) | Goal → done story |
+| [requirements-analysis.md](requirements-analysis.md) | Structured Q&A before Specify (`/elicit`) |
 | [Memory.md](Memory.md) | `.specs/` memory, search, semantic (optional) |
-| [Cursor-hooks-and-sandbox.md](Cursor-hooks-and-sandbox.md) | Automatic IDE protection (Cursor hooks, performance, tuning) |
+| [Cursor-hooks-and-sandbox.md](Cursor-hooks-and-sandbox.md) | Optional Cursor IDE hooks (off by default), enable/disable, tuning |
 | [FAQ.md](FAQ.md) | Common questions |
 
 ---

@@ -10,12 +10,9 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 ### Changed
 
-- **README** — restructured around what the kit solves rather than internals: plain-language problem statement, a drawn feature flow, how complexity sizing loads only what a change needs, and a layer-by-layer section (artifacts, skills, gates, requirements analysis, loops, memory) each linking to its guide
-- **README** — phase command table removed; those are agent-facing and read as chat/terminal commands to newcomers
-- **README** — credits now name the four upstream projects actually shipped in the package, with full lineage kept in [credits](guide/credits.md)
-- **README** — contributing trimmed to setup and PR expectations; dogfooding workflow lives in [CONTRIBUTING.md](../CONTRIBUTING.md)
-- **README** — Cursor hooks marked optional with disable steps when the IDE feels heavy (Windows / `node.exe`)
-- **Credits** — separates what ships in the package from what is referenced but not vendored
+- **README** — install explains Python as optional (Node-only works; Python adds automatic proof); user-experience flow, five complexity tiers with artifacts/approvals, concrete kit inventory (12 artifacts, 28 skills, 9 gates, 6 memory commands), optional capabilities off by default
+- **README** — requirements analysis guide linked; hooks cited as optional item, not a dedicated section
+- **Docs** — [Requirements analysis](guide/requirements-analysis.md) guide for `/elicit` and requirements briefs
 - **npm description** — ≤350 characters; hooks optional and tunable
 
 ## 4.1.0 — Elicitation wave 2 (gate + context)

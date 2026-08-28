@@ -44,6 +44,18 @@ What `install` does on 3.0:
 
 Runtime **does not** read `.specs/harness/scripts/` or `.specs/seatbelt/scripts/`. Copy or reinstall gates under `.specs/guardrails/scripts/`.
 
+## Upgrading to 4.2+ (Cursor hooks opt-in)
+
+**4.2.0** changed Cursor hooks from **installed by default** to **opt-in**:
+
+| Situation | Action |
+| --- | --- |
+| Fresh install on 4.2+ | Hooks are **not** registered unless you run `install --with-cursor-hooks` or set `cursor.hooks: true` in `.specs/config.yaml` |
+| Upgraded from 4.1.x with hooks already present | Existing `.cursor/hooks.json` entries are **kept** until you run `install --without-cursor-hooks` |
+| Want hooks on a project that never had them | `npx @luizsantiago/spec-guardrails install --with-cursor-hooks` |
+
+See [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md) and [CHANGELOG](../CHANGELOG.md#420--cursor-hooks-opt-in-off-by-default).
+
 ## From `spec-seatbelt` 2.x
 
 1. Update docs/scripts that call `npx @luizsantiago/spec-seatbelt` → `@luizsantiago/spec-guardrails`.

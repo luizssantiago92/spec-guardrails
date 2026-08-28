@@ -170,7 +170,7 @@ Stops warnings and strict blocks. The shell hook **still runs** (CLI cost remain
 
 ### Disable sandbox hook only
 
-Edit `.cursor/hooks.json` — remove the `beforeShellExecution` entry for `sandbox-shell.mjs`. User hooks and the context-guard entry are preserved on reinstall merge unless you removed them yourself; re-run `install` merges shipped entries idempotently.
+Edit `.cursor/hooks.json` — remove the `beforeShellExecution` entry for `sandbox-shell.mjs`. User hooks and the context-guard entry are preserved unless you removed them yourself. To re-enable shipped hooks later, run `install --with-cursor-hooks`.
 
 ### Disable context guard hook
 

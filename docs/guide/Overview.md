@@ -227,6 +227,7 @@ Semantic search is **optional** — useful with **lots** of archived features an
 | I want to… | Read |
 | --- | --- |
 | Install and try in 10 minutes | [Quick start](Quick-start.md) |
+| Vague request — Q&A before Specify | [Requirements analysis](requirements-analysis.md) |
 | Understand memory and search | [Memory](Memory.md) |
 | See every chat command | [Agent commands](agent-commands.md) |
 | See product promises | [Guarantees matrix](Guarantees-matrix.md) |

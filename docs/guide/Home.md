@@ -21,6 +21,7 @@ Works with **Cursor, Claude Code, Copilot, Codex**, and other agents. See [Platf
 | --- | --- |
 | **[Overview](Overview.md)** | Full simple picture — what it is, how much to use |
 | [Quick start](Quick-start.md) | Ten minutes from install to first spec |
+| [Requirements analysis](requirements-analysis.md) | Structured Q&A before Specify when the request is vague |
 | [How it works](How-it-works.md) | Story from idea to archive |
 | [Memory](Memory.md) | `.specs/` memory and search — when and how much |
 
@@ -34,7 +35,7 @@ npx @luizsantiago/spec-guardrails install
 
 Optional: `npx @luizsantiago/spec-guardrails doctor`
 
-**Node 18+** required. **Python 3.10+** enables automatic gates (Brakes mode).
+**Node 18+** required. **Python 3.10+** is optional — same process with or without it; Python adds automatic proof at each step (see [FAQ → Process vs Brakes](FAQ.md#process-vs-brakes)).
 
 ---
 

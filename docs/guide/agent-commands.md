@@ -131,6 +131,8 @@ Out of scope: PDF export and scheduled emails.
 
 **Skip when:** Request is already testable — go to `/specify`. Owner can always refuse Elicitation.
 
+**Guide:** [Requirements analysis](requirements-analysis.md)
+
 ---
 
 ## `/explore` — think before you commit (optional)

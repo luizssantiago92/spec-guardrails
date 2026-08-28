@@ -36,4 +36,13 @@ describe("classify-change", () => {
     });
     assert.notEqual(result.tier, "quick");
   });
+
+  it("suggests elicit for vague descriptions", () => {
+    const result = classifyChange({
+      description: "improve the settings page interface",
+      files: [],
+    });
+    assert.equal(result.suggestElicit, true);
+    assert.match(formatClassifyChange(result), /\/elicit/);
+  });
 });

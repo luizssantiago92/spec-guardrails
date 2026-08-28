@@ -87,6 +87,11 @@ Commands:
   req-analysis discover                List local kickoff sources (prd.md, kickoff.md, …)
   req-analysis promote                 Print next steps after brief approval
     [--scope project|feature]          Match the brief scope
+  req-analysis validate [brief.md]     Gate: approved requirements brief before /specify
+  req-analysis context                 Assemble kickoff + brief context for Specify
+    [--scope project|feature]          Scope (default: project)
+    [--slug <feature-slug>]            Feature slug when scope=feature
+    [--json]                           Machine-readable output
   archive-feature [feature]          Fold verified feature into ROADMAP + domain spec; reset STATE
     [--domain <slug>]                Domain folder under .specs/domains/ (default: feature slug)
     [--skip-verify]                  Skip validate-state (tests / recovery only)
@@ -168,6 +173,7 @@ Commands:
     [--json]                         Machine-readable plan for agents
   validate-traceability [feature]    REQ → tasks → validation coverage chain
   validate-quick [quick-folder]      Quick-mode TASK.md / SUMMARY.md structural gate
+  validate-req-analysis [brief.md]   Requirements brief gate before /specify (/elicit)
   validate-state [feature]           Completion gate before declaring a feature done
   check-commit --message "<msg>"     Conventional Commits gate
   lessons <add|list|penalize|prune|promote|graduate|status>  Lessons engine
@@ -953,8 +959,41 @@ if (command === "--version" || command === "-v" || command === "version") {
         }
       }
       console.log(formatPromoteMessage({ scope, description }));
+    } else if (sub === "validate") {
+      const briefPath = rest.find((arg) => !arg.startsWith("--"));
+      const code = await runGate("validate-req-analysis", briefPath ? [briefPath] : []);
+      process.exit(code);
+    } else if (sub === "context") {
+      let scope = "project";
+      let slug = "";
+      let json = false;
+      for (let i = 0; i < rest.length; i += 1) {
+        const arg = rest[i];
+        if (arg === "--json") {
+          json = true;
+        } else if (arg === "--scope" && rest[i + 1]) {
+          scope = rest[i + 1];
+          i += 1;
+        } else if (arg.startsWith("--scope=")) {
+          scope = arg.slice("--scope=".length);
+        } else if (arg === "--slug" && rest[i + 1]) {
+          slug = rest[i + 1];
+          i += 1;
+        } else if (arg.startsWith("--slug=")) {
+          slug = arg.slice("--slug=".length);
+        }
+      }
+      const scriptArgs = ["--scope", scope];
+      if (slug) {
+        scriptArgs.push("--slug", slug);
+      }
+      if (json) {
+        scriptArgs.push("--json");
+      }
+      const code = await runGuardrailsScript("req-context", scriptArgs);
+      process.exit(code);
     } else {
-      throw new Error("Usage: req-analysis init | discover | promote");
+      throw new Error("Usage: req-analysis init | discover | promote | validate | context");
     }
   } catch (err) {
     console.error(`❌ ${err.message}`);

@@ -82,7 +82,7 @@ EXPLORE (optional) → ELICIT (optional) → SPECIFY → DISCUSS (conditional) �
 | Phase | Required | Reference | Sister skill | Gate |
 | --- | --- | --- | --- | --- |
 | **Explore** | Optional | `references/explore.md` | — | — |
-| **Elicit** | Optional | `references/elicitation.md` | — | — (v1 skill checklist; gate in 4.x wave 2) |
+| **Elicit** | Optional | `references/elicitation.md` | `validate-req-analysis` | — (before `/specify`; suggest-only entry) |
 | **Constitution** | Once per project | `references/constitution.md` | — | — |
 | **Specify** | Yes | `references/specify.md` | — | `validate_spec.py` |
 | **Discuss** | Conditional | `references/discuss.md` | — | — |

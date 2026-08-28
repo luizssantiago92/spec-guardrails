@@ -182,11 +182,9 @@ Full guide: **[Memory](Memory.md)** — no project required to understand the mo
 - retry and run budgets
 - read / write / delete rules (e.g. deny DELETE under `.git/`)
 
-**Context guards** check before edit or before claiming “feature done” (active feature, task files, validation PASS).
+**Context guards** check before edit or before claiming “feature done” (active feature, task files, validation PASS). On **Cursor**, `install` registers hooks so these checks run automatically — see **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)** for what you will see in the IDE and how to tune it.
 
-**Cursor hooks (3.8+):** `install` adds `.cursor/hooks/` so `context-guard check-edit` runs automatically before write/edit tools — you still approve specs/tasks; the IDE blocks out-of-scope edits without the agent remembering to call the CLI.
-
-**Sandbox policy (3.9+):** same install adds a shell hook for destructive commands (`rm -rf`, `curl | bash`, force-push to main, …). This is policy enforcement, not a container sandbox — configure `sandbox.mode` in `.specs/config.yaml`.
+**Sandbox policy (3.9+):** a shell hook blocks or warns on destructive commands (`rm -rf`, `curl | bash`, force-push to main, …). Policy only — not a container sandbox. Configure `sandbox.mode` in `.specs/config.yaml`. Full behavior: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)**.
 
 These reduce blast radius; they do not replace your review.
 

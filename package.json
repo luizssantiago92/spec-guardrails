@@ -1,6 +1,6 @@
 {
   "name": "@luizsantiago/spec-guardrails",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Spec-driven process kit for AI coding agents: write goals in .specs/, break into tasks, implement in waves, verify with proof. Process mode (Node) or Brakes mode (Node + Python gates). Works with Cursor, Claude, Copilot, and Codex.",
   "type": "module",
   "bin": {

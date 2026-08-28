@@ -124,7 +124,10 @@ Out of scope: PDF export and scheduled emails.
 | --- | --- |
 | `req-analysis init "…" --scope project\|feature` | Scaffold brief template |
 | `req-analysis discover` | List local kickoff files (`prd.md`, `kickoff.md`, …) |
+| `req-analysis validate [brief.md]` | Gate: approved requirements brief before `/specify` |
+| `req-analysis context [--scope …] [--slug …]` | Kickoff + brief bundle for Specify |
 | `req-analysis promote --scope …` | Print next steps after owner approves brief |
+| `validate-req-analysis [brief.md]` | Same gate (direct Python entry) |
 
 **Skip when:** Request is already testable — go to `/specify`. Owner can always refuse Elicitation.
 
@@ -258,6 +261,8 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `context-guard status` | Execute readiness (STATE + open tasks) |
 | `context-guard check-edit <path>` | Contextual guard before editing (scope + task Files) |
 | `context-guard check-complete [feature]` | Guard before claiming completion (tasks + validation PASS) |
+| `sandbox status` | Sandbox policy mode (`off` \| `warn` \| `strict`) |
+| `sandbox check-command "<cmd>"` | Test a shell command against deny patterns |
 | `solution-explore init <feature> --candidates A,B` | Start explicit solution exploration (worktrees + exploration.md) |
 | `solution-explore validate [feature]` | Comparison matrix complete before decision |
 | `solution-explore select <feature> --candidate A --rationale "…"` | Record exploration winner |
@@ -272,4 +277,5 @@ Full CLI list: `npx @luizsantiago/spec-guardrails --help`.
 - [Skills and hub](skills-and-hub.md) — what each skill file does
 - [Gates reference](gates.md) — what the agent runs at each phase
 - [Platform parity](Platform-parity.md) — Cursor, Claude Code, Copilot, Codex, and AGENTS.md
+- [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md) — automatic IDE protection, tuning, performance
 - [Quick start](Quick-start.md) — first ten minutes

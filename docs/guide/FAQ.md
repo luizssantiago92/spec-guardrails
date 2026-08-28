@@ -50,6 +50,14 @@ You need agents (or humans driving agents) to follow **Specify → … → Verif
 
 No. It stops many **incomplete** finishes and empty stubs. Judgment, product taste, and review still matter. Sisters help when you want a deeper look.
 
+## What are Cursor hooks and why do I see extra Node processes?
+
+Since **3.8.0**, `install` registers **Cursor hooks** that run **context-guard** before file edits and **sandbox policy** before shell commands — automatically, without you calling the CLI.
+
+You may notice hook activity in the Cursor UI or many short-lived `node.exe` processes on busy agent sessions (especially on Windows with `npx`). That is expected. Hooks are **soft governance**, not an OS container.
+
+Full guide: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)** — symptoms, modes (`warn` / `strict`), tuning, and disabling.
+
 ## Why not load security and QA every time?
 
 Cost and focus. Most turns don’t need a full audit. When you do, say so and load **one** sister.

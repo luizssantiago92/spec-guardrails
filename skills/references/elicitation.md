@@ -136,8 +136,14 @@ Use the template from `req-analysis init`. Required sections:
 
 Present the brief summary. Wait for explicit approval before `/specify`.
 
-**v1 checklist (no Python gate yet):**
+**Gate before `/specify` (Brakes mode):**
 
+```bash
+npx @luizsantiago/spec-guardrails req-analysis validate
+# or: validate-req-analysis .specs/project/requirements-brief.md
+```
+
+**Checklist (Process mode — agent verifies when Python is unavailable):**
 - [ ] Open questions is `- none` or empty
 - [ ] Owner approval filled
 - [ ] Context sources lists at least one input
@@ -159,6 +165,12 @@ npx @luizsantiago/spec-guardrails feature-init "owner description"
 Copy or link brief → `.specs/features/NNN-slug/requirements-brief.md` (optional).
 
 Open `specify.md` — derive `spec.md` from brief; do **not** re-ask resolved questions.
+
+Optional context bundle for Specify:
+
+```bash
+npx @luizsantiago/spec-guardrails req-analysis context --scope feature --slug settings-page
+```
 
 ```bash
 npx @luizsantiago/spec-guardrails req-analysis promote --scope feature

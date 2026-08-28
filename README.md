@@ -7,7 +7,7 @@
 
 Spec Guardrails is a process kit that installs phase guides, persistent project memory, and optional structural checks into your repository. Teams keep ownership of requirements and approval gates; agents follow a repeatable path from written intent to verified delivery.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.0.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.1.x**
 
 ---
 
@@ -94,10 +94,11 @@ Enable when the work warrants them — most teams start with the core loop only.
 | Episodic memory | Session notes → lessons for future runs |
 | Code index | Lightweight brownfield file and symbol map |
 | Solution exploration | Compare implementation options before committing |
-| Sandbox / execution policy | Warn or block destructive shell commands and path drift |
+| Sandbox policy | Warn or block destructive shell commands (Cursor hook) |
+| Execution policy | Path allowlists, budgets, read/write/delete effects |
 | Semantic retrieval | Search by meaning — off by default |
 
-Guides: [Memory](docs/guide/Memory.md) · [Brownfield context](docs/guide/brownfield-context.md) · [Safety & exploration](docs/guide/Overview.md)
+Guides: [Memory](docs/guide/Memory.md) · [Cursor hooks and sandbox](docs/guide/Cursor-hooks-and-sandbox.md) · [Brownfield context](docs/guide/brownfield-context.md)
 
 ---
 
@@ -123,6 +124,7 @@ Start with the guide that matches your question; each page links deeper where ne
 | --- | --- | --- |
 | Orientation | [Overview](docs/guide/Overview.md) | [Concepts](docs/guide/concepts.md) |
 | First session | [Quick start](docs/guide/Quick-start.md) | [Agent commands](docs/guide/agent-commands.md) |
+| Cursor IDE protection | [Cursor hooks and sandbox](docs/guide/Cursor-hooks-and-sandbox.md) | [Guarantees matrix](docs/guide/Guarantees-matrix.md) |
 | Process model | [How it works](docs/guide/How-it-works.md) | [Loop patterns](docs/guide/loop-patterns.md) |
 | Enforcement | [Gates](docs/guide/gates.md) | [Gates and guarantees](docs/guide/Gates-and-guarantees.md) |
 | Long-running projects | [Memory](docs/guide/Memory.md) | [Brownfield context](docs/guide/brownfield-context.md) |

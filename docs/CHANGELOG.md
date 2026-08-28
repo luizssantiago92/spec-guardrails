@@ -6,6 +6,22 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.1.0 — Elicitation wave 2 (gate + context)
+
+### Added
+
+- **`validate-req-analysis` gate** — structural checks on requirements briefs before `/specify`
+- **`req-analysis validate`** and **`req-analysis context`** — CLI wrappers for the gate and kickoff/brief bundle
+- **`req_context.py`** — read-only context assembler for Specify
+- **Docs** — [Cursor hooks and sandbox](guide/Cursor-hooks-and-sandbox.md): IDE behavior, symptoms, tuning, performance
+
+### Changed
+
+- **`classify-change`** — suggests `/elicit` when description language is vague (never blocks `/specify`)
+- **Hub** — Elicit phase lists `validate-req-analysis` gate
+- **Overview**, **FAQ**, **README**, **agent commands** — cross-links to hooks guide; `elicitation.md` references gate
+- **CI** — verifies `skills/references/elicitation.md` exists
+
 ## 4.0.0 — Elicitation phase (`/elicit`) wave 1
 
 ### Added

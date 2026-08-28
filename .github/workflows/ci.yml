@@ -51,6 +51,7 @@ jobs:
       - name: Verify phase references exist
         run: |
           test -f skills/references/explore.md
+          test -f skills/references/elicitation.md
           test -f skills/references/constitution.md
           test -f skills/references/specify.md
           test -f skills/references/discuss.md

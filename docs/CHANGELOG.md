@@ -6,6 +6,17 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.2.1 — npm description and publish trigger
+
+### Changed
+
+- **npm description** — leads with positioning instead of a feature list: the agent writes the spec, gets approval, builds in waves, and proves the result; runtime requirements and release notes moved out
+
+### Fixed
+
+- **`publish.yml`** — dropped the `release: published` trigger, which could never succeed: the `npm` environment allows the `main` branch only, so a release event running on the tag ref was rejected before any step executed. Creating a GitHub release no longer starts a failing publish run; publishing stays manual from `main`
+- **`publish.yml`** — removed the release-only tag validation step and the now-dead `workflow_dispatch` conditionals
+
 ## 4.2.0 — Cursor hooks opt-in (off by default)
 
 ### Changed

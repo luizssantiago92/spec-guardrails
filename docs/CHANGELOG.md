@@ -163,7 +163,7 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 - **Companion doctor:** reads `.specs/companions/INDEX.json` (written by Atlas `install`); probes gate mirror, rule, registry section, and preserve paths per companion
 - **`spec-guardrails doctor`:** lists installed Atlases when paired — no hardcoded Atlas list in Guardrails code
-- **Docs:** [Companion: Atlas family](guide/Companion-atlas-family.md); ecosystem guide links Atlas schema contract
+- **Docs:** Companion: Atlas family (guide removed in 3.2.0); ecosystem guide links Atlas schema contract
 - **CLI:** fix `doctor` help text (`USAGE` template backticks broke the CLI)
 
 ## 3.1.10 — Path safety leftovers + Actions publish

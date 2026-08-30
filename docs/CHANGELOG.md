@@ -10,6 +10,7 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 ### Fixed
 
+- **README illustrations** — rewritten as proxy-safe SVG: explicit pixel `width`/`height` instead of `width="100%"`, no `<style>` block, no CSS custom properties, no `prefers-color-scheme`, no animation, and ASCII-only text. The previous versions relied on features that image-rasterizing proxies (such as the one npm uses for README images) cannot resolve, so the images did not render on the npm package page; the mojibake introduced while writing the files (`d3 files`, `25 files`, `2’5`) is gone as well
 - **`check-suppressions` / `check-commit --staged` / `quality-checks`** — subprocess output is decoded as UTF-8 with replacement, so the gates no longer crash with `AttributeError` on Windows when the staged diff or a test runner emits bytes outside the platform locale (4.5.0 shipped SVG assets and em dashes that triggered it)
 - **Attribution** — credits [loopgate_harness](https://github.com/rxdt/loopgate_harness) (MIT) for the enforcement and presentation ideas adopted in 4.5.0, in the README table, [credits](guide/credits.md), and [ecosystem](guide/ecosystem.md); notes that `tlc-spec-driven` declares CC-BY-4.0 at skill level while its repository ships MIT
 - **README** — `Garantees matrix` typo in the gates section

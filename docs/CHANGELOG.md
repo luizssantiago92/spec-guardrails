@@ -26,6 +26,7 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 ### Fixed
 
+- **Attribution** — credits [loopgate_harness](https://github.com/rxdt/loopgate_harness) (MIT) for the enforcement and presentation ideas adopted in this release, in the README table, [credits](guide/credits.md), and [ecosystem](guide/ecosystem.md); notes that `tlc-spec-driven` declares CC-BY-4.0 at skill level while its repository ships MIT
 - **README** — `Garantees matrix` typo in the gates section
 - **Repository hygiene** — untracked leftover maintainer scratch files (`.commit-msg.txt`, `.pr-body.md`) and added them to `.gitignore`
 

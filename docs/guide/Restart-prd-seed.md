@@ -102,10 +102,10 @@ execution-policy status | check-path | record-retry
 | P2 | Solution exploration mode | Shipped (`solution-explore` CLI) |
 | P2 | Optional semantic retrieval | Shipped (`memory-retrieve`, optional `embed`) |
 | P2+ | Memory polish (design/tasks chunks, doctor hints, embed preservation) | Shipped (3.7.0) |
-| P2+ | Cursor hooks for auto `context-guard` | Shipped (3.8.0); **opt-in since 4.2.0** (`install --with-cursor-hooks`) |
+| P2+ | Cursor hooks for auto `context-guard` | Shipped (3.8.0); **removed in 4.3.0** — use `context-guard` CLI instead |
 | P2+ | Episodic memory lifecycle | Shipped (3.9.0 — `episodes` CLI) |
 | P2+ | Brownfield code index | Shipped (3.9.0 — `code-index` CLI) |
-| P2+ | Soft OS sandbox policy | Shipped (3.9.0 — `sandbox` + Cursor shell hook) |
+| P2+ | Soft OS sandbox policy | Shipped (3.9.0 — `sandbox` CLI) |
 
 **Strategic roadmap (core package): complete.** Future work is optional plugins (full RepoGraph, container sandbox), not blocking the product loop.
 

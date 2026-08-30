@@ -7,7 +7,7 @@
 
 Spec Guardrails installs a working method into your repository: the agent writes down what it is going to build, gets your approval, implements in small waves, and proves the result before calling it done. Nothing about your stack changes — you get written requirements, a task plan, and verification evidence stored as files in the project.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.2.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.3.x**
 
 ---
 
@@ -213,10 +213,9 @@ Implementation happens in **small waves**: pick the next runnable jobs, test, im
 
 | Capability | What it adds |
 | --- | --- |
-| **Cursor IDE hooks** | Scope check before file edits and shell-command policy on Cursor — disabled by default; requirements analysis can ask if you want them; you can also enable or disable anytime in chat |
 | **Semantic memory search** | Find past specs and decisions by meaning, not just keywords |
 
-→ [Cursor hooks and sandbox](docs/guide/Cursor-hooks-and-sandbox.md) · [Memory](docs/guide/Memory.md)
+→ [Memory](docs/guide/Memory.md)
 
 ---
 
@@ -242,7 +241,6 @@ Implementation happens in **small waves**: pick the next runnable jobs, test, im
 | Enforcement | [Gates](docs/guide/gates.md) | [Gates and guarantees](docs/guide/Gates-and-guarantees.md) |
 | Requirements | [Requirements analysis](docs/guide/requirements-analysis.md) | [Agent commands → /elicit](docs/guide/agent-commands.md) |
 | Long-running projects | [Memory](docs/guide/Memory.md) | [Brownfield context](docs/guide/brownfield-context.md) |
-| Cursor IDE (optional) | [Cursor hooks and sandbox](docs/guide/Cursor-hooks-and-sandbox.md) | [Guarantees matrix](docs/guide/Guarantees-matrix.md) |
 | Questions | [FAQ](docs/guide/FAQ.md) | [Stability policy](docs/guide/Stability-policy.md) |
 
 Full index: [docs/guide/README.md](docs/guide/README.md)

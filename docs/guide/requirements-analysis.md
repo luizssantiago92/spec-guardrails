@@ -56,14 +56,6 @@ Without Python, the agent runs the same checklist manually.
 
 ---
 
-## Optional: Cursor IDE hooks (during elicitation)
-
-On **Cursor**, the agent may ask once during requirements analysis whether to enable IDE hooks — scope check before edits and shell-command screening. **Default is off** (better for modest machines). You can also ask anytime in chat: *"enable Cursor hooks"* or *"disable Cursor hooks"*.
-
-Details: [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)
-
----
-
 ## CLI helpers
 
 ```bash

@@ -67,8 +67,6 @@ Commands:
   install                            Install skills, references, gates and .specs/ memory
     [--preset <name>]                Seed .specs/config.yaml from a built-in preset
     [--force-config]                 Replace existing config.yaml when using --preset
-    [--with-cursor-hooks]            Register Cursor IDE hooks (off by default)
-    [--without-cursor-hooks]         Remove shipped Cursor hooks and set cursor.hooks: false
   init-config [--preset <name>]      Create .specs/config.yaml (default preset: default)
     [--force]                        Replace existing config.yaml
   preset list                        List built-in config presets
@@ -195,6 +193,7 @@ if (command === "--version" || command === "-v" || command === "version") {
 } else if (command === "install") {
   try {
     const installOptions = {};
+    let deprecatedCursorHooksFlag = false;
     for (let i = 0; i < args.length; i++) {
       const arg = args[i];
       if (arg === "--preset") {
@@ -204,13 +203,18 @@ if (command === "--version" || command === "-v" || command === "version") {
         }
       } else if (arg === "--force-config") {
         installOptions.forceConfig = true;
-      } else if (arg === "--with-cursor-hooks") {
-        installOptions.withCursorHooks = true;
-      } else if (arg === "--without-cursor-hooks") {
-        installOptions.withoutCursorHooks = true;
+      } else if (arg === "--with-cursor-hooks" || arg === "--without-cursor-hooks") {
+        deprecatedCursorHooksFlag = true;
       } else {
         throw new Error(`Unknown install flag: ${arg}`);
       }
+    }
+
+    if (deprecatedCursorHooksFlag) {
+      console.warn(
+        "⚠️  --with-cursor-hooks / --without-cursor-hooks are deprecated (removed in 4.3.0). " +
+          "Running install normally; legacy hook artifacts are cleaned automatically.",
+      );
     }
 
     await install(installOptions);

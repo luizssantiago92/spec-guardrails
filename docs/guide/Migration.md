@@ -44,17 +44,28 @@ What `install` does on 3.0:
 
 Runtime **does not** read `.specs/harness/scripts/` or `.specs/seatbelt/scripts/`. Copy or reinstall gates under `.specs/guardrails/scripts/`.
 
-## Upgrading to 4.2+ (Cursor hooks opt-in)
+## Upgrading to 4.3 (Cursor hooks removed)
 
-**4.2.0** changed Cursor hooks from **installed by default** to **opt-in**:
+**4.3.0** removed Cursor IDE hooks entirely. The automatic scope and shell checks that hooks used to trigger are still available — the agent runs `context-guard` and `sandbox` CLI commands at phase boundaries instead.
 
 | Situation | Action |
 | --- | --- |
-| Fresh install on 4.2+ | Hooks are **not** registered unless you run `install --with-cursor-hooks` or set `cursor.hooks: true` in `.specs/config.yaml` |
-| Upgraded from 4.1.x with hooks already present | Existing `.cursor/hooks.json` entries are **kept** until you run `install --without-cursor-hooks` |
-| Want hooks on a project that never had them | `npx @luizsantiago/spec-guardrails install --with-cursor-hooks` |
+| Upgrading from 4.2.x or earlier with hook artifacts | Run `npx @luizsantiago/spec-guardrails install` — legacy `.cursor/hooks.json` entries, shipped hook scripts, and the `cursor.hooks` config block are cleaned automatically |
+| Scripts still using `--with-cursor-hooks` / `--without-cursor-hooks` | Flags are accepted as no-op with a deprecation warning; remove them when convenient |
+| Scope or shell safety | Use `context-guard check-edit`, `context-guard check-complete`, and `sandbox check-command` via CLI |
 
-See [Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md) and [CHANGELOG](../CHANGELOG.md#420--cursor-hooks-opt-in-off-by-default).
+See [CHANGELOG](../CHANGELOG.md#430--cursor-hooks-removed).
+
+## Upgrading to 4.2+ (Cursor hooks opt-in) — historical
+
+**4.2.0** changed Cursor hooks from **installed by default** to **opt-in**. Hooks were **removed in 4.3.0** — see above.
+
+| Situation | Action (historical) |
+| --- | --- |
+| Fresh install on 4.2.x | Hooks were not registered unless you ran `install --with-cursor-hooks` or set `cursor.hooks: true` |
+| Upgraded from 4.1.x with hooks present | Existing entries were kept until `install --without-cursor-hooks` |
+
+See [CHANGELOG](../CHANGELOG.md#420--cursor-hooks-opt-in-off-by-default).
 
 ## From `spec-seatbelt` 2.x
 

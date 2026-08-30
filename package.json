@@ -1,6 +1,6 @@
 {
   "name": "@luizsantiago/spec-guardrails",
-  "version": "4.2.1",
+  "version": "4.3.0",
   "description": "Governed spec-driven development for AI coding agents. Your agent writes the spec, gets your approval, builds in small waves, and proves the result — plans and project memory stored as files in your repo.",
   "type": "module",
   "bin": {
@@ -12,7 +12,7 @@
   "scripts": {
     "guardrails": "node index.js",
     "test": "npm run test:node && npm run test:gates",
-    "test:node": "node --test test/install.test.js test/test_feature_init.test.js test/test_config.test.js test/test_archive.test.js test/test_delta_merge.test.js test/test_presets.test.js test/test_brownfield.test.js test/test_doctor.test.js test/test_token_cost.test.js test/test_next_steps.test.js test/test_classify_change.test.js test/test_feature_status.test.js test/test_agent_contract.test.js test/test_gates_python.test.js test/test_specs_utils.test.js test/test_validation_verdict.test.js test/test_execution_policy.test.js test/test_workspace_isolation.test.js test/test_adapter_registry.test.js test/test_context_guard.test.js test/test_solution_exploration.test.js test/test_memory_doctor.test.js test/test_cursor_hooks.test.js test/test_sandbox_policy.test.js test/test_req_analysis.test.js",
+    "test:node": "node --test test/install.test.js test/test_feature_init.test.js test/test_config.test.js test/test_archive.test.js test/test_delta_merge.test.js test/test_presets.test.js test/test_brownfield.test.js test/test_doctor.test.js test/test_token_cost.test.js test/test_next_steps.test.js test/test_classify_change.test.js test/test_feature_status.test.js test/test_agent_contract.test.js test/test_gates_python.test.js test/test_specs_utils.test.js test/test_validation_verdict.test.js test/test_execution_policy.test.js test/test_workspace_isolation.test.js test/test_adapter_registry.test.js test/test_context_guard.test.js test/test_solution_exploration.test.js test/test_memory_doctor.test.js test/test_cursor_hooks_cleanup.test.js test/test_sandbox_policy.test.js test/test_req_analysis.test.js",
     "test:gates": "node test/run-gate-tests.mjs",
     "prepublishOnly": "npm test"
   },

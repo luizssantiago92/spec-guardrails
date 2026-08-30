@@ -51,7 +51,6 @@ Beyond adaptations above, this package adds:
 - Node CLI (`install`, `doctor`, `feature-init`, memory-index, execution policy, req-analysis, …)
 - Python structural gates under `scripts/` (installed to `.specs/guardrails/scripts/`)
 - Platform adapters (Cursor, Claude, Copilot, Codex, `AGENTS.md`)
-- Cursor hooks templates (optional — opt-in via `install --with-cursor-hooks`)
 - Elicitation phase (`/elicit`, requirements briefs, `validate-req-analysis`)
 
 ---

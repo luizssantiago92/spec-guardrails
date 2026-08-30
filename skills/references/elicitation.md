@@ -108,18 +108,6 @@ Mark covered items: `covered by kickoff.md §…` — **do not ask again**.
 | One area per round | UI **or** API **or** data — not all at once |
 | Stop when | Gaps closed, owner says "enough", or Open questions is `- none` |
 
-**Cursor IDE hooks (optional, once per project — first elicitation round only):**
-
-If the platform is **Cursor** and `.cursor/hooks.json` has no shipped Spec Guardrails entries yet, ask **once**:
-
-> "Cursor can run automatic scope checks before file edits and screen shell commands. This is **off by default** (lighter on modest machines). Enable Cursor hooks for this project? A) Yes — run `install --with-cursor-hooks` B) No — keep off (recommended on low-RAM machines) C) Decide later"
-
-- **Yes** → `npx @luizsantiago/spec-guardrails install --with-cursor-hooks` (sets `cursor.hooks: true` in config when present).
-- **No** → note in brief or STATE; do not install hooks.
-- **Later** → skip; owner can say "enable Cursor hooks" or "disable Cursor hooks" in chat anytime.
-
-Never block Elicitation or Specify on this question.
-
 Templates by detected type (ask only relevant dimensions):
 
 - **UI** — layout, primary actions, navigation, states

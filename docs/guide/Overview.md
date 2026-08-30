@@ -182,9 +182,9 @@ Full guide: **[Memory](Memory.md)** — no project required to understand the mo
 - retry and run budgets
 - read / write / delete rules (e.g. deny DELETE under `.git/`)
 
-**Context guards** check before edit or before claiming “feature done” (active feature, task files, validation PASS). On **Cursor**, you can optionally enable hooks so these checks run automatically — **off by default**; see **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)**.
+**Context guards** check before edit or before claiming “feature done” (active feature, task files, validation PASS). Run `context-guard check-edit` and `context-guard check-complete` via CLI when the agent needs scope enforcement.
 
-**Sandbox policy (optional):** when hooks are enabled, a shell hook blocks or warns on destructive commands (`rm -rf`, `curl | bash`, force-push to main, …). Policy only — not a container sandbox. Configure `sandbox.mode` in `.specs/config.yaml`. Full behavior: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)**.
+**Sandbox policy (optional):** `sandbox check-command` blocks or warns on destructive commands (`rm -rf`, `curl | bash`, force-push to main, …). Policy only — not a container sandbox. Configure `sandbox.mode` in `.specs/config.yaml`.
 
 These reduce blast radius; they do not replace your review.
 

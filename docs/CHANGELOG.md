@@ -6,6 +6,20 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.3.0 — Cursor hooks removed
+
+### Removed
+
+- **Cursor IDE hooks** — automatic scope and shell checks via `.cursor/hooks.json` and shipped hook scripts (`context-guard-edit.mjs`, `sandbox-shell.mjs`). Motivation: each edit/shell action spawned short-lived Node processes (especially heavy on Windows with `npx`), with limited benefit because hooks were opt-in and fail-open
+- **`install --with-cursor-hooks` / `--without-cursor-hooks`** — removed from help; flags accepted as no-op with deprecation warning for compatibility
+- **`cursor.hooks` config block** — removed from config template
+- **Docs** — deleted Cursor hooks and sandbox guide; removed hook sections from hub, elicitation, FAQ, Overview, and doc index
+
+### Changed
+
+- **`install`** — runs idempotent legacy cleanup: removes shipped hook scripts, strips shipped entries from `.cursor/hooks.json` (preserves user hooks), deletes empty `hooks.json`, removes `cursor:` block from config
+- **`context-guard` and `sandbox` CLI** — unchanged; agent runs these at phase boundaries instead of IDE auto-triggers
+
 ## 4.2.1 — npm description and publish trigger
 
 ### Changed
@@ -24,7 +38,7 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 - **`install`** — Cursor hooks are **not** registered unless `--with-cursor-hooks` or `cursor.hooks: true` in `.specs/config.yaml`
 - **`install --without-cursor-hooks`** — removes shipped hook entries and sets `cursor.hooks: false`
 - **`/elicit`** — may ask once (Cursor) whether to enable IDE hooks; hub documents chat enable/disable
-- **Docs** — [Cursor hooks and sandbox](guide/Cursor-hooks-and-sandbox.md), FAQ, Overview, config template, [Migration](guide/Migration.md), GETTING_STARTED, and doc index updated for opt-in default; fixed stale README anchor links
+- **Docs** — Cursor hooks and sandbox guide, FAQ, Overview, config template, Migration, GETTING_STARTED, and doc index updated for opt-in default; fixed stale README anchor links
 
 ## 4.1.1 — README rewrite for first-time readers + npm description
 
@@ -42,7 +56,7 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 - **`validate-req-analysis` gate** — structural checks on requirements briefs before `/specify`
 - **`req-analysis validate`** and **`req-analysis context`** — CLI wrappers for the gate and kickoff/brief bundle
 - **`req_context.py`** — read-only context assembler for Specify
-- **Docs** — [Cursor hooks and sandbox](guide/Cursor-hooks-and-sandbox.md): IDE behavior, symptoms, tuning, performance
+- **Docs** — Cursor hooks and sandbox guide: IDE behavior, symptoms, tuning, performance (guide removed in 4.3.0)
 
 ### Changed
 

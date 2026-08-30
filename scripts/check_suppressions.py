@@ -33,11 +33,14 @@ def read_staged_diff(cwd: Path) -> str:
         cwd=cwd,
         capture_output=True,
         text=True,
+        # Diffs can carry bytes the platform locale cannot decode (SVG, em dashes).
+        encoding="utf-8",
+        errors="replace",
         check=False,
     )
     if result.returncode not in (0, 1):
-        raise RuntimeError(result.stderr.strip() or "git diff --cached failed")
-    return result.stdout
+        raise RuntimeError((result.stderr or "").strip() or "git diff --cached failed")
+    return result.stdout or ""
 
 
 def added_lines(diff_text: str) -> list[tuple[str, str]]:

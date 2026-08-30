@@ -38,6 +38,9 @@ def run_command(command: str, cwd: Path) -> dict:
         shell=True,
         capture_output=True,
         text=True,
+        # Test runners emit symbols the platform locale cannot always decode.
+        encoding="utf-8",
+        errors="replace",
         check=False,
     )
     output = (completed.stdout or "") + (completed.stderr or "")

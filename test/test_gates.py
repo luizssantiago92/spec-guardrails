@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import os
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -1278,6 +1279,21 @@ class SuppressionGateTest(unittest.TestCase):
         diff = "+++ b/src/app.py\n+    x = 1\n"
         report = check_suppressions.build_report(diff, [r"#\s*noqa\b"])
         self.assertTrue(report.passed)
+
+    def test_reads_staged_diff_with_non_ascii_bytes(self):
+        """Regression: locale decoding made read_staged_diff return None on Windows."""
+
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        root = Path(tmp.name)
+        subprocess.run(["git", "init", "--quiet"], cwd=root, check=True)
+        (root / "doc.md").write_text("Título — em dash and ünicode\n", encoding="utf-8")
+        subprocess.run(["git", "add", "doc.md"], cwd=root, check=True)
+
+        diff = check_suppressions.read_staged_diff(root)
+
+        self.assertIsInstance(diff, str)
+        self.assertTrue(check_suppressions.build_report(diff, [r"#\s*noqa\b"]).passed)
 
 
 class ProjectConfigTest(unittest.TestCase):

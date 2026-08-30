@@ -11,6 +11,7 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | Phase | Order | Gate / CLI |
 | --- | ---: | --- |
 | **Planning** | 1 | `feature-init` (CLI) |
+| | 1b | `validate-req-analysis` (requirements brief before `/specify`) |
 | | 2 | `validate-spec` |
 | | 3 | `analyze-artifacts` |
 | | 4 | `validate-tasks` |
@@ -24,6 +25,7 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 
 | Gate | Script / CLI | When | What it checks |
 | --- | --- | --- | --- |
+| **validate-req-analysis** | `validate_req_analysis.py` | Before `/specify` when using `/elicit` | Approved requirements brief shape and discovery citations |
 | **validate-spec** | `validate_spec.py` | Before you approve `spec.md` | Required sections, `SHALL`/`MUST` criteria, assumptions |
 | **analyze-artifacts** | `analyze_artifacts.py` | Before task approval; on drift | Every REQ has task coverage; no orphan tasks |
 | **validate-tasks** | `validate_tasks.py` | Before you approve `tasks.md` | Task shape, binary done criteria, `task-graph.md` when 3+ tasks, file overlap |

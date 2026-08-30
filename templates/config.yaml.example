@@ -76,8 +76,11 @@ elicitation:
 sandbox:
   mode: warn
   deny_patterns:
-    - "rm\\s+-rf"
-    - "curl.*\\|.*sh"
+    - "rm\\s+(-[^\\s]*f[^\\s]*\\s+-[^\\s]*r|-rf|-fr)\\s"
+    - "curl\\b[^\\n|]*\\|\\s*(?:ba)?sh\\b"
+    - "wget\\b[^\\n|]*\\|\\s*(?:ba)?sh\\b"
+    - "git\\s+push\\b[^\\n]*(--force|--force-with-lease)[^\\n]*\\b(main|master)\\b"
+    - "\\b(DROP\\s+DATABASE|DROP\\s+SCHEMA|TRUNCATE\\s+TABLE)\\b"
 
 # Project-specific overrides (appended on top of preset + rules above):
 # overrides:

@@ -22,6 +22,7 @@ Run `npx @luizsantiago/spec-guardrails doctor` to see whether Brakes (Python) ar
 | Guarantee | Mechanism | Mode | Enforcement |
 | --- | --- | --- | --- |
 | Intent exists before code | `validate-spec` | Brakes | Hard gate (Python) |
+| Requirements brief approved (optional `/elicit`) | `validate-req-analysis` | Brakes | Hard gate (Python) |
 | Tasks derive from requirements | `analyze-artifacts` | Brakes | Hard gate |
 | Requirements stay traceable | `validate-traceability` | Brakes | Hard gate |
 | Task shape is buildable | `validate-tasks` | Brakes | Hard gate |

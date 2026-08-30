@@ -28,6 +28,7 @@ import { featureInit } from "./lib/feature.js";
 import { featureStatus, formatFeatureStatus } from "./lib/feature-status.js";
 import { GATE_COMMANDS, AUX_COMMANDS, runGate, runGuardrailsScript } from "./lib/gates.js";
 import { install } from "./lib/install.js";
+import { parsePlatformArg } from "./lib/platform-detect.js";
 import {
   cleanupWorkspaces,
   formatWorkspaceList,
@@ -67,6 +68,8 @@ Commands:
   install                            Install skills, references, gates and .specs/ memory
     [--preset <name>]                Seed .specs/config.yaml from a built-in preset
     [--force-config]                 Replace existing config.yaml when using --preset
+    [--all-platforms]                Install every skill tree (Cursor, Claude, Copilot, Codex)
+    [--platform cursor|claude|copilot|codex]  Force a platform instead of auto-detect
   init-config [--preset <name>]      Create .specs/config.yaml (default preset: default)
     [--force]                        Replace existing config.yaml
   preset list                        List built-in config presets
@@ -125,6 +128,7 @@ Commands:
   execution-policy record-run        Increment agent-run counter (blocks at budget)
   memory-index rebuild               Rebuild SQLite memory index from .specs/ artifacts
   memory-index embed [--force]       Optional semantic embeddings (requires config + provider)
+  memory-index status [--json]       Index chunk, embedding, and staleness stats
   memory-query --from <id>           Bounded context package from the knowledge graph
     [--depth N]                      Traversal depth (default 2)
     [--json]                         Machine-readable output
@@ -203,6 +207,16 @@ if (command === "--version" || command === "-v" || command === "version") {
         }
       } else if (arg === "--force-config") {
         installOptions.forceConfig = true;
+      } else if (arg === "--all-platforms") {
+        installOptions.allPlatforms = true;
+      } else if (arg === "--platform") {
+        const platform = parsePlatformArg(args[++i] ?? "");
+        if (!platform) {
+          throw new Error(
+            "--platform requires cursor, claude, copilot, or codex.",
+          );
+        }
+        installOptions.platform = platform;
       } else if (arg === "--with-cursor-hooks" || arg === "--without-cursor-hooks") {
         deprecatedCursorHooksFlag = true;
       } else {
@@ -215,6 +229,10 @@ if (command === "--version" || command === "-v" || command === "version") {
         "⚠️  --with-cursor-hooks / --without-cursor-hooks are deprecated (removed in 4.3.0). " +
           "Running install normally; legacy hook artifacts are cleaned automatically.",
       );
+    }
+
+    if (installOptions.allPlatforms && installOptions.platform) {
+      throw new Error("Use either --all-platforms or --platform, not both.");
     }
 
     await install(installOptions);

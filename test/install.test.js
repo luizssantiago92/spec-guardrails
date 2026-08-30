@@ -96,12 +96,76 @@ async function withMockServer(fn, options) {
 }
 
 describe("install guardrails", () => {
+  it("installs only detected platform by default (Cursor fallback)", async () => {
+    await withMockServer(async (mockServer) => {
+      const cwd = await createTempDir("harness-platform-default-");
+
+      try {
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+
+        assert.equal(
+          await pathExists(path.join(cwd, ".cursor/skills/agent-architecture.md")),
+          true,
+        );
+        assert.equal(
+          await pathExists(path.join(cwd, ".claude/skills/agent-architecture.md")),
+          false,
+        );
+        assert.equal(await pathExists(path.join(cwd, ".cursorrules")), true);
+        assert.equal(await pathExists(path.join(cwd, "AGENTS.md")), true);
+        assert.equal(
+          await pathExists(path.join(cwd, ".claude/CLAUDE.md")),
+          false,
+        );
+      } finally {
+        await fs.rm(cwd, { recursive: true, force: true });
+      }
+    });
+  });
+
+  it("preserves prior skill trees when switching platforms", async () => {
+    await withMockServer(async (mockServer) => {
+      const cwd = await createTempDir("harness-platform-migrate-");
+
+      try {
+        await fs.mkdir(path.join(cwd, ".claude/skills"), { recursive: true });
+        await fs.writeFile(
+          path.join(cwd, ".claude/skills/agent-architecture.md"),
+          "# prior hub\n",
+          "utf8",
+        );
+
+        await install({
+          cwd,
+          repoUrl: mockServer.baseUrl,
+          silent: true,
+          platform: "cursor",
+        });
+
+        assert.equal(
+          await fs.readFile(
+            path.join(cwd, ".claude/skills/agent-architecture.md"),
+            "utf8",
+          ),
+          SKILL_FIXTURE,
+        );
+        assert.equal(
+          await pathExists(path.join(cwd, ".cursor/skills/agent-architecture.md")),
+          true,
+        );
+        assert.equal(await pathExists(path.join(cwd, ".claude/CLAUDE.md")), true);
+      } finally {
+        await fs.rm(cwd, { recursive: true, force: true });
+      }
+    });
+  });
+
   it("creates the full guardrails structure in the target project", async () => {
     await withMockServer(async (mockServer) => {
       const cwd = await createTempDir("harness-install-");
 
       try {
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         const cursorSkill = path.join(
           cwd,
@@ -238,7 +302,7 @@ describe("install guardrails", () => {
       const cwd = await createTempDir("harness-references-");
 
       try {
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         for (const dir of [
           ".cursor/skills",
@@ -282,7 +346,7 @@ describe("install guardrails", () => {
       const cwd = await createTempDir("harness-gates-");
 
       try {
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         for (const script of SCRIPT_ASSETS) {
           const scriptPath = path.join(cwd, GUARDRAILS_SCRIPTS_DIR, script.file);
@@ -407,7 +471,7 @@ describe("install guardrails", () => {
       const cwd = await createTempDir("harness-idempotent-");
 
       try {
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         const stateFile = path.join(cwd, ".specs/STATE.md");
         const lessonsFile = path.join(cwd, ".specs/LESSONS.md");
@@ -420,7 +484,7 @@ describe("install guardrails", () => {
         await fs.writeFile(lessonsFile, "# Custom lessons\n", "utf8");
         await fs.writeFile(baselineRule, "# Custom rules\n", "utf8");
 
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         assert.equal(await fs.readFile(stateFile, "utf8"), "# Custom state\n");
         assert.equal(
@@ -441,7 +505,7 @@ describe("install guardrails", () => {
       const cwd = await createTempDir("harness-baseline-stale-");
 
       try {
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         const baselineRule = path.join(
           cwd,
@@ -464,7 +528,7 @@ keep me
           "utf8",
         );
 
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         const baseline = await fs.readFile(baselineRule, "utf8");
         assert.match(baseline, /guardrails-managed:skills-map:start/);
@@ -482,7 +546,7 @@ keep me
       const cwd = await createTempDir("harness-cursorrules-upgrade-");
 
       try {
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         const cursorRules = path.join(cwd, ".cursorrules");
         await fs.writeFile(
@@ -495,7 +559,7 @@ keep me
           "utf8",
         );
 
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true, allPlatforms: true });
 
         const rulesContent = await fs.readFile(cursorRules, "utf8");
         assert.match(rulesContent, /engineering-standards\.md/);

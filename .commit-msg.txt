@@ -1,0 +1,11 @@
+release: 4.3.0 - remove Cursor IDE hooks
+
+Remove the Cursor hooks integration that spawned short-lived Node
+processes on every edit and shell command. Scope and sandbox checks
+remain as context-guard and sandbox CLI commands the agent runs at
+phase boundaries.
+
+install now cleans legacy hook artifacts idempotently: shipped scripts,
+shipped hooks.json entries (preserving user hooks), empty hooks.json,
+and the cursor.hooks config block. Deprecated --with-cursor-hooks and
+--without-cursor-hooks flags are accepted as no-op with a warning.

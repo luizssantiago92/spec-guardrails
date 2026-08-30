@@ -44,7 +44,6 @@ Type these in **chat** in your agent environment. They load phase procedures fro
 | Command | When |
 | --- | --- |
 | `install` | First time or upgrade |
-| `install --with-cursor-hooks` | Optional — enable Cursor IDE hooks (off by default on 4.2+) |
 | `project-init` | Brownfield repo (optional) |
 | `doctor` | Install looks broken |
 | `classify-change` / `feature-status` | Pick a tier or see next step |

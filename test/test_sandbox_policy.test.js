@@ -6,7 +6,6 @@ import {
   DEFAULT_SANDBOX_DENIES,
   parseSandboxPolicy,
 } from "../lib/sandbox-policy.js";
-import { extractShellCommand } from "../templates/cursor/hooks/sandbox-shell.mjs";
 
 describe("sandbox policy", () => {
   it("blocks rm -rf in strict mode", () => {
@@ -32,10 +31,5 @@ sandbox:
 `);
     assert.equal(policy.mode, "strict");
     assert.ok(policy.deny_patterns.length > DEFAULT_SANDBOX_DENIES.length);
-  });
-
-  it("extracts shell command from hook input", () => {
-    const command = extractShellCommand({ command: "npm test" });
-    assert.equal(command, "npm test");
   });
 });

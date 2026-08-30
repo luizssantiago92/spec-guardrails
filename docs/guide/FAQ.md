@@ -50,19 +50,15 @@ You need agents (or humans driving agents) to follow **Specify → … → Verif
 
 No. It stops many **incomplete** finishes and empty stubs. Judgment, product taste, and review still matter. Sisters help when you want a deeper look.
 
-## What are Cursor hooks and why do I see extra Node processes?
+## I upgraded from 4.2.x and still see `.cursor/hooks/` files
 
-**Optional Cursor-only feature — off by default.** Hooks auto-run scope checks before edits and shell policy before terminal commands **only after you opt in**:
+**Cursor IDE hooks were removed in 4.3.0.** Re-run install — legacy hook scripts, empty `hooks.json`, and the `cursor.hooks` config block are cleaned automatically:
 
 ```bash
-npx @luizsantiago/spec-guardrails install --with-cursor-hooks
+npx @luizsantiago/spec-guardrails install
 ```
 
-`/elicit` may ask once whether to enable them. You can also say "enable Cursor hooks" or "disable Cursor hooks" in chat.
-
-When enabled, you may notice hook activity or many short-lived `node.exe` processes on busy sessions (especially on Windows). That is expected. Hooks are **soft governance**, not an OS container.
-
-Full guide: **[Cursor hooks and sandbox](Cursor-hooks-and-sandbox.md)** — enable/disable, modes, tuning.
+Scope and shell safety checks remain available via `context-guard` and `sandbox` CLI commands (the agent runs them at phase boundaries). See [Migration](Migration.md#upgrading-to-43-cursor-hooks-removed).
 
 ## Why not load security and QA every time?
 

@@ -49,11 +49,11 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | Before Execute waves (3+ tasks) | `npx @luizsantiago/spec-guardrails loop-plan [feature]` |
 | Parallel wave (2+ tasks, disjoint Files) | `npx @luizsantiago/spec-guardrails workspace-prepare [feature] --tasks T1,T2` |
 | After parallel wave merge | `npx @luizsantiago/spec-guardrails workspace-cleanup [feature] --force` |
-| Before editing paths outside task Files | `npx @luizsantiago/spec-guardrails context-guard check-edit <path> [--op write]` — **Cursor:** optional auto-run via hooks when `cursor.hooks: true` (see below) |
+| Before editing paths outside task Files | `npx @luizsantiago/spec-guardrails context-guard check-edit <path> [--op write]` |
 | Before claiming feature complete | `npx @luizsantiago/spec-guardrails context-guard check-complete [feature]` |
 | Session episodic note | `npx @luizsantiago/spec-guardrails episodes record --summary "…"` |
 | Brownfield code lookup | `npx @luizsantiago/spec-guardrails code-index rebuild` · `code-index search "…"` |
-| Shell safety check | `npx @luizsantiago/spec-guardrails sandbox check-command "<cmd>"` — **Cursor:** optional auto-run via hooks when enabled |
+| Shell safety check | `npx @luizsantiago/spec-guardrails sandbox check-command "<cmd>"` |
 | Solution exploration (explicit) | `npx @luizsantiago/spec-guardrails solution-explore init <feature> --candidates A,B` |
 | Before exploration decision | `npx @luizsantiago/spec-guardrails solution-explore validate [feature]` |
 | Retrieve related context | `npx @luizsantiago/spec-guardrails memory-retrieve "<query>"` |
@@ -72,17 +72,6 @@ Gates accept a feature name, a feature directory, or a path to the artifact. Wit
 A **non-zero exit means STOP** — fix the artifact, then re-run the gate. Never continue past a failing gate.
 
 **Process mode (Brakes off).** If Python 3.10+ or shell execution is unavailable, say so once, then perform the same checks by reading the artifact against the reference checklist. Process mode never lowers the standard; it only changes who runs the check. Run `doctor` to see separate **Process** and **Brakes** scores.
-
-## Cursor IDE hooks (optional — off by default)
-
-Shipped hooks auto-run `context-guard check-edit` and `sandbox check-command` on Cursor. **They are not installed unless the owner opts in** — the core loop and CLI checks work the same without them.
-
-| Owner says | Action |
-| --- | --- |
-| Enable Cursor hooks | `npx @luizsantiago/spec-guardrails install --with-cursor-hooks` |
-| Disable Cursor hooks | `npx @luizsantiago/spec-guardrails install --without-cursor-hooks` |
-
-`/elicit` may ask once on Cursor during the first requirements round. Recommend **off** on low-RAM machines (each edit/shell spawns Node). Details: repository doc [Cursor hooks and sandbox](https://github.com/luizssantiago92/spec-guardrails/blob/main/docs/guide/Cursor-hooks-and-sandbox.md).
 
 ## Phase Map
 

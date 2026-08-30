@@ -17,7 +17,6 @@ describe("adapter registry", () => {
   it("exposes capability metadata per adapter", () => {
     const cursor = getAdapter("cursor");
     assert.ok(cursor);
-    assert.equal(cursor.capabilities.supports_hooks, true);
     assert.equal(cursor.capabilities.supports_skills, true);
 
     const agentsMd = getAdapter("agents-md");

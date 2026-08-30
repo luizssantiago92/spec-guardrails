@@ -6,6 +6,20 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.5.1 — Gate encoding fix + attribution
+
+### Fixed
+
+- **`check-suppressions` / `check-commit --staged` / `quality-checks`** — subprocess output is decoded as UTF-8 with replacement, so the gates no longer crash with `AttributeError` on Windows when the staged diff or a test runner emits bytes outside the platform locale (4.5.0 shipped SVG assets and em dashes that triggered it)
+- **Attribution** — credits [loopgate_harness](https://github.com/rxdt/loopgate_harness) (MIT) for the enforcement and presentation ideas adopted in 4.5.0, in the README table, [credits](guide/credits.md), and [ecosystem](guide/ecosystem.md); notes that `tlc-spec-driven` declares CC-BY-4.0 at skill level while its repository ships MIT
+- **README** — `Garantees matrix` typo in the gates section
+- **Repository hygiene** — untracked leftover maintainer scratch files (`.commit-msg.txt`, `.pr-body.md`) and added them to `.gitignore`
+
+### Changed
+
+- **Hub (`agent-architecture.md`)** — gate table lists `check_suppressions.py` and `run_quality_checks.py`, and `validate_req_analysis.py` moved from the sister-skill column to the gate column for Elicit, so the agent is actually told to run the 4.5.0 gates
+- **Docs index** — lists `ecosystem.md`
+
 ## 4.5.0 — README visuals + enforcement gaps
 
 ### Added
@@ -21,15 +35,6 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 - **Install next steps** — message names the detected platform and mentions `--all-platforms` instead of implying every adapter tree is installed
 - **README** — visual flow and tiers diagrams, CI/downloads badges, honest limits section, two new gates in the kit table
 - **`templates/config.yaml.example`** — documents `suppressions`, `quality.checks`, and `commit.max_staged_lines`
-- **Hub (`agent-architecture.md`)** — gate table lists `check_suppressions.py` and `run_quality_checks.py`, and `validate_req_analysis.py` moved from the sister-skill column to the gate column for Elicit
-- **Docs index** — lists `ecosystem.md`
-
-### Fixed
-
-- **Attribution** — credits [loopgate_harness](https://github.com/rxdt/loopgate_harness) (MIT) for the enforcement and presentation ideas adopted in this release, in the README table, [credits](guide/credits.md), and [ecosystem](guide/ecosystem.md); notes that `tlc-spec-driven` declares CC-BY-4.0 at skill level while its repository ships MIT
-- **`check-suppressions` / `check-commit --staged` / `quality-checks`** — subprocess output is decoded as UTF-8 with replacement, so the gates no longer crash on Windows when the staged diff or a test runner emits bytes outside the platform locale
-- **README** — `Garantees matrix` typo in the gates section
-- **Repository hygiene** — untracked leftover maintainer scratch files (`.commit-msg.txt`, `.pr-body.md`) and added them to `.gitignore`
 
 ## 4.4.0 — Platform-aware install + hygiene
 

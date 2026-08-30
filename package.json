@@ -1,6 +1,6 @@
 {
   "name": "@luizsantiago/spec-guardrails",
-  "version": "4.5.0",
+  "version": "4.5.1",
   "description": "Governed spec-driven development for AI coding agents. Your agent writes the spec, gets your approval, builds in small waves, and proves the result — plans and project memory stored as files in your repo.",
   "type": "module",
   "bin": {

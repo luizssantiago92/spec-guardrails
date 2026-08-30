@@ -1,13 +1,17 @@
 # Spec Guardrails
 
 [![npm version](https://img.shields.io/npm/v/@luizsantiago/spec-guardrails.svg)](https://www.npmjs.com/package/@luizsantiago/spec-guardrails)
+[![npm downloads](https://img.shields.io/npm/dm/@luizsantiago/spec-guardrails.svg)](https://www.npmjs.com/package/@luizsantiago/spec-guardrails)
+[![CI](https://github.com/luizssantiago92/spec-guardrails/actions/workflows/ci.yml/badge.svg)](https://github.com/luizssantiago92/spec-guardrails/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+![Spec Guardrails — governed spec-driven development for AI coding agents](https://raw.githubusercontent.com/luizssantiago92/spec-guardrails/main/.assets/banner.svg)
 
 **Governed spec-driven development for AI coding agents.**
 
 Spec Guardrails installs a working method into your repository: the agent writes down what it is going to build, gets your approval, implements in small waves, and proves the result before calling it done. Nothing about your stack changes — you get written requirements, a task plan, and verification evidence stored as files in the project.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.4.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.5.x**
 
 ---
 
@@ -63,70 +67,19 @@ Read more: [Quick start](docs/guide/Quick-start.md) · [Platform parity](docs/gu
 
 You describe your project or the feature you want — in chat, or by pointing the agent at a file such as `prd.md` or `docs/brief.md`. With Spec Guardrails already installed, the agent reads that material plus what is already in the repo and picks up from there if work is in progress (`STATE.md` tells it where you left off).
 
-```
-     YOU describe the project or feature
-     (chat, prd.md, docs/brief.md, kickoff paste)
-              │
-              ▼
-   ┌──────────────────────┐
-   │  READ & CLASSIFY     │   Agent reads your inputs and the repo,
-   │                      │   then sizes the change (see table below).
-   └──────────┬───────────┘
-              │
-        Still vague? ──► Requirements analysis (optional)
-              │          Up to 5 questions per round, one topic at a time,
-              │          with suggested options — never repeats what your
-              │          document already answered.
-              ▼
-   ┌──────────────────────┐
-   │  REQUIREMENTS BRIEF  │   Captured gaps and decisions in writing.
-   └──────────┬───────────┘
-              │
-        ◆ YOU APPROVE ◆        (1 of 3 — when elicitation ran)
-              │
-              ▼
-   ┌──────────────────────┐
-   │  SPECIFY             │   What must happen, what "done" means,
-   │                      │   what is out of scope → spec.md
-   └──────────┬───────────┘
-              │
-        ◆ YOU APPROVE ◆        (2 of 3)
-              │
-              ▼
-   ┌──────────────────────┐
-   │  TASKS               │   Small checkable jobs → tasks.md
-   │                      │   (+ task-graph.md when work can split)
-   └──────────┬───────────┘
-              │
-        ◆ YOU APPROVE ◆        (3 of 3)
-              │
-              ▼
-   ┌──────────────────────┐
-   │  BUILD (loop)        │   One wave at a time: test, implement,
-   │        ↺             │   check, commit — repeat until done.
-   └──────────┬───────────┘
-              ▼
-   ┌──────────────────────┐
-   │  VERIFY              │   Independent review with proof → validation.md
-   └──────────┬───────────┘
-              ▼
-   ┌──────────────────────┐
-   │  ARCHIVE             │   Fold outcome into project memory.
-   └──────────────────────┘
-
-   Tiny fix (≤3 files, no new dependency)?
-   Express lane: build → verify → commit (no spec/tasks ceremony).
-```
+![Spec Guardrails phase flow — classify, optional elicitation, three human approvals, build loop, verify, archive](https://raw.githubusercontent.com/luizssantiago92/spec-guardrails/main/.assets/flow.svg)
 
 The agent never skips your approvals on the full path. Requirements analysis is **suggested**, not forced — if the request is already clear, it goes straight to Specify.
 
-Read more: [How it works](docs/guide/How-it-works.md) · [Agent commands](docs/guide/agent-commands.md)
+Read more: [How it works](docs/guide/How-it-works.md) · [Agent commands](docs/guide/agent-commands.md) · [Glossary](docs/guide/Glossary.md)
 
 ---
 
 ## How it sizes the work
 
 Before starting, the agent classifies the change and loads only what that change needs. A typo does not get a task graph; a payments integration does not skip review.
+
+![Complexity tiers — Quick, Simple, Medium, Complex, Parallel](https://raw.githubusercontent.com/luizssantiago92/spec-guardrails/main/.assets/tiers.svg)
 
 | Complexity | Typical scope | What gets created | Your approvals |
 | --- | --- | --- | --- |
@@ -173,7 +126,7 @@ Instructions the agent loads **one at a time** — hub `agent-architecture.md` (
 
 → [Skills and hub](docs/guide/skills-and-hub.md)
 
-### Gates (9)
+### Gates (11)
 
 Automatic checks at step boundaries — each one blocks a specific kind of shortcut:
 
@@ -187,6 +140,8 @@ Automatic checks at step boundaries — each one blocks a specific kind of short
 | `validate-state` | Feature is declared done without evidence |
 | `validate-quick` | Quick-mode fix broke its size or shape rules |
 | `check-commit` | Commit message does not follow the agreed format |
+| `check-suppressions` | Staged diff adds `# noqa`, `eslint-disable`, `@ts-ignore`, skipped tests, or `--no-verify` |
+| `quality-checks` | Configured project commands (`npm test`, …) fail during `/verify` |
 | `lessons` | A failed verify tries to skip the lesson step |
 
 → [Gates](docs/guide/gates.md) · [Garantees matrix](docs/guide/Guarantees-matrix.md)
@@ -223,11 +178,26 @@ Implementation happens in **small waves**: pick the next runnable jobs, test, im
 
 | Path | Role |
 | --- | --- |
-| `.cursor/skills/` (+ Claude, Copilot, Codex trees) | Phase instructions for the agent |
+| `.cursor/skills/` (or detected platform tree) | Phase instructions for your agent |
 | `.specs/STATE.md` | Active feature and next step |
 | `.specs/features/NNN-slug/` | Spec, tasks, and validation per feature |
 | `.specs/guardrails/scripts/` | Python checks (when Brakes mode is on) |
 | `.specs/config.yaml` | Optional project rules and execution policy |
+
+---
+
+## Honest limits
+
+Gates enforce **structure and evidence in `.specs/`** — not product taste, not whether your tests are clever, and not a full AST review of implementation code. A green gate means the artifact shape and cited proof look complete; you still approve specs and tasks.
+
+| Gates check | Gates do **not** check |
+| --- | --- |
+| Spec sections and `SHALL`/`MUST` criteria | Semantic alignment between tests and requirements |
+| REQ → task → validation traceability | Stub or broken source outside cited paths |
+| Commit message shape and suppression patterns | Whether coverage % equals test quality |
+| Commands you list under `quality.checks` | Commands you never configured |
+
+See [Guarantees matrix](docs/guide/Guarantees-matrix.md) for the full product view.
 
 ---
 
@@ -241,7 +211,7 @@ Implementation happens in **small waves**: pick the next runnable jobs, test, im
 | Enforcement | [Gates](docs/guide/gates.md) | [Gates and guarantees](docs/guide/Gates-and-guarantees.md) |
 | Requirements | [Requirements analysis](docs/guide/requirements-analysis.md) | [Agent commands → /elicit](docs/guide/agent-commands.md) |
 | Long-running projects | [Memory](docs/guide/Memory.md) | [Brownfield context](docs/guide/brownfield-context.md) |
-| Questions | [FAQ](docs/guide/FAQ.md) | [Stability policy](docs/guide/Stability-policy.md) |
+| Questions | [FAQ](docs/guide/FAQ.md) | [Glossary](docs/guide/Glossary.md) · [Stability policy](docs/guide/Stability-policy.md) |
 
 Full index: [docs/guide/README.md](docs/guide/README.md)
 

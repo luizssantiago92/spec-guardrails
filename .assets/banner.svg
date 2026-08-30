@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 140" width="100%" role="img" aria-label="Spec Guardrails banner">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --text: #f0f6fc;
+      --sub: #8b949e;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --border: #30363d;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --panel: #f6f8fa;
+        --text: #24292f;
+        --sub: #57606a;
+        --accent: #0969da;
+        --accent2: #1a7f37;
+        --border: #d0d7de;
+      }
+    }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .panel { fill: var(--panel); stroke: var(--border); }
+    .title { fill: var(--text); font-size: 28px; font-weight: 700; }
+    .tagline { fill: var(--sub); font-size: 14px; }
+    .pill { fill: var(--accent); }
+    .pill-text { fill: #fff; font-size: 11px; font-weight: 600; }
+    @keyframes pulse { 50% { opacity: .55; } }
+    .dot { fill: var(--accent2); animation: pulse 2s ease-in-out infinite; }
+  </style>
+  <rect width="820" height="140" fill="var(--bg)"/>
+  <rect x="24" y="24" width="772" height="92" rx="16" class="panel" stroke-width="1.5"/>
+  <circle cx="56" cy="70" r="6" class="dot"/>
+  <text x="72" y="58" class="title">Spec Guardrails</text>
+  <text x="72" y="82" class="tagline">Your agent writes the spec, you approve, it builds in waves, and proves the result.</text>
+  <rect x="620" y="48" width="148" height="28" rx="14" class="pill"/>
+  <text x="694" y="66" text-anchor="middle" class="pill-text">spec-driven · gated</text>
+</svg>

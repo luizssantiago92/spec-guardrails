@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="100%" role="img" aria-label="Spec Guardrails phase flow from classify to archive with human approvals">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --text: #f0f6fc;
+      --sub: #8b949e;
+      --accent: #58a6ff;
+      --approve: #d29922;
+      --gate: #f78166;
+      --ok: #3fb950;
+      --border: #30363d;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --panel: #f6f8fa;
+        --text: #24292f;
+        --sub: #57606a;
+        --accent: #0969da;
+        --approve: #bf8700;
+        --gate: #cf222e;
+        --ok: #1a7f37;
+        --border: #d0d7de;
+      }
+    }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .box { fill: var(--panel); stroke: var(--border); stroke-width: 1.5; }
+    .approve { fill: none; stroke: var(--approve); stroke-width: 2; }
+    .label { fill: var(--text); font-size: 12px; font-weight: 600; text-anchor: middle; }
+    .sublabel { fill: var(--sub); font-size: 10px; text-anchor: middle; }
+    @keyframes flow { to { stroke-dashoffset: -18; } }
+    @keyframes loop { to { stroke-dashoffset: -24; } }
+    .flow { stroke: var(--ok); stroke-width: 2; fill: none; stroke-dasharray: 6 4; animation: flow .9s linear infinite; }
+    .loop-back { stroke: var(--accent); stroke-width: 2; fill: none; stroke-dasharray: 8 6; animation: loop 1.2s linear infinite; }
+  </style>
+  <rect width="900" height="320" fill="var(--bg)"/>
+  <text x="450" y="28" fill="var(--sub)" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">SPEC GUARDRAILS FLOW</text>
+
+  <!-- Row 1 -->
+  <rect x="30" y="50" width="110" height="52" rx="8" class="box"/>
+  <text x="85" y="72" class="label">Classify</text>
+  <text x="85" y="88" class="sublabel">size the change</text>
+
+  <rect x="170" y="50" width="110" height="52" rx="8" class="box"/>
+  <text x="225" y="72" class="label">Elicit</text>
+  <text x="225" y="88" class="sublabel">optional brief</text>
+
+  <polygon points="330,76 360,60 390,76 360,92" class="approve"/>
+  <text x="360" y="80" class="label" font-size="10">APPROVE</text>
+
+  <rect x="410" y="50" width="110" height="52" rx="8" class="box"/>
+  <text x="465" y="72" class="label">Specify</text>
+  <text x="465" y="88" class="sublabel">spec.md</text>
+
+  <polygon points="550,76 580,60 610,76 580,92" class="approve"/>
+  <text x="580" y="80" class="label" font-size="10">APPROVE</text>
+
+  <rect x="630" y="50" width="110" height="52" rx="8" class="box"/>
+  <text x="685" y="72" class="label">Tasks</text>
+  <text x="685" y="88" class="sublabel">tasks.md</text>
+
+  <polygon points="770,76 800,60 830,76 800,92" class="approve"/>
+  <text x="800" y="80" class="label" font-size="10">APPROVE</text>
+
+  <!-- Row 2 -->
+  <rect x="170" y="150" width="130" height="56" rx="8" class="box"/>
+  <text x="235" y="174" class="label">Build loop</text>
+  <text x="235" y="190" class="sublabel">test · implement · commit</text>
+
+  <rect x="360" y="150" width="110" height="56" rx="8" class="box"/>
+  <text x="415" y="174" class="label">Verify</text>
+  <text x="415" y="190" class="sublabel">validation.md</text>
+
+  <rect x="530" y="150" width="110" height="56" rx="8" class="box"/>
+  <text x="585" y="174" class="label">Archive</text>
+  <text x="585" y="190" class="sublabel">domain memory</text>
+
+  <!-- Arrows row 1 -->
+  <path d="M140 76 H170" class="flow" marker-end="url(#arr)"/>
+  <path d="M280 76 H330" class="flow" marker-end="url(#arr)"/>
+  <path d="M390 76 H410" class="flow" marker-end="url(#arr)"/>
+  <path d="M520 76 H550" class="flow" marker-end="url(#arr)"/>
+  <path d="M610 76 H630" class="flow" marker-end="url(#arr)"/>
+  <path d="M740 76 H770" class="flow" marker-end="url(#arr)"/>
+
+  <!-- Down to build -->
+  <path d="M685 102 V128 H235 V150" class="flow" marker-end="url(#arr)"/>
+
+  <!-- Build loop -->
+  <path d="M300 178 H360" class="flow" marker-end="url(#arr)"/>
+  <path d="M470 178 H530" class="flow" marker-end="url(#arr)"/>
+
+  <!-- Loop back -->
+  <path d="M235 206 C235 260 120 260 120 178" class="loop-back" marker-end="url(#arr-blue)"/>
+
+  <!-- Quick lane -->
+  <rect x="30" y="240" width="840" height="56" rx="10" class="box"/>
+  <text x="450" y="262" class="label">Quick lane (d3 files)</text>
+  <text x="450" y="280" class="sublabel">build ’ verify ’ commit  no spec/tasks ceremony</text>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="var(--ok)"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/>
+    </marker>
+  </defs>
+</svg>

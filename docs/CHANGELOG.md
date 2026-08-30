@@ -6,6 +6,22 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.5.0 — README visuals + enforcement gaps
+
+### Added
+
+- **README illustrations** — `.assets/banner.svg`, `flow.svg`, and `tiers.svg` with light/dark theme support
+- **`check-suppressions`** — blocks staged diffs that add `# noqa`, `eslint-disable`, `@ts-ignore`, skipped tests, or `--no-verify` (configurable via `suppressions.patterns`)
+- **`quality-checks`** — runs commands listed under `quality.checks` in `.specs/config.yaml` during `/verify`
+- **`check-commit --staged`** — rejects empty commits and oversized staged diffs (`commit.max_staged_lines`)
+- **[Glossary](guide/Glossary.md)** — short definitions for hub, gate, tier, wave, brief, and related terms
+
+### Changed
+
+- **Install next steps** — message names the detected platform and mentions `--all-platforms` instead of implying every adapter tree is installed
+- **README** — visual flow and tiers diagrams, CI/downloads badges, honest limits section, two new gates in the kit table
+- **`templates/config.yaml.example`** — documents `suppressions`, `quality.checks`, and `commit.max_staged_lines`
+
 ## 4.4.0 — Platform-aware install + hygiene
 
 ### Added

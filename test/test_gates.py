@@ -20,6 +20,9 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import _common  # noqa: E402
 import check_commit  # noqa: E402
+import check_suppressions  # noqa: E402
+import run_quality_checks  # noqa: E402
+import _project_config  # noqa: E402
 import validate_spec  # noqa: E402
 import validate_state  # noqa: E402
 import validate_tasks  # noqa: E402
@@ -1263,6 +1266,52 @@ class CommitGateTest(unittest.TestCase):
     def test_merge_commit_is_skipped(self):
         report = check_commit.build_report("Merge pull request #12 from branch")
         self.assertTrue(report.passed)
+
+
+class SuppressionGateTest(unittest.TestCase):
+    def test_blocks_noqa_in_added_line(self):
+        diff = "+++ b/src/app.py\n+    x = 1  # noqa\n"
+        report = check_suppressions.build_report(diff, [r"#\s*noqa\b"])
+        self.assertFalse(report.passed)
+
+    def test_passes_clean_diff(self):
+        diff = "+++ b/src/app.py\n+    x = 1\n"
+        report = check_suppressions.build_report(diff, [r"#\s*noqa\b"])
+        self.assertTrue(report.passed)
+
+
+class ProjectConfigTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_loads_quality_checks(self):
+        config_dir = self.root / ".specs"
+        config_dir.mkdir(parents=True, exist_ok=True)
+        (config_dir / "config.yaml").write_text(
+            "quality:\n  checks:\n    - npm test\n    - npm run lint\n",
+            encoding="utf-8",
+        )
+        with _chdir(self.root):
+            config = _project_config.load_project_config()
+        self.assertEqual(config["quality"]["checks"], ["npm test", "npm run lint"])
+
+
+class QualityChecksTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_skips_when_no_checks_configured(self):
+        with _chdir(self.root):
+            code, _ = _run_main(lambda: run_quality_checks.main([]))
+        self.assertEqual(code, 0)
 
 
 if __name__ == "__main__":

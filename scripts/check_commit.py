@@ -24,10 +24,12 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
 import sys
 from pathlib import Path
 
-from _common import EXIT_USAGE, Report
+from _common import EXIT_OK, EXIT_USAGE, Report
+from _project_config import load_project_config
 
 GATE = "check-commit"
 
@@ -49,6 +51,61 @@ HEADER = re.compile(
     r"^(?P<type>[a-z]+)(?:\((?P<scope>[^()]+)\))?(?P<breaking>!)?:\s(?P<subject>.+)$"
 )
 MAX_SUBJECT_LENGTH = 72
+
+
+def read_staged_diff(cwd: Path) -> str:
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--numstat"],
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode not in (0, 1):
+        raise RuntimeError(result.stderr.strip() or "git diff --cached --numstat failed")
+    return result.stdout
+
+
+def count_staged_lines(numstat_text: str) -> int:
+    total = 0
+    for line in numstat_text.splitlines():
+        parts = line.split("\t")
+        if len(parts) < 3:
+            continue
+        added, deleted = parts[0], parts[1]
+        if added == "-" or deleted == "-":
+            continue
+        total += int(added) + int(deleted)
+    return total
+
+
+def build_staged_report(cwd: Path) -> Report:
+    report = Report(gate=GATE, target="staged changes")
+    config = load_project_config()
+    max_lines = int(config.get("commit", {}).get("max_staged_lines") or 500)
+
+    if not (cwd / ".git").exists():
+        report.error("not a git repository")
+        return report
+
+    try:
+        numstat = read_staged_diff(cwd)
+    except RuntimeError as err:
+        report.error(str(err))
+        return report
+
+    if not numstat.strip():
+        report.error("empty commit blocked — no staged changes")
+        return report
+
+    lines = count_staged_lines(numstat)
+    report.ok(f"staged diff spans {lines} line(s)")
+    if lines > max_lines:
+        report.error(
+            f"staged diff is {lines} lines — limit is {max_lines} "
+            "(split the commit or raise commit.max_staged_lines in config)"
+        )
+    return report
 
 
 def build_report(message: str) -> Report:
@@ -107,33 +164,60 @@ def build_report(message: str) -> Report:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Validate a commit message")
-    source = parser.add_mutually_exclusive_group(required=True)
-    source.add_argument("--message", help="commit message text")
-    source.add_argument("--file", help="path to a file holding the commit message")
+    parser = argparse.ArgumentParser(description="Validate a commit message and/or staged diff")
+    parser.add_argument("--message", help="commit message text")
+    parser.add_argument("--file", help="path to a file holding the commit message")
+    parser.add_argument(
+        "--staged",
+        action="store_true",
+        help="validate staged diff size and reject empty commits",
+    )
     parser.add_argument(
         "--strict",
         action="store_true",
         help="treat warnings as blocking failures",
     )
+    parser.add_argument(
+        "--cwd",
+        default=".",
+        help="repository root for --staged (default: current directory)",
+    )
     args = parser.parse_args(argv)
 
-    if args.file:
-        path = Path(args.file).expanduser()
-        if not path.exists():
-            print(f"[{GATE}] FAIL - {path}")
-            print(f"  error   file not found: {path}")
-            return EXIT_USAGE
-        message = path.read_text(encoding="utf-8")
-    else:
-        message = args.message or ""
+    if args.message and args.file:
+        print(f"[{GATE}] FAIL - arguments")
+        print("  error   use either --message or --file, not both")
+        return EXIT_USAGE
 
-    comment_free = "\n".join(
-        line for line in message.splitlines() if not line.startswith("#")
-    )
+    if not args.staged and not args.message and not args.file:
+        print(f"[{GATE}] FAIL - arguments")
+        print("  error   provide --message, --file, or --staged")
+        return EXIT_USAGE
 
-    report = build_report(comment_free)
-    return report.emit(strict=args.strict)
+    exit_code = EXIT_OK
+
+    if args.staged:
+        staged_report = build_staged_report(Path(args.cwd).resolve())
+        exit_code = max(exit_code, staged_report.emit(strict=args.strict))
+
+    if args.message or args.file:
+        if args.file:
+            path = Path(args.file).expanduser()
+            if not path.exists():
+                print(f"[{GATE}] FAIL - {path}")
+                print(f"  error   file not found: {path}")
+                return EXIT_USAGE
+            message = path.read_text(encoding="utf-8")
+        else:
+            message = args.message or ""
+
+        comment_free = "\n".join(
+            line for line in message.splitlines() if not line.startswith("#")
+        )
+        message_report = build_report(comment_free)
+        exit_code = max(exit_code, message_report.emit(strict=args.strict))
+
+    return exit_code
 
 
 if __name__ == "__main__":

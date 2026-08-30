@@ -15,6 +15,8 @@ These projects directly influenced **skills, gates, `.specs/` layout, or CLI beh
 | [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/main/packages/skills-catalog/skills/(development)/tlc-spec-driven) | CC-BY-4.0 | Spec → tasks → execute → verify phase model; `.specs/features/`, `STATE.md`, spec/task markdown shapes; gate “brakes” philosophy |
 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT | Discuss-phase patterns (options A/B/C, decision records); definition-of-done framing in verify/archive |
 
+The `tlc-spec-driven` skill declares `license: CC-BY-4.0` in its own front matter, even though the containing repository ships an MIT `LICENSE`. We follow the stricter skill-level license and attribute it by name wherever its patterns appear.
+
 ### Task graph and parallel Execute
 
 | Source | License | What we use (concrete) |
@@ -28,6 +30,14 @@ These projects directly influenced **skills, gates, `.specs/` layout, or CLI beh
 | [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Execute wave model; operational vs feature loops documented in [loop-patterns.md](loop-patterns.md) |
 | [Addy Osmani — Loop engineering](https://addyosmani.com/blog/loop-engineering/) | Essay | Referenced in loop-patterns guide for loop taxonomy |
 | [awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | CC0 | Ecosystem positioning vocabulary (harness vs app); not copied as code |
+
+### Enforcement hardening and README presentation (4.5.0)
+
+| Source | License | What we use (concrete) |
+| --- | --- | --- |
+| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | Idea that a gate must block linter/test bypass patterns (`check-suppressions`); project-configured commands run as verify evidence (`quality.checks` → `run_quality_checks.py`); staged-diff size and empty-commit policy in `check-commit --staged`; documentation framing of an explicit “honest limits” table, a glossary, and theme-aware SVG diagrams in the README |
+
+No code or SVG asset from `loopgate_harness` is vendored. Our `.assets/*.svg` files are hand-written for this project; the borrowed part is the presentation approach (inline CSS for light/dark, diagram-per-section) and the enforcement ideas above.
 
 ---
 

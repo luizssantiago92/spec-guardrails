@@ -144,7 +144,7 @@ Automatic checks at step boundaries — each one blocks a specific kind of short
 | `quality-checks` | Configured project commands (`npm test`, …) fail during `/verify` |
 | `lessons` | A failed verify tries to skip the lesson step |
 
-→ [Gates](docs/guide/gates.md) · [Garantees matrix](docs/guide/Guarantees-matrix.md)
+→ [Gates](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md)
 
 ### Requirements analysis
 
@@ -235,6 +235,7 @@ Spec Guardrails adapts patterns from open-source work. These are the projects wh
 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT | Design-discussion patterns and definition-of-done framing |
 | [graph-engineering](https://github.com/codejunkie99/graph-engineering) | MIT | Task-graph rules behind safe parallel waves |
 | [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Wave-based execution model |
+| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | Suppression-bypass blocking, project-configured quality commands as verify evidence, honest-limits and theme-aware diagram presentation |
 
 Everything else — the CLI, the Python checks, the platform adapters, and the requirements-analysis phase — is original work in this repository. Full lineage, including references we cite but do not bundle: [Credits and lineage](docs/guide/credits.md).
 

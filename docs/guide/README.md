@@ -43,7 +43,8 @@ Plain-language guides for **Spec Guardrails 4.5.x**.
 | [loop-patterns.md](loop-patterns.md) | Feature vs operational loops |
 | [brownfield-context.md](brownfield-context.md) | Brownfield and deferred code graphs |
 | [Restart-prd-seed.md](Restart-prd-seed.md) | PRD template for greenfield product |
-| [Migration.md](Migration.md) | Older package names |
+| [Migration.md](Migration.md) | Older package names and platform-aware install (4.4+) |
+| [ecosystem.md](ecosystem.md) | Related tools and where this kit fits |
 | [Stability-policy.md](Stability-policy.md) | Semver policy |
 | [credits.md](credits.md) | Attribution |
 

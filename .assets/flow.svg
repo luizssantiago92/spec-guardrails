@@ -1,110 +1,118 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="100%" role="img" aria-label="Spec Guardrails phase flow from classify to archive with human approvals">
-  <style>
-    :root {
-      --bg: #0d1117;
-      --panel: #161b22;
-      --text: #f0f6fc;
-      --sub: #8b949e;
-      --accent: #58a6ff;
-      --approve: #d29922;
-      --gate: #f78166;
-      --ok: #3fb950;
-      --border: #30363d;
-    }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #ffffff;
-        --panel: #f6f8fa;
-        --text: #24292f;
-        --sub: #57606a;
-        --accent: #0969da;
-        --approve: #bf8700;
-        --gate: #cf222e;
-        --ok: #1a7f37;
-        --border: #d0d7de;
-      }
-    }
-    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    .box { fill: var(--panel); stroke: var(--border); stroke-width: 1.5; }
-    .approve { fill: none; stroke: var(--approve); stroke-width: 2; }
-    .label { fill: var(--text); font-size: 12px; font-weight: 600; text-anchor: middle; }
-    .sublabel { fill: var(--sub); font-size: 10px; text-anchor: middle; }
-    @keyframes flow { to { stroke-dashoffset: -18; } }
-    @keyframes loop { to { stroke-dashoffset: -24; } }
-    .flow { stroke: var(--ok); stroke-width: 2; fill: none; stroke-dasharray: 6 4; animation: flow .9s linear infinite; }
-    .loop-back { stroke: var(--accent); stroke-width: 2; fill: none; stroke-dasharray: 8 6; animation: loop 1.2s linear infinite; }
-  </style>
-  <rect width="900" height="320" fill="var(--bg)"/>
-  <text x="450" y="28" fill="var(--sub)" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">SPEC GUARDRAILS FLOW</text>
-
-  <!-- Row 1 -->
-  <rect x="30" y="50" width="110" height="52" rx="8" class="box"/>
-  <text x="85" y="72" class="label">Classify</text>
-  <text x="85" y="88" class="sublabel">size the change</text>
-
-  <rect x="170" y="50" width="110" height="52" rx="8" class="box"/>
-  <text x="225" y="72" class="label">Elicit</text>
-  <text x="225" y="88" class="sublabel">optional brief</text>
-
-  <polygon points="330,76 360,60 390,76 360,92" class="approve"/>
-  <text x="360" y="80" class="label" font-size="10">APPROVE</text>
-
-  <rect x="410" y="50" width="110" height="52" rx="8" class="box"/>
-  <text x="465" y="72" class="label">Specify</text>
-  <text x="465" y="88" class="sublabel">spec.md</text>
-
-  <polygon points="550,76 580,60 610,76 580,92" class="approve"/>
-  <text x="580" y="80" class="label" font-size="10">APPROVE</text>
-
-  <rect x="630" y="50" width="110" height="52" rx="8" class="box"/>
-  <text x="685" y="72" class="label">Tasks</text>
-  <text x="685" y="88" class="sublabel">tasks.md</text>
-
-  <polygon points="770,76 800,60 830,76 800,92" class="approve"/>
-  <text x="800" y="80" class="label" font-size="10">APPROVE</text>
-
-  <!-- Row 2 -->
-  <rect x="170" y="150" width="130" height="56" rx="8" class="box"/>
-  <text x="235" y="174" class="label">Build loop</text>
-  <text x="235" y="190" class="sublabel">test · implement · commit</text>
-
-  <rect x="360" y="150" width="110" height="56" rx="8" class="box"/>
-  <text x="415" y="174" class="label">Verify</text>
-  <text x="415" y="190" class="sublabel">validation.md</text>
-
-  <rect x="530" y="150" width="110" height="56" rx="8" class="box"/>
-  <text x="585" y="174" class="label">Archive</text>
-  <text x="585" y="190" class="sublabel">domain memory</text>
-
-  <!-- Arrows row 1 -->
-  <path d="M140 76 H170" class="flow" marker-end="url(#arr)"/>
-  <path d="M280 76 H330" class="flow" marker-end="url(#arr)"/>
-  <path d="M390 76 H410" class="flow" marker-end="url(#arr)"/>
-  <path d="M520 76 H550" class="flow" marker-end="url(#arr)"/>
-  <path d="M610 76 H630" class="flow" marker-end="url(#arr)"/>
-  <path d="M740 76 H770" class="flow" marker-end="url(#arr)"/>
-
-  <!-- Down to build -->
-  <path d="M685 102 V128 H235 V150" class="flow" marker-end="url(#arr)"/>
-
-  <!-- Build loop -->
-  <path d="M300 178 H360" class="flow" marker-end="url(#arr)"/>
-  <path d="M470 178 H530" class="flow" marker-end="url(#arr)"/>
-
-  <!-- Loop back -->
-  <path d="M235 206 C235 260 120 260 120 178" class="loop-back" marker-end="url(#arr-blue)"/>
-
-  <!-- Quick lane -->
-  <rect x="30" y="240" width="840" height="56" rx="10" class="box"/>
-  <text x="450" y="262" class="label">Quick lane (d3 files)</text>
-  <text x="450" y="280" class="sublabel">build ’ verify ’ commit  no spec/tasks ceremony</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" role="img" aria-label="Spec Guardrails phase flow: classify, optional elicit, three owner approvals, build loop, verify, archive, plus a quick lane">
+  <rect width="900" height="330" rx="12" fill="#0d1117"/>
+  <text x="450" y="30" font-family="Helvetica, Arial, sans-serif" font-size="11" font-weight="bold" fill="#8b949e" text-anchor="middle" letter-spacing="1">SPEC GUARDRAILS FLOW</text>
 
   <defs>
-    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-      <path d="M0,0 L8,4 L0,8 Z" fill="var(--ok)"/>
+    <marker id="arrow-green" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#3fb950"/>
     </marker>
-    <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
-      <path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/>
+    <marker id="arrow-blue" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#58a6ff"/>
     </marker>
   </defs>
+
+  <!-- Planning row -->
+  <rect x="30" y="52" width="110" height="52" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="85" y="74" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Classify</text>
+  <text x="85" y="90" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">size the change</text>
+
+  <rect x="170" y="52" width="110" height="52" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="225" y="74" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Elicit</text>
+  <text x="225" y="90" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">optional brief</text>
+
+  <polygon points="330,78 360,58 390,78 360,98" fill="none" stroke="#d29922" stroke-width="2">
+    <animate attributeName="stroke-width" values="2;3.2;2" keyTimes="0;0.5;1" dur="0.7s" begin="1.1s" fill="remove"/>
+  </polygon>
+  <path d="M352 78 l6 6 l10 -12" fill="none" stroke="#d29922" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="1">
+    <animate attributeName="opacity" values="0.25;1" keyTimes="0;1" dur="0.5s" begin="1.1s" fill="freeze"/>
+  </path>
+  <text x="360" y="118" font-family="Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" fill="#d29922" text-anchor="middle">APPROVE</text>
+
+  <rect x="410" y="52" width="110" height="52" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="465" y="74" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Specify</text>
+  <text x="465" y="90" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">spec.md</text>
+
+  <polygon points="550,78 580,58 610,78 580,98" fill="none" stroke="#d29922" stroke-width="2">
+    <animate attributeName="stroke-width" values="2;3.2;2" keyTimes="0;0.5;1" dur="0.7s" begin="1.9s" fill="remove"/>
+  </polygon>
+  <path d="M572 78 l6 6 l10 -12" fill="none" stroke="#d29922" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="1">
+    <animate attributeName="opacity" values="0.25;1" keyTimes="0;1" dur="0.5s" begin="1.9s" fill="freeze"/>
+  </path>
+  <text x="580" y="118" font-family="Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" fill="#d29922" text-anchor="middle">APPROVE</text>
+
+  <rect x="630" y="52" width="110" height="52" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="685" y="74" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Tasks</text>
+  <text x="685" y="90" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">tasks.md</text>
+
+  <polygon points="770,78 800,58 830,78 800,98" fill="none" stroke="#d29922" stroke-width="2">
+    <animate attributeName="stroke-width" values="2;3.2;2" keyTimes="0;0.5;1" dur="0.7s" begin="2.7s" fill="remove"/>
+  </polygon>
+  <path d="M792 78 l6 6 l10 -12" fill="none" stroke="#d29922" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="1">
+    <animate attributeName="opacity" values="0.25;1" keyTimes="0;1" dur="0.5s" begin="2.7s" fill="freeze"/>
+  </path>
+  <text x="800" y="118" font-family="Helvetica, Arial, sans-serif" font-size="9" font-weight="bold" fill="#d29922" text-anchor="middle">APPROVE</text>
+
+  <!-- Planning arrows -->
+  <path d="M140 78 H168" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite"/>
+  </path>
+  <path d="M280 78 H328" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite"/>
+  </path>
+  <path d="M390 78 H408" fill="none" stroke="#3fb950" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <path d="M520 78 H548" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite"/>
+  </path>
+  <path d="M610 78 H628" fill="none" stroke="#3fb950" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <path d="M740 78 H768" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Into the build loop -->
+  <path d="M830 78 H862 V132 H235 V150" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Execute row -->
+  <rect x="170" y="152" width="130" height="56" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="235" y="176" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Build loop</text>
+  <text x="235" y="192" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">test, implement, commit</text>
+
+  <rect x="360" y="152" width="110" height="56" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="415" y="176" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Verify</text>
+  <text x="415" y="192" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">validation.md</text>
+
+  <rect x="530" y="152" width="110" height="56" rx="8" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="585" y="176" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Archive</text>
+  <text x="585" y="192" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">domain memory</text>
+
+  <path d="M300 180 H358" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite"/>
+  </path>
+  <path d="M470 180 H528" fill="none" stroke="#3fb950" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow-green)">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="0.8s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Wave loop back -->
+  <path d="M235 208 C235 258 120 258 120 182" fill="none" stroke="#58a6ff" stroke-width="2" stroke-dasharray="8 6" marker-end="url(#arrow-blue)">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="1.1s" repeatCount="indefinite"/>
+  </path>
+  <text x="120" y="272" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#58a6ff" text-anchor="middle">next wave</text>
+
+  <!-- Travelling pulse: hidden in static renderers, visible only while animating -->
+  <circle r="4" fill="#3fb950" opacity="0">
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.03;0.95;1" dur="5.6s" repeatCount="indefinite"/>
+    <animateMotion dur="5.6s" repeatCount="indefinite" calcMode="linear"
+      path="M140 78 H830 L862 78 V132 H235 V148"/>
+  </circle>
+  <circle r="3.5" fill="#58a6ff" opacity="0">
+    <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.08;0.9;1" dur="2.2s" repeatCount="indefinite"/>
+    <animateMotion dur="2.2s" repeatCount="indefinite" calcMode="linear"
+      path="M235 208 C235 258 120 258 120 182"/>
+  </circle>
+
+  <!-- Quick lane -->
+  <rect x="330" y="248" width="540" height="56" rx="10" fill="#161b22" stroke="#30363d" stroke-width="1.5"/>
+  <text x="600" y="270" font-family="Helvetica, Arial, sans-serif" font-size="12" font-weight="bold" fill="#f0f6fc" text-anchor="middle">Quick lane (3 files or fewer)</text>
+  <text x="600" y="288" font-family="Helvetica, Arial, sans-serif" font-size="10" fill="#8b949e" text-anchor="middle">build, verify, commit - no spec or tasks ceremony</text>
 </svg>

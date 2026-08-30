@@ -60,6 +60,8 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | Rebuild / embed memory index | `npx @luizsantiago/spec-guardrails memory-index rebuild` · `memory-index embed` |
 | On gate retry (Execute playbook) | `npx @luizsantiago/spec-guardrails execution-policy record-retry Tn` |
 | On each commit | `python3 .specs/guardrails/scripts/check_commit.py --message "<message>"` |
+| Before each commit (staged diff) | `python3 .specs/guardrails/scripts/check_suppressions.py` |
+| During Verify, when `quality.checks` is configured | `python3 .specs/guardrails/scripts/run_quality_checks.py` |
 | Before declaring a feature done | `python3 .specs/guardrails/scripts/validate_state.py [feature]` |
 | Traceability (Medium+ features) | `python3 .specs/guardrails/scripts/validate_traceability.py [feature]` |
 | Quick mode evidence | `python3 .specs/guardrails/scripts/validate_quick.py [feature]` |
@@ -82,15 +84,15 @@ EXPLORE (optional) → ELICIT (optional) → SPECIFY → DISCUSS (conditional) �
 | Phase | Required | Reference | Sister skill | Gate |
 | --- | --- | --- | --- | --- |
 | **Explore** | Optional | `references/explore.md` | — | — |
-| **Elicit** | Optional | `references/elicitation.md` | `validate-req-analysis` | — (before `/specify`; suggest-only entry) |
+| **Elicit** | Optional | `references/elicitation.md` | — | `validate_req_analysis.py` (before `/specify`; suggest-only entry) |
 | **Constitution** | Once per project | `references/constitution.md` | — | — |
 | **Specify** | Yes | `references/specify.md` | — | `validate_spec.py` |
 | **Discuss** | Conditional | `references/discuss.md` | — | — |
 | **Design** | No | `references/design.md` | — | — |
 | **Tasks** | No | `references/tasks.md` | `task-graph-engineering.md` | `validate_tasks.py` |
 | **Analyze** | Before task approval | `references/analyze.md` | — | `analyze_artifacts.py` |
-| **Execute** | Yes | `references/implement.md` | `engineering-standards.md` | `check_commit.py` |
-| **Verify** | Yes | `references/validate.md` | `security-review.md` | `validate_state.py` |
+| **Execute** | Yes | `references/implement.md` | `engineering-standards.md` | `check_commit.py`, `check_suppressions.py` |
+| **Verify** | Yes | `references/validate.md` | `security-review.md` | `validate_state.py`, `run_quality_checks.py` |
 | **Archive** | After Verify PASS | `references/archive.md` | `git-handoff.md` | `archive-feature` |
 | **Converge** | On drift | `references/converge.md` | — | `analyze_artifacts.py` |
 | **Handoff** | Yes | `references/memory.md` | `git-handoff.md` | — |

@@ -59,11 +59,14 @@ def read_staged_diff(cwd: Path) -> str:
         cwd=cwd,
         capture_output=True,
         text=True,
+        # Paths can carry bytes the platform locale cannot decode.
+        encoding="utf-8",
+        errors="replace",
         check=False,
     )
     if result.returncode not in (0, 1):
-        raise RuntimeError(result.stderr.strip() or "git diff --cached --numstat failed")
-    return result.stdout
+        raise RuntimeError((result.stderr or "").strip() or "git diff --cached --numstat failed")
+    return result.stdout or ""
 
 
 def count_staged_lines(numstat_text: str) -> int:

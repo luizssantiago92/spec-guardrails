@@ -36,6 +36,8 @@ Run `npx @luizsantiago/spec-guardrails doctor` to see whether Brakes (Python) ar
 | Quick changes stay bounded | `validate-quick` | Brakes | Hard gate |
 | Completion cites evidence | `validate-state` | Brakes | Hard gate |
 | Commits follow policy | `check-commit` | Brakes | Hard gate |
+| Suppressions blocked in diff | `check-suppressions` | Brakes | Hard gate (when run) |
+| Project commands run at verify | `quality-checks` | Process + Brakes | CLI (config-driven) |
 | Verification is independent | fresh-context `/verify` + `validate.md` | Process | Phase skill (not exit-code) |
 | Knowledge survives chats | `.specs/` + `archive-feature` | Process | Install + CLI |
 | Failures become reusable rules | `lessons` | Brakes | Hard gate (post-verify FAIL) |

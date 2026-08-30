@@ -84,6 +84,8 @@ Plan → Test → Implement → Gate → Commit → Next
 
 ```bash
 python3 .specs/guardrails/scripts/check_commit.py --message "feat(auth): add token refresh"
+python3 .specs/guardrails/scripts/check_commit.py --staged
+python3 .specs/guardrails/scripts/check_suppressions.py
 git add [files] .specs/features/[feature]/tasks.md
 git commit -m "feat(auth): add token refresh"
 ```

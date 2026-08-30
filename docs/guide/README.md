@@ -1,6 +1,6 @@
 # Documentation
 
-Plain-language guides for **Spec Guardrails 4.3.x**.  
+Plain-language guides for **Spec Guardrails 4.5.x**.  
 **New here?** Read **[Overview](Overview.md)** first, then [Quick start](Quick-start.md).
 
 ---
@@ -16,6 +16,7 @@ Plain-language guides for **Spec Guardrails 4.3.x**.
 | [requirements-analysis.md](requirements-analysis.md) | Structured Q&A before Specify (`/elicit`) |
 | [Memory.md](Memory.md) | `.specs/` memory, search, semantic (optional) |
 | [FAQ.md](FAQ.md) | Common questions |
+| [Glossary.md](Glossary.md) | Short definitions (hub, gate, tier, wave, …) |
 
 ---
 

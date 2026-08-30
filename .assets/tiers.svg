@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="100%" role="img" aria-label="Spec Guardrails complexity tiers from Quick to Parallel">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --text: #f0f6fc;
+      --sub: #8b949e;
+      --q: #3fb950;
+      --s: #58a6ff;
+      --m: #a371f7;
+      --c: #f78166;
+      --p: #d29922;
+      --border: #30363d;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --panel: #f6f8fa;
+        --text: #24292f;
+        --sub: #57606a;
+        --q: #1a7f37;
+        --s: #0969da;
+        --m: #8250df;
+        --c: #cf222e;
+        --p: #bf8700;
+        --border: #d0d7de;
+      }
+    }
+    text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .card { fill: var(--panel); stroke: var(--border); stroke-width: 1.5; }
+    .title { fill: var(--text); font-size: 13px; font-weight: 700; text-anchor: middle; }
+    .meta { fill: var(--sub); font-size: 10px; text-anchor: middle; }
+    .badge { font-size: 10px; font-weight: 700; text-anchor: middle; fill: #fff; }
+  </style>
+  <rect width="900" height="200" fill="var(--bg)"/>
+  <text x="450" y="24" fill="var(--sub)" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">COMPLEXITY TIERS</text>
+
+  <!-- Quick -->
+  <rect x="20" y="44" width="160" height="130" rx="10" class="card"/>
+  <rect x="20" y="44" width="160" height="28" rx="10" fill="var(--q)"/>
+  <text x="100" y="62" class="badge">QUICK</text>
+  <text x="100" y="92" class="title">d3 files</text>
+  <text x="100" y="110" class="meta">code + evidence</text>
+  <text x="100" y="128" class="meta">0 approvals</text>
+  <text x="100" y="152" class="meta">express lane</text>
+
+  <!-- Simple -->
+  <rect x="195" y="44" width="160" height="130" rx="10" class="card"/>
+  <rect x="195" y="44" width="160" height="28" rx="10" fill="var(--s)"/>
+  <text x="275" y="62" class="badge">SIMPLE</text>
+  <text x="275" y="92" class="title">25 files</text>
+  <text x="275" y="110" class="meta">spec ’ code ’ verify</text>
+  <text x="275" y="128" class="meta">1 approval (spec)</text>
+
+  <!-- Medium -->
+  <rect x="370" y="44" width="160" height="130" rx="10" class="card"/>
+  <rect x="370" y="44" width="160" height="28" rx="10" fill="var(--m)"/>
+  <text x="450" y="62" class="badge">MEDIUM</text>
+  <text x="450" y="92" class="title">~10 tasks</text>
+  <text x="450" y="110" class="meta">spec + tasks + verify</text>
+  <text x="450" y="128" class="meta">2 approvals</text>
+
+  <!-- Complex -->
+  <rect x="545" y="44" width="160" height="130" rx="10" class="card"/>
+  <rect x="545" y="44" width="160" height="28" rx="10" fill="var(--c)"/>
+  <text x="625" y="62" class="badge">COMPLEX</text>
+  <text x="625" y="92" class="title">APIs / infra</text>
+  <text x="625" y="110" class="meta">+ design.md</text>
+  <text x="625" y="128" class="meta">23 approvals</text>
+
+  <!-- Parallel -->
+  <rect x="720" y="44" width="160" height="130" rx="10" class="card"/>
+  <rect x="720" y="44" width="160" height="28" rx="10" fill="var(--p)"/>
+  <text x="800" y="62" class="badge">PARALLEL</text>
+  <text x="800" y="92" class="title">split work</text>
+  <text x="800" y="110" class="meta">task-graph.md</text>
+  <text x="800" y="128" class="meta">worktrees + merge owner</text>
+</svg>

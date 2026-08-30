@@ -32,7 +32,9 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | **validate-traceability** | `validate_traceability.py` | After tasks; again with `validation.md` | REQ → tasks → same-line coverage evidence (structural only) |
 | **validate-quick** | `validate_quick.py` | End of `/quick` | TASK.md / SUMMARY.md shape; ≤3 files; no sensitive paths |
 | **loop-plan** | `loop_plan.py` | Start of each `/loop` wave | Next runnable tasks; parallel groups (disjoint files) |
-| **check-commit** | `check_commit.py` | Every commit | Conventional Commits shape |
+| **check-commit** | `check_commit.py` | Every commit | Conventional Commits shape; optional `--staged` for empty/oversized diffs |
+| **check-suppressions** | `check_suppressions.py` | Before commit (staged diff) | Blocks linter/test bypass patterns in added lines |
+| **quality-checks** | `run_quality_checks.py` | During `/verify` | Runs `quality.checks` commands from config |
 | **validate-state** | `validate_state.py` | Before declaring feature done | PASS verdict, evidence cites `file:line`, no open gaps |
 | **lessons** | `lessons.py` | After Verify FAIL | Grounded lessons only — no self-declared wisdom |
 | **archive-feature** | CLI | After Verify PASS | Merges feature into domain memory |

@@ -180,6 +180,9 @@ Commands:
   validate-req-analysis [brief.md]   Requirements brief gate before /specify (/elicit)
   validate-state [feature]           Completion gate before declaring a feature done
   check-commit --message "<msg>"     Conventional Commits gate
+    [--staged]                       Also reject empty commits and oversized staged diffs
+  check-suppressions                 Block noqa/eslint-disable/ts-ignore/skip in staged diff
+  quality-checks [--json]            Run quality.checks from .specs/config.yaml (/verify)
   lessons <add|list|penalize|prune|promote|graduate|status>  Lessons engine
   --help                             Show this message
   --version                          Print the package version

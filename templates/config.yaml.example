@@ -82,6 +82,24 @@ sandbox:
     - "git\\s+push\\b[^\\n]*(--force|--force-with-lease)[^\\n]*\\b(main|master)\\b"
     - "\\b(DROP\\s+DATABASE|DROP\\s+SCHEMA|TRUNCATE\\s+TABLE)\\b"
 
+# Verification suppressions (optional — block agents from silencing linters/tests)
+suppressions:
+  patterns:
+    - "#\\s*noqa\\b"
+    - "eslint-disable"
+    - "@ts-ignore\\b"
+    - "\\bxit\\s*\\("
+    - "--no-verify\\b"
+
+# Project quality commands (optional — run during /verify)
+quality:
+  checks:
+    - npm test
+
+# Commit policy (optional — used with check-commit --staged)
+commit:
+  max_staged_lines: 500
+
 # Project-specific overrides (appended on top of preset + rules above):
 # overrides:
 #   rules:

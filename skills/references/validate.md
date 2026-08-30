@@ -113,11 +113,12 @@ The completion gate searches for `file:line` (for example `test/routes/login.tes
 python3 .specs/guardrails/scripts/validate_state.py .specs/features/[feature]
 python3 .specs/guardrails/scripts/validate_state.py [feature]
 python3 .specs/guardrails/scripts/validate_state.py          # single-feature projects
+npx @luizsantiago/spec-guardrails quality-checks             # when quality.checks is configured
 ```
 
 Checks that the report exists, the verdict is exactly PASS in the **preamble** (before the first `##` section) or under a dedicated `## Verdict` / `## Result` / `## Status` heading, every spec requirement ID shares a line with test `file:line` evidence, and no task remains open. A `- Verdict: PASS` buried under Discrimination Sensor or Coverage does not count. Preamble and `## Verdict` must not disagree. Evidence inside fenced samples or HTML comments does not count. `PASS` with any surviving mutant on a sensor/mutant line fails. `PASS` with open `Gaps` bullets or Security Review `Result: fail` fails. On Medium+ features (`design.md` with content, 4+ tasks, or 2+ phases) a discrimination-sensor **outcome** is **blocking** — the section heading alone is not enough — and a Medium+ `PASS` requires at least one `killed` mutant in the sensor focus (`injected` alone, or `killed` only under Gaps, is not enough). Below Medium+ a missing outcome is a warning (`--strict` still promotes warnings). Non-zero exit means the feature is not done.
 
-The gate cannot judge whether a cited test actually asserts the criterion. That judgment is the verifier's; a green gate with a weak assertion is still a FAIL in the report.
+The gate cannot judge whether a cited test actually asserts the criterion. Run `quality-checks` when `.specs/config.yaml` lists project commands (`npm test`, …) and cite the passing output in the validation report. That judgment is still the verifier's; a green gate with a weak assertion is still a FAIL in the report.
 
 **Gate-enforced vs verifier judgment.** `validate_state.py` enforces form: verdict scope, test-path evidence, REQ↔evidence lines, sensor outcomes on Medium+, open Gaps, Security `Result: fail`, open tasks. The following stay **verifier judgment** (not structural gates): whether each coverage row's test truly asserts the outcome, whether a lightweight Security path is justified, Interactive UAT / walkthrough success, and optional `## AppSec` / `## QA` sections. See the [gate stability contract](https://github.com/luizssantiago92/spec-guardrails/blob/main/prd/gate-stability.md).
 

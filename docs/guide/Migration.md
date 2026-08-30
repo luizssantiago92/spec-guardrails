@@ -26,8 +26,9 @@ What `install` does on 3.0:
 
 | Writes / refreshes | Preserves |
 | --- | --- |
-| Skills under `.cursor/skills/` and `.claude/skills/` | `.specs/STATE.md`, feature specs, decisions |
-| Gate scripts under **`.specs/guardrails/scripts/`** | User prose outside managed blocks |
+| Skills under detected platform (default Cursor) + any existing skill trees | `.specs/STATE.md`, feature specs, decisions |
+| All four trees when using `--all-platforms` | User prose outside managed blocks |
+| Gate scripts under **`.specs/guardrails/scripts/`** | Prior platform trees when migrating IDEs |
 | Markers `SPEC-GUARDRAILS` / `guardrails-managed` | — |
 | Upgrades old `.cursorrules` blocks (`SPEC-SEATBELT`, `AGENTIC-HARNESS`) | — |
 
@@ -55,6 +56,19 @@ Runtime **does not** read `.specs/harness/scripts/` or `.specs/seatbelt/scripts/
 | Scope or shell safety | Use `context-guard check-edit`, `context-guard check-complete`, and `sandbox check-command` via CLI |
 
 See [CHANGELOG](../CHANGELOG.md#430--cursor-hooks-removed).
+
+## Upgrading to 4.4 (platform-aware install)
+
+**4.4.0** installs skills into **one platform tree by default** (auto-detected; Cursor when unknown). Prior trees are kept when you change IDEs.
+
+| Situation | Action |
+| --- | --- |
+| Fresh install in Cursor only | `install` — writes `.cursor/skills/` only |
+| Repo used by multiple agents | `install --all-platforms` |
+| Force a specific agent | `install --platform claude` (or `cursor`, `copilot`, `codex`) |
+| Migrated from Claude to Cursor | `install` refreshes both `.claude/skills/` (existing hub) and `.cursor/skills/` (detected) |
+
+See [CHANGELOG](../CHANGELOG.md#440--platform-aware-install--hygiene).
 
 ## Upgrading to 4.2+ (Cursor hooks opt-in) — historical
 

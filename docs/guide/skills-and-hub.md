@@ -30,6 +30,8 @@ Loaded **one per turn** (plus hub). Each file is a step-by-step procedure.
 | Reference | Agent command | Phase |
 | --- | --- | --- |
 | `explore.md` | `/explore` | Research — no feature folder yet |
+| `elicitation.md` | `/elicit` | Requirements brief before Specify |
+| `solution-exploration.md` | `/solution-explore` | Explicit design fork (CLI + artifact) |
 | `constitution.md` | `/constitution` | Once — project principles |
 | `project-init.md` | `/project-init` | Brownfield repo map |
 | `specify.md` | `/specify` | Written requirements |
@@ -79,6 +81,10 @@ Loaded **one per turn** (plus hub). Each file is a step-by-step procedure.
 Dumping every skill + reference every turn ≈ **31k tokens** — see [Token efficiency](Token-efficiency.md).
 
 ## Where files land after install
+
+By default, `install` detects your agent platform and writes skills to **one tree** (Cursor when nothing is detected). Use `--all-platforms` for every tree, or `--platform cursor|claude|copilot|codex` to force one.
+
+Existing skill trees are **preserved** when you switch IDEs — re-run `install` to refresh them without losing prior platforms.
 
 | Path | Contents |
 | --- | --- |

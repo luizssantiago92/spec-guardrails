@@ -7,7 +7,7 @@
 
 Spec Guardrails installs a working method into your repository: the agent writes down what it is going to build, gets your approval, implements in small waves, and proves the result before calling it done. Nothing about your stack changes — you get written requirements, a task plan, and verification evidence stored as files in the project.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.3.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.4.x**
 
 ---
 
@@ -249,26 +249,7 @@ Full index: [docs/guide/README.md](docs/guide/README.md)
 
 ## Contributing
 
-Focused improvements to skills, gates, CLI, docs, and tests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for repository layout, gate stability rules, and local checks.
-
-**Build your contribution with Spec Guardrails.** In your own project or fork, install the latest stable release and let the phases guide the change:
-
-```bash
-npx @luizsantiago/spec-guardrails@latest install
-npx @luizsantiago/spec-guardrails doctor
-```
-
-Describe the change in chat, approve the spec and the task plan, implement, and verify before opening the pull request — the resulting `.specs/` folder is the evidence that supports your PR.
-
-**In this source repository**, work against your branch instead of the published package:
-
-```bash
-git clone https://github.com/luizssantiago92/spec-guardrails.git
-cd spec-guardrails
-npm install
-npm run guardrails -- install
-npm run guardrails -- doctor
-```
+Focused improvements are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) for layout, gate stability rules, and local checks.
 
 Edit sources under `skills/`, `lib/`, `scripts/`, and `rules/`; re-run `npm run guardrails -- install` after changing shipped assets, and run `npm test` before every PR.
 

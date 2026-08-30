@@ -6,6 +6,26 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.4.0 — Platform-aware install + hygiene
+
+### Added
+
+- **Platform detection on `install`** — detects Cursor, Claude Code, GitHub Copilot, or OpenAI Codex from environment markers and repo layout; installs skills and adapter entry files only for the detected platform
+- **`install --all-platforms`** — previous behavior (all four skill trees); useful for CI and multi-agent repos
+- **`install --platform <id>`** — force `cursor`, `claude`, `copilot`, or `codex` instead of auto-detect
+- **Migration preserve** — existing skill trees (hub present) are refreshed even when switching IDEs, so returning to a prior agent keeps its tree up to date
+- **`memory-index status [--json]`** — documented in CLI help (already supported by the Python gate)
+
+### Changed
+
+- **`doctor`** — skills-hub and platform-adapters checks target installed platforms only, not every tree
+- **Docs** — gates catalog includes `validate-req-analysis`; skills index lists `elicitation.md` and `solution-exploration.md`; Migration documents all four skill trees and 4.4 install behavior
+- **`templates/config.yaml.example`** — sandbox deny patterns aligned with runtime defaults
+
+### Removed
+
+- **`lib/memory-index.js`** — unused Node wrapper (CLI routes through `gates.js` + Python scripts)
+
 ## 4.3.0 — Cursor hooks removed
 
 ### Removed

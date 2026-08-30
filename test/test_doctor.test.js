@@ -212,10 +212,13 @@ describe("guardrails doctor", () => {
     );
   });
 
-  it("fails skills-hub when any adapter tree is missing the hub", async () => {
+  it("fails skills-hub when an installed tree is missing the hub", async () => {
     const cwd = await createTempDir("doctor-hub-");
-    await scaffoldDoctorInstall(cwd, { includeGateDeps: false });
-    await fs.rm(path.join(cwd, ".codex/skills/agent-architecture.md"));
+    await fs.mkdir(path.join(cwd, ".specs/features"), { recursive: true });
+    await fs.mkdir(path.join(cwd, ".specs/project"), { recursive: true });
+    await fs.mkdir(path.join(cwd, ".specs/guardrails/scripts"), { recursive: true });
+    await fs.mkdir(path.join(cwd, ".cursor/skills"), { recursive: true });
+    await fs.writeFile(path.join(cwd, ".specs/STATE.md"), "# State\n", "utf8");
 
     const checks = await runDoctorChecks(cwd);
     assert.equal(checks.find((check) => check.id === "skills-hub")?.pass, false);

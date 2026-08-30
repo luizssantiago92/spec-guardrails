@@ -21,6 +21,13 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 - **Install next steps** — message names the detected platform and mentions `--all-platforms` instead of implying every adapter tree is installed
 - **README** — visual flow and tiers diagrams, CI/downloads badges, honest limits section, two new gates in the kit table
 - **`templates/config.yaml.example`** — documents `suppressions`, `quality.checks`, and `commit.max_staged_lines`
+- **Hub (`agent-architecture.md`)** — gate table lists `check_suppressions.py` and `run_quality_checks.py`, and `validate_req_analysis.py` moved from the sister-skill column to the gate column for Elicit
+- **Docs index** — lists `ecosystem.md`
+
+### Fixed
+
+- **README** — `Garantees matrix` typo in the gates section
+- **Repository hygiene** — untracked leftover maintainer scratch files (`.commit-msg.txt`, `.pr-body.md`) and added them to `.gitignore`
 
 ## 4.4.0 — Platform-aware install + hygiene
 

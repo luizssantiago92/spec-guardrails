@@ -144,7 +144,7 @@ Automatic checks at step boundaries — each one blocks a specific kind of short
 | `quality-checks` | Configured project commands (`npm test`, …) fail during `/verify` |
 | `lessons` | A failed verify tries to skip the lesson step |
 
-→ [Gates](docs/guide/gates.md) · [Garantees matrix](docs/guide/Guarantees-matrix.md)
+→ [Gates](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md)
 
 ### Requirements analysis
 

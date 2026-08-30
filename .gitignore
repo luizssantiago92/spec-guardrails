@@ -11,6 +11,8 @@ __pycache__/
 
 # Maintainer-local (never commit)
 .local/
+.commit-msg.txt
+.pr-body.md
 
 # Installer output in this source repo (consumers commit their own .specs/)
 .cursor/

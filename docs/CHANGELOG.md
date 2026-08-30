@@ -12,7 +12,7 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 - **Platform detection on `install`** — detects Cursor, Claude Code, GitHub Copilot, or OpenAI Codex from environment markers and repo layout; installs skills and adapter entry files only for the detected platform
 - **`install --all-platforms`** — previous behavior (all four skill trees); useful for CI and multi-agent repos
-- **`install --platform <id>`** — force `cursor`, `claude`, `copilot`, or `codex` instead of auto-detect
+- **`install --platform <id>`** — force `cursor`, `claude`, `copilot`, or `codex` instead of auto-detect (existing trees are still refreshed)
 - **Migration preserve** — existing skill trees (hub present) are refreshed even when switching IDEs, so returning to a prior agent keeps its tree up to date
 - **`memory-index status [--json]`** — documented in CLI help (already supported by the Python gate)
 

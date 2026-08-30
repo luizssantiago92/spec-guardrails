@@ -135,7 +135,12 @@ describe("install guardrails", () => {
           "utf8",
         );
 
-        await install({ cwd, repoUrl: mockServer.baseUrl, silent: true });
+        await install({
+          cwd,
+          repoUrl: mockServer.baseUrl,
+          silent: true,
+          platform: "cursor",
+        });
 
         assert.equal(
           await fs.readFile(

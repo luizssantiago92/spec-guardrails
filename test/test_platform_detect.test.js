@@ -132,6 +132,27 @@ describe("platform detection", () => {
     }
   });
 
+  it("--platform keeps existing trees alongside the forced one", async () => {
+    clearPlatformEnv();
+    const cwd = await createTempDir("platform-forced-");
+    await fs.mkdir(path.join(cwd, ".codex/skills"), { recursive: true });
+    await fs.writeFile(
+      path.join(cwd, ".codex/skills/agent-architecture.md"),
+      "# Hub\n",
+      "utf8",
+    );
+
+    try {
+      const { skillDirs, detected } = await resolveSkillInstallTargets(cwd, {
+        platform: "cursor",
+      });
+      assert.equal(detected, "cursor");
+      assert.deepEqual(skillDirs.sort(), [".codex/skills", ".cursor/skills"]);
+    } finally {
+      await fs.rm(cwd, { recursive: true, force: true });
+    }
+  });
+
   it("--all-platforms installs every skill tree", async () => {
     const cwd = await createTempDir("platform-all-");
     try {

@@ -1,7 +1,7 @@
 {
   "name": "@luizsantiago/spec-guardrails",
   "version": "4.7.0",
-  "description": "Governed spec-driven development for AI coding agents. Your agent writes the spec, gets your approval, builds in small waves, and proves the result — plans and project memory stored as files in your repo.",
+  "description": "Governed spec-driven development for AI coding agents: spec-first workflow, optional Python gates (Brakes), repo memory in .specs/, and an optional python-platform preset for backend + DevOps + AI teams.",
   "type": "module",
   "bin": {
     "spec-guardrails": "./index.js"
@@ -36,7 +36,9 @@
     "claude",
     "spec-driven",
     "guardrails",
-    "cli"
+    "cli",
+    "python",
+    "devops"
   ],
   "author": "luizsantiago",
   "license": "MIT",

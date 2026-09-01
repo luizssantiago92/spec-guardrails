@@ -61,8 +61,12 @@ Loaded **one per turn** (plus hub). Each file is a step-by-step procedure.
 | `qa-strategy.md` | **Conditional** — multi-step UI or owner ask | QA focus — after AppSec if both apply |
 | `code-simplify.md` | **Conditional** — Medium+ or owner ask | Refactor without behavior change |
 | `ship-ready.md` | **Conditional** — owner asks to ship | Pre-release checklist — never auto-push |
+| `python-devops.md` | **Conditional** — infra/docker/terraform/helm/CI paths in tasks, or `python-platform` preset | Ship Surface in `design.md` — load during Design/Tasks/Execute, not with AppSec/QA |
+| `ai-engineering.md` | **Conditional** — LLM/RAG/MCP/agent/prompt paths, or classify-change AI signal | AI Surface in `design.md` — same loading rules as `python-devops` |
 
-**Conditional rule:** load **at most one** conditional sister at a time. Sequence: AppSec → drop → QA → drop.
+**Conditional rule:** load **at most one** conditional sister at a time for Verify extras (AppSec, QA). Sequence: AppSec → drop → QA → drop. Platform sisters (`python-devops`, `ai-engineering`) load during Design/Tasks/Execute when paths match — never together with AppSec/QA in the same window.
+
+**Install set:** hub + **10** sister skills + **19** phase references — see [README kit inventory](https://github.com/luizssantiago92/spec-guardrails#kit-inventory).
 
 ## Always-on project rule
 

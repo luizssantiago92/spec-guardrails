@@ -98,15 +98,15 @@ Rules: [Concepts → Complexity tiers](concepts.md#complexity-tiers--how-the-age
 
 ## What’s in your repo after install
 
-Think of four layers — **only the first two are mandatory** for daily use:
+Think of **four core layers** — the first two are mandatory for daily use; **Python Platform** is an optional fifth for backend + DevOps + AI teams (4.7+):
 
 ### 1. Skills (instructions for the agent)
 
 Installed under your **detected platform tree** (for example `.cursor/skills/` in Cursor). Use `install --all-platforms` if you need every adapter tree in one repo.
 
 - **Hub** — map and rules (`agent-architecture.md`)
-- **References** — one file per phase (`specify.md`, `implement.md`, …)
-- **Sister skills** — security, task-graph, … loaded on demand
+- **References** — 19 phase files (`specify.md`, `implement.md`, …)
+- **Sister skills** — 10 cross-cutting guides (security, task-graph, platform infra/AI, …) loaded on demand
 
 The agent loads **one phase at a time** to save tokens. Details: [Skills and hub](skills-and-hub.md)
 
@@ -127,9 +127,9 @@ Handoff rules: [Memory skill](../../skills/references/memory.md) (installed copy
 
 ### 3. Gates (optional automatic checks — Brakes mode)
 
-Python scripts in `.specs/guardrails/scripts/`. **Exit ≠ 0 means stop and fix.**
+Python scripts in `.specs/guardrails/scripts/` — **12 gates** including `validate-ship-surface` for python-platform teams. **Exit ≠ 0 means stop and fix.**
 
-Examples: incomplete spec, tasks not tracing to requirements, “done” without test evidence.
+Examples: incomplete spec, tasks not tracing to requirements, “done” without test evidence, missing Ship/AI Surface when infra/AI paths appear in tasks.
 
 You do not run these manually every day — the agent runs them at phase boundaries.
 
@@ -138,6 +138,10 @@ Reference: [Gates](gates.md) · [Guarantees matrix](Guarantees-matrix.md)
 ### 4. CLI helpers (optional power tools)
 
 Memory search, execution policy, worktrees, solution exploration — **use when the work needs them**, not on day one.
+
+### 5. Python Platform (optional — 4.7+)
+
+Preset `python-platform` for teams shipping **backend + DevOps + AI** from one repo: Ship Surface and AI Surface in `design.md`, gate `validate-ship-surface`, sisters `python-devops` and `ai-engineering`. Not a live observability platform — see [python-platform.md](python-platform.md).
 
 ---
 
@@ -231,6 +235,7 @@ Semantic search is **optional** — useful with **lots** of archived features an
 | Understand memory and search | [Memory](Memory.md) |
 | See every chat command | [Agent commands](agent-commands.md) |
 | See product promises | [Guarantees matrix](Guarantees-matrix.md) |
+| Python + DevOps + AI in one repo | [python-platform.md](python-platform.md) · [Tutorial 04](tutorials/04-python-platform-ship-surface.md) |
 | Questions | [FAQ](FAQ.md) |
 | Technical README | [../../README.md](../../README.md) |
 

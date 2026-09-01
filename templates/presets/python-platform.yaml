@@ -43,7 +43,7 @@ elicitation:
 
 memory:
   retrieval:
-  # Semantic search is optional — enable after `memory-index embed` when the team wants it.
+    # Semantic search is optional — enable after `memory-index embed` when the team wants it.
     semantic: false
     provider: none
     model: text-embedding-3-small

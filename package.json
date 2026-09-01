@@ -1,7 +1,7 @@
 {
   "name": "@luizsantiago/spec-guardrails",
   "version": "4.7.0",
-  "description": "Governed spec-driven development for AI coding agents: spec-first workflow, optional Python gates (Brakes), repo memory in .specs/, and an optional python-platform preset for backend + DevOps + AI teams.",
+  "description": "Governed spec-driven development for AI coding agents: spec-first workflow, optional Python gates (Brakes), repo memory in .specs/, and an optional python-platform preset when Python features touch deploy/infra and/or AI paths.",
   "type": "module",
   "bin": {
     "spec-guardrails": "./index.js"

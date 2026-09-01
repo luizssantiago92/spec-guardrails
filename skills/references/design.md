@@ -75,11 +75,40 @@ Skipping Design is the default for Simple and Medium tiers.
 
 ## Out of Scope for This Design
 - [explicitly excluded]
+
+## Ship Surface
+
+Fill when tasks touch infra paths (Docker, Compose, Terraform, Helm, CI workflows). Required fields for the gate: **Deploy unit**, **CI**, **Rollback**.
+
+| Field | Value |
+| --- | --- |
+| API / contract | OpenAPI path, health route, or N/A (worker/CLI) |
+| Migrations | Command or N/A |
+| Env / secrets | Source of config — no secret values |
+| Deploy unit | Service/chart/worker unit that ships |
+| CI | Workflow or command before merge |
+| Rollback | How to undo a bad deploy |
+| Observability | Logs/metrics/alerts for this change |
+
+## AI Surface
+
+Fill when tasks touch AI paths (`prompts/`, `evals/`, MCP, embeddings, LLM/RAG code). Required fields for the gate: **Eval harness**, **Fallback / degrade**.
+
+| Field | Value |
+| --- | --- |
+| Capability | chat, RAG, tool-use, embed batch, etc. |
+| Model / provider | Model name — no API keys |
+| Tools / MCP scope | Allowlist / deny list |
+| Eval harness | `pytest tests/eval/` or dataset path |
+| PII / data policy | What must not reach the model |
+| Fallback / degrade | Behavior on timeout/failure/rate limit |
+| Cost guard | Budget link or execution-policy note |
 ```
 
 ## Rules
 
 - No implementation code in `design.md` — interfaces and signatures only when they clarify a contract.
+- If tasks touch infra or AI `Files`, run `validate_ship_surface.py` after Tasks and before Verify.
 - If the design reveals that the spec is wrong or incomplete, stop and update `spec.md` first; re-run the spec gate.
 - When multiple defensible implementations exist for the same spec, use explicit **solution exploration** (`references/solution-exploration.md`) before Execute — not parallel ad-hoc spikes.
 - Prefer the smallest design that satisfies the spec. Extensibility that no requirement asks for is speculation.

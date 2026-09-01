@@ -79,7 +79,34 @@ See [CHANGELOG](../CHANGELOG.md#440--platform-aware-install--hygiene).
 | Fresh install on 4.2.x | Hooks were not registered unless you ran `install --with-cursor-hooks` or set `cursor.hooks: true` |
 | Upgraded from 4.1.x with hooks present | Existing entries were kept until `install --without-cursor-hooks` |
 
-See [CHANGELOG](../CHANGELOG.md#420--cursor-hooks-opt-in-off-by-default).
+See [CHANGELOG](../CHANGELOG.md#430--cursor-hooks-removed).
+
+## 4.x era summary (Guardrails)
+
+After **3.0**, the package name stays **Spec Guardrails**. Major themes by minor:
+
+| Versions | Theme | Migration detail |
+| --- | --- | --- |
+| **4.0–4.1** | `/elicit`, requirements briefs, `validate-req-analysis` | Re-run `install`; optional elicitation only |
+| **4.2–4.3** | Cursor hooks opt-in → removed | [4.3 hooks removed](#upgrading-to-43-cursor-hooks-removed) |
+| **4.4** | Platform-aware `install` | [4.4 platform install](#upgrading-to-44-platform-aware-install) |
+| **4.5** | `check-suppressions`, `quality-checks`, config fixes | Update `config.yaml.example` patterns if you copied old template |
+| **4.6** | Tutorials, `feature-overview` | Additive — no breaking CLI |
+| **4.7** | `python-platform` preset, Ship/AI Surface gate | [python-platform.md](python-platform.md); optional preset |
+
+**Version picking:** see [Product history](Product-history.md) for which pin fits your team.
+
+## Upgrading to 4.7 (Python platform pack)
+
+**4.7.0** adds the optional `python-platform` preset and `validate-ship-surface` gate. Existing repos without that preset are unaffected until you opt in.
+
+| Situation | Action |
+| --- | --- |
+| Python + DevOps + AI team | `init-config --preset python-platform` or `extends: python-platform` in `.specs/config.yaml`; read [python-platform.md](python-platform.md) |
+| Everyone else | Stay on `python`, `node-ts`, or `default` — no action required |
+| Pin older line without platform pack | `npx @luizsantiago/spec-guardrails@4.6.0 install` — see [Product history](Product-history.md) |
+
+See [CHANGELOG](../CHANGELOG.md#470--python-platform-pack-backend--devops--ai).
 
 ## From `spec-seatbelt` 2.x
 
@@ -101,5 +128,6 @@ Same as above: install Spec Guardrails 3.0 fresh. Do not expect harness path dua
 ## Related
 
 - [Stability policy](Stability-policy.md) — why the name will not change again
+- [Product history](Product-history.md) — eras and version pinning
 - [Restart-prd-seed.md](Restart-prd-seed.md) — clean single-package restart PRD template
 - [CHANGELOG](../CHANGELOG.md) — 3.0.0 section

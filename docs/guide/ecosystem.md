@@ -43,8 +43,20 @@ Where Spec Guardrails sits among harness, loop, and graph engineering — and wh
 | [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) | Skill security scanner | Recommended before installing untrusted skills — see `security-review.md` |
 | [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/skillevaluator) | Skill publication eval harness | Complementary QA for skill authors |
 | [coze-dev/coze-loop](https://github.com/coze-dev/coze-loop) | Agent ops platform (eval, traces, prompts) | Adjacent — runtime observability, not repo-local SDD |
+| LangSmith / similar | Live LLM traces and eval in prod | Adjacent — we version **contracts** in git (`AI Surface`), not production telemetry |
 | [kkawailab/speckit-tutorial](https://github.com/kkawailab/speckit-tutorial) | Progressive Spec Kit tutorials | External onboarding reference |
 | [Shubhamsaboo/awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) | Curated LLM app index | Discovery only |
+
+## Python platform teams (4.7+)
+
+| We do | We do not |
+| --- | --- |
+| `python-platform` preset + Ship/AI Surface in `design.md` | Replace LangSmith / Coze Loop live traces |
+| `validate_ship_surface` — structural gate before Verify | Run `terraform plan` security review or cost analysis |
+| Connect `/elicit`, memory, lessons to AI kickoffs | Guarantee eval quality — only that a harness is documented |
+| Tutorial 04 + appendices (FastAPI, Django, worker, RAG) | Ship framework-specific presets |
+
+Guide: [python-platform.md](python-platform.md)
 
 ## What we are not building
 

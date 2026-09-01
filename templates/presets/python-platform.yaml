@@ -1,0 +1,78 @@
+# Python platform preset — backend + DevOps + AI engineering
+# See docs/guide/python-platform.md for capabilities and limitations.
+schema: spec-driven
+
+branch_prefix: feat
+
+extends: python
+
+context: |
+  Stack: Python 3.10+ (framework-agnostic — FastAPI, Django, workers, or plain modules)
+  Test command: pytest
+  Lint: ruff check .
+  Branch prefix: feat
+  DevOps: docker compose config, terraform validate, helm template (enable in quality.checks)
+  AI: run eval suite when AI Surface is present in design.md
+  Ship/AI surfaces: document in design.md; gate validate_ship_surface.py enforces structure
+
+rules:
+  specify:
+    - Prefer EARS acceptance criteria
+    - Mark unknowns with [NEEDS CLARIFICATION: question]
+    - For model behavior, write testable criteria (golden set, bounds) — not only HTTP 200
+  tasks:
+    - Every REQ must appear in the Test Coverage Matrix
+    - Gate Check Commands must include pytest
+    - When Files touch infra or AI paths, design.md must include Ship Surface and/or AI Surface
+  implement:
+    - Run pytest before each commit
+    - Run infra/AI quality checks from quality.checks when the task Gate references them
+  verify:
+    - Evidence must cite test file:line paths under tests/
+    - When AI Surface exists, validation.md must cite eval evidence (file:line or command output)
+    - Run validate_ship_surface before validate_state when tasks touch infra or AI paths
+
+elicitation:
+  max_questions_per_turn: 5
+  kickoff_discovery_paths:
+    - prd.md
+    - docs/brief.md
+    - docs/prd.md
+    - .specs/project/kickoff.md
+    - docs/ai-brief.md
+
+memory:
+  retrieval:
+  # Semantic search is optional — enable after `memory-index embed` when the team wants it.
+    semantic: false
+    provider: none
+    model: text-embedding-3-small
+
+quality:
+  checks:
+    - pytest
+    - ruff check .
+    # Uncomment the checks your repo uses:
+    # - docker compose config --quiet
+    # - terraform -chdir=infra validate
+    # - helm template release ./charts/app
+    # - pytest tests/eval -m "not live"
+
+ship_surface:
+  infra_globs:
+    - "**/Dockerfile"
+    - "**/docker-compose*.yml"
+    - "**/docker-compose*.yaml"
+    - "**/terraform/**"
+    - "**/*.tf"
+    - "**/charts/**"
+    - "**/helm/**"
+    - "**/.github/workflows/**"
+  ai_globs:
+    - "**/prompts/**"
+    - "**/mcp/**"
+    - "**/evals/**"
+    - "**/tests/eval/**"
+    - "**/*embed*"
+    - "**/*llm*"
+    - "**/*rag*"

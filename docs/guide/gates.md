@@ -16,8 +16,9 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | | 3 | `analyze-artifacts` |
 | | 4 | `validate-tasks` |
 | | 4b | `validate-traceability` (REQ ↔ tasks; again when `validation.md` exists) |
+| | 4c | `validate-ship-surface` (when infra/AI paths in task Files) |
 | **Building** | 5 | `loop-plan` → implement → `check-commit` + `check-suppressions` (repeat per wave) |
-| **Closing** | 6 | `validate-traceability` (full coverage lines) → `quality-checks` (when configured) → `validate-state` |
+| **Closing** | 6 | `validate-traceability` (full coverage lines) → `validate-ship-surface` → `quality-checks` (when configured) → `validate-state` |
 | | 7 | `archive-feature` (CLI) |
 | | — | `lessons` (after Verify FAIL) |
 
@@ -30,6 +31,7 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | **analyze-artifacts** | `analyze_artifacts.py` | Before task approval; on drift | Every REQ has task coverage; no orphan tasks |
 | **validate-tasks** | `validate_tasks.py` | Before you approve `tasks.md` | Task shape, binary done criteria, `task-graph.md` when 3+ tasks, file overlap |
 | **validate-traceability** | `validate_traceability.py` | After tasks; again with `validation.md` | REQ → tasks → same-line coverage evidence (structural only) |
+| **validate-ship-surface** | `validate_ship_surface.py` | After tasks; before Verify when infra/AI Files | Ship Surface + AI Surface fields in `design.md` (structural only) |
 | **validate-quick** | `validate_quick.py` | End of `/quick` | TASK.md / SUMMARY.md shape; ≤3 files; no sensitive paths |
 | **loop-plan** | `loop_plan.py` | Start of each `/loop` wave | Next runnable tasks; parallel groups (disjoint files) |
 | **check-commit** | `check_commit.py` | Every commit | Conventional Commits shape; optional `--staged` for empty/oversized diffs |

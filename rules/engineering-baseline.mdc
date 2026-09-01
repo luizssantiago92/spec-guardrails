@@ -34,6 +34,8 @@ Chat language is a personal preference. Set it in your own agent settings if you
 | `.cursor/skills/code-simplify.md` | Simplification sister (load on demand) |
 | `.cursor/skills/ship-ready.md` | Ship-ready sister (load on demand) |
 | `.cursor/skills/git-handoff.md` | Git sync and session handoff |
+| `.cursor/skills/python-devops.md` | Python DevOps — Ship Surface (load on demand) |
+| `.cursor/skills/ai-engineering.md` | AI engineering — AI Surface (load on demand) |
 <!-- guardrails-managed:skills-map:end -->
 
 # Deterministic Gates

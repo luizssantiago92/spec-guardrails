@@ -7,6 +7,9 @@ Hands-on paths from zero to parallel Execute. Each tutorial is self-contained; d
 | [01 — Quick fix](01-quick-fix.md) | ~20 min | Express lane: classify → implement → `validate-quick` |
 | [02 — Medium feature](02-medium-feature.md) | ~45 min | Spec approval → tasks → loop → independent `/verify` |
 | [03 — Parallel worktrees](03-parallel-worktrees.md) | ~60 min | `task-graph.md`, `workspace-prepare`, two-stage batch review |
+| [04 — Python platform](04-python-platform-ship-surface.md) | ~45 min | `python-platform` preset, Ship + AI Surface, `validate-ship-surface` |
+
+Appendices: [FastAPI](appendix-a-fastapi.md) · [Django](appendix-b-django.md) · [Worker](appendix-c-worker.md) · [RAG/MCP/eval](appendix-d-ai-rag-mcp.md)
 
 Before you start: [Quick start](../Quick-start.md) · [How it works](../How-it-works.md) · `npx @luizsantiago/spec-guardrails doctor`
 

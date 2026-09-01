@@ -183,6 +183,7 @@ Commands:
   loop-plan [tasks.md|feature]       Next Execute wave — parallel groups + sub-agent hints
     [--json]                         Machine-readable plan for agents
   validate-traceability [feature]    REQ → tasks → validation coverage chain
+  validate-ship-surface [feature]    Ship Surface + AI Surface when infra/AI paths in tasks
   validate-quick [quick-folder]      Quick-mode TASK.md / SUMMARY.md structural gate
   validate-req-analysis [brief.md]   Requirements brief gate before /specify (/elicit)
   validate-state [feature]           Completion gate before declaring a feature done

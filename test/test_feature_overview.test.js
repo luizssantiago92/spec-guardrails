@@ -49,6 +49,44 @@ describe("feature-overview", () => {
     assert.match(formatFeatureOverview(overview), /REQ-001/);
   });
 
+  it("includes Ship and AI surface sections in overview output", async () => {
+    const cwd = await createTempDir("feature-overview-surfaces-");
+    const feature = "003-rag";
+    const featureDir = path.join(cwd, ".specs/features", feature);
+    await fs.mkdir(featureDir, { recursive: true });
+    await fs.writeFile(
+      path.join(cwd, ".specs/STATE.md"),
+      `# State\n\n- Feature: ${feature}\n- Phase: Design\n`,
+    );
+    await fs.writeFile(path.join(featureDir, "spec.md"), "# RAG API\n");
+    await fs.writeFile(
+      path.join(featureDir, "design.md"),
+      `# Design
+
+## Ship Surface
+
+| Field | Value |
+| --- | --- |
+| Deploy unit | compose service api |
+| CI | ci.yml |
+| Rollback | helm rollback |
+
+## AI Surface
+
+| Field | Value |
+| --- | --- |
+| Eval harness | pytest tests/eval/ |
+| Fallback / degrade | safe 503 |
+`,
+    );
+
+    const overview = await buildFeatureOverview(feature, { cwd });
+    assert.equal(overview.shipSurface["Deploy unit"], "compose service api");
+    assert.equal(overview.aiSurface["Eval harness"], "pytest tests/eval/");
+    assert.match(formatFeatureOverview(overview), /Operational traceability/);
+    assert.match(formatFeatureOverview(overview), /AI traceability/);
+  });
+
   it("writes overview.md when --write is used", async () => {
     const cwd = await createTempDir("feature-overview-write-");
     const feature = "002-ui";

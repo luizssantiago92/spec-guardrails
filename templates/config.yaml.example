@@ -4,8 +4,8 @@
 
 schema: spec-driven
 
-# Extend a built-in preset (default | node-ts | python):
-# extends: node-ts
+# Extend a built-in preset (default | node-ts | python | python-platform):
+# extends: python-platform
 
 context: |
   Tech stack: (fill in)
@@ -100,6 +100,17 @@ suppressions:
 quality:
   checks:
     - npm test
+
+# Ship / AI surface globs (optional — used by validate_ship_surface.py)
+# ship_surface:
+#   infra_globs:
+#     - "**/Dockerfile"
+#     - "**/docker-compose*.yml"
+#     - "**/.github/workflows/**"
+#   ai_globs:
+#     - "**/prompts/**"
+#     - "**/evals/**"
+#     - "**/tests/eval/**"
 
 # Commit policy (optional — used with check-commit --staged)
 commit:

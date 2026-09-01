@@ -37,6 +37,15 @@ describe("classify-change", () => {
     assert.notEqual(result.tier, "quick");
   });
 
+  it("flags AI signals and suggests ai-engineering skill", () => {
+    const result = classifyChange({
+      description: "add RAG over internal docs with MCP tools",
+      files: ["src/rag.py", "prompts/system.md"],
+    });
+    assert.equal(result.suggestAiSkill, true);
+    assert.match(formatClassifyChange(result), /ai-engineering/);
+  });
+
   it("suggests elicit for vague descriptions", () => {
     const result = classifyChange({
       description: "improve the settings page interface",

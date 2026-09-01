@@ -10,7 +10,12 @@
 
 Spec Guardrails installs a working method into your repository: the agent writes down what it is going to build, gets your approval, implements in small waves, and proves the result before calling it done. Nothing about your stack changes — you get written requirements, a task plan, and verification evidence stored as files in the project.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.6.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.7.x**
+
+### Who it's for
+
+- **Any stack** — default SDD with gates and `.specs/` memory
+- **Python platform teams** — backend + DevOps + AI in one repo: use preset `python-platform`, Ship/AI Surface, and [Tutorial 04](docs/guide/tutorials/04-python-platform-ship-surface.md). Not a live observability platform — see [limitations](docs/guide/python-platform.md#limitations-honest).
 
 ---
 
@@ -60,7 +65,7 @@ In short: Python turns "trust the agent" into "the agent has to prove it."
 
 Which checks exist and what each one requires: [Gates](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md)
 
-Read more: [Quick start](docs/guide/Quick-start.md) · [Tutorials](docs/guide/tutorials/README.md) · [Platform parity](docs/guide/Platform-parity.md) · [CHANGELOG](docs/CHANGELOG.md)
+| Go deeper | [Quick start](docs/guide/Quick-start.md) · [CHANGELOG](docs/CHANGELOG.md) · [Product history](docs/guide/Product-history.md) · [Tutorials](docs/guide/tutorials/README.md) · [Platform parity](docs/guide/Platform-parity.md) |
 
 ---
 
@@ -212,7 +217,7 @@ See [Guarantees matrix](docs/guide/Guarantees-matrix.md) for the full product vi
 | Enforcement | [Gates](docs/guide/gates.md) | [Gates and guarantees](docs/guide/Gates-and-guarantees.md) |
 | Requirements | [Requirements analysis](docs/guide/requirements-analysis.md) | [Agent commands → /elicit](docs/guide/agent-commands.md) |
 | Long-running projects | [Memory](docs/guide/Memory.md) | [Brownfield context](docs/guide/brownfield-context.md) |
-| Questions | [FAQ](docs/guide/FAQ.md) | [Glossary](docs/guide/Glossary.md) · [Stability policy](docs/guide/Stability-policy.md) |
+| Questions | [FAQ](docs/guide/FAQ.md) | [Glossary](docs/guide/Glossary.md) · [Product history](docs/guide/Product-history.md) · [Stability policy](docs/guide/Stability-policy.md) |
 
 Full index: [docs/guide/README.md](docs/guide/README.md)
 

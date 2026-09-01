@@ -1,6 +1,6 @@
 # Documentation
 
-Plain-language guides for **Spec Guardrails 4.5.x**.  
+Plain-language guides for **Spec Guardrails 4.7.x**.  
 **New here?** Read **[Overview](Overview.md)** first, then [Quick start](Quick-start.md).
 
 ---
@@ -44,6 +44,8 @@ Plain-language guides for **Spec Guardrails 4.5.x**.
 | [brownfield-context.md](brownfield-context.md) | Brownfield and deferred code graphs |
 | [Restart-prd-seed.md](Restart-prd-seed.md) | PRD template for greenfield product |
 | [Migration.md](Migration.md) | Older package names and platform-aware install (4.4+) |
+| [Product-history.md](Product-history.md) | **Eras, stable version picks, pinning npm** |
+| [python-platform.md](python-platform.md) | Python + DevOps + AI preset (4.7+) |
 | [ecosystem.md](ecosystem.md) | Related tools and where this kit fits |
 | [Stability-policy.md](Stability-policy.md) | Semver policy |
 | [credits.md](credits.md) | Attribution |
@@ -55,5 +57,6 @@ Plain-language guides for **Spec Guardrails 4.5.x**.
 | File | Topic |
 | --- | --- |
 | [../../README.md](../../README.md) | npm package intro and doc links |
-| [../CHANGELOG.md](../CHANGELOG.md) | Version history |
+| [../CHANGELOG.md](../CHANGELOG.md) | Version history (every release) |
+| [Product-history.md](Product-history.md) | Eras and which version to pin |
 | [../../CONTRIBUTING.md](../../CONTRIBUTING.md) | Contributing |

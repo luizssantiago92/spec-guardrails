@@ -1,10 +1,40 @@
 # Changelog
 
-Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](guide/Migration.md). Name freeze: [Stability policy](guide/Stability-policy.md).
+Version history for `@luizsantiago/spec-guardrails`.
+
+- **Eras and version picking:** [Product history](guide/Product-history.md)
+- **Upgrade steps:** [Migration](guide/Migration.md)
+- **SemVer / gate freeze:** [Stability policy](guide/Stability-policy.md)
 
 ## Unreleased
 
 —
+
+## 4.7.0 — Python platform pack (backend + DevOps + AI)
+
+### Added
+
+- **`python-platform` preset** — extends `python` with DevOps/AI hints, elicitation paths, suggested `quality.checks`, and configurable ship/AI globs
+- **`validate_ship_surface.py`** — structural gate for **Ship Surface** (deploy, CI, rollback) and **AI Surface** (eval harness, fallback) in `design.md`
+- **Sister skills** — `python-devops.md`, `ai-engineering.md` (on-demand)
+- **Brownfield** — `detectProjectStack` flags Compose, Terraform, Helm, CI, AI deps, eval dirs; suggests `python-platform`
+- **`classify-change`** — AI signals (llm/rag/mcp/agent/prompt) + hint to load `ai-engineering.md`
+- **`feature-overview`** — operational + AI traceability sections from `design.md`
+- **Tutorial 04** — framework-agnostic platform path + appendices (FastAPI, Django, worker, RAG/MCP/eval)
+- **Guide** — [python-platform.md](guide/python-platform.md) with capabilities and honest limitations
+
+### Changed
+
+- **`design.md` / `tasks.md` / `implement.md` / `validate.md`** — Ship + AI Surface workflow and gate schedule
+- **Hub** — `validate_ship_surface` in gates table; conditional sister skills for platform work
+- **`docs/guide/gates.md`**, **`ecosystem.md`**, **`Memory.md`** — platform positioning
+- **Docs** — [Product history](guide/Product-history.md) (eras, stable version picks, npm pinning); index and README links
+
+### Limitations (this release)
+
+- No live LLM traces or distributed eval runtime — harness and surfaces are git contracts + structural gates only
+- IaC checks remain structural (`terraform validate`, `helm template`) — not plan/security review
+- Framework stacks documented in tutorial appendices, not separate presets
 
 ## 4.6.0 — Tutorials, feature dashboard, subagent review
 

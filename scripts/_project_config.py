@@ -21,6 +21,27 @@ DEFAULT_SUPPRESSION_PATTERNS = [
 
 DEFAULT_MAX_STAGED_LINES = 500
 
+DEFAULT_INFRA_GLOBS = [
+    "**/Dockerfile",
+    "**/docker-compose*.yml",
+    "**/docker-compose*.yaml",
+    "**/terraform/**",
+    "**/*.tf",
+    "**/charts/**",
+    "**/helm/**",
+    "**/.github/workflows/**",
+]
+
+DEFAULT_AI_GLOBS = [
+    "**/prompts/**",
+    "**/mcp/**",
+    "**/evals/**",
+    "**/tests/eval/**",
+    "**/*embed*",
+    "**/*llm*",
+    "**/*rag*",
+]
+
 
 def config_path(cwd: Path | str | None = None) -> Path:
     root = Path(cwd) if cwd is not None else Path.cwd()
@@ -64,6 +85,10 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
         "quality": {"checks": []},
         "suppressions": {"patterns": list(DEFAULT_SUPPRESSION_PATTERNS)},
         "commit": {"max_staged_lines": DEFAULT_MAX_STAGED_LINES},
+        "ship_surface": {
+            "infra_globs": list(DEFAULT_INFRA_GLOBS),
+            "ai_globs": list(DEFAULT_AI_GLOBS),
+        },
     }
 
     path = config_path(cwd)
@@ -102,8 +127,26 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
             index += 1
             continue
 
+        if stripped == "ship_surface:":
+            section = "ship_surface"
+            section_indent = indent
+            index += 1
+            continue
+
         if section and indent <= section_indent and not stripped.endswith(":"):
             section = None
+
+        if section == "ship_surface" and stripped == "infra_globs:":
+            items, index = _parse_list_block(lines, index + 1, indent)
+            if items:
+                config["ship_surface"]["infra_globs"] = items
+            continue
+
+        if section == "ship_surface" and stripped == "ai_globs:":
+            items, index = _parse_list_block(lines, index + 1, indent)
+            if items:
+                config["ship_surface"]["ai_globs"] = items
+            continue
 
         if section == "quality" and stripped == "checks:":
             items, index = _parse_list_block(lines, index + 1, indent)
@@ -124,3 +167,9 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
         index += 1
 
     return config
+
+
+def load_ship_surface_config(cwd: Path | str | None = None) -> dict:
+    """Return ship_surface globs with defaults for validate_ship_surface.py."""
+
+    return load_project_config(cwd)["ship_surface"]

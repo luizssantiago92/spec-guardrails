@@ -76,6 +76,7 @@ jobs:
           test -f scripts/validate_tasks.py
           test -f scripts/validate_state.py
           test -f scripts/validate_traceability.py
+          test -f scripts/validate_ship_surface.py
           test -f scripts/validate_quick.py
           test -f scripts/analyze_artifacts.py
           test -f scripts/loop_plan.py

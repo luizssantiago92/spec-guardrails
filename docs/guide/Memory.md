@@ -180,6 +180,21 @@ It does **not** turn semantic on/off for you — you still choose that in config
 
 ---
 
+## Python platform teams
+
+When using the **`python-platform`** preset ([guide](python-platform.md)):
+
+| When | Memory command |
+| --- | --- |
+| Vague AI kickoff ("add RAG") | `/elicit` first — brief indexed on approve |
+| Repeatable AI decisions | `memory-retrieve` before `/specify` or `/design` |
+| After verify FAIL on eval | `lessons.py add` from `validation.md` |
+| Large `.specs/` history | Start FTS (`semantic: false` in preset); enable semantic only after `memory-index embed` |
+
+Semantic search is **optional** — the preset defaults it off so teams opt in deliberately.
+
+---
+
 ## Team tips (Cursor)
 
 1. Write good **specs and validation** — search quality follows artifact quality.

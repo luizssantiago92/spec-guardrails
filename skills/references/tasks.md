@@ -46,6 +46,14 @@ Break the work into atomic tasks with real dependencies and binary done criteria
    python3 .specs/guardrails/scripts/validate_tasks.py [feature]
    ```
 
+**Ship / AI surfaces.** When task `Files` touch infra or AI paths (see `python-platform` preset globs), ensure `design.md` includes **Ship Surface** and/or **AI Surface** before approval. Run:
+
+```bash
+python3 .specs/guardrails/scripts/validate_ship_surface.py [feature]
+```
+
+Load `python-devops.md` or `ai-engineering.md` sister skills when those paths apply.
+
 **Authoring vs gate.** `validate_tasks.py` already enforces REQ coverage and `Tests`/`Gate` fields. The matrix and Gate Check Commands sections are an owner/verifier checklist (judgment) until a future form gate — do not skip them when Tasks ran.
 
 ## Gate

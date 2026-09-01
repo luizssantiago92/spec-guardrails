@@ -110,11 +110,14 @@ The completion gate searches for `file:line` (for example `test/routes/login.tes
 ## Gate
 
 ```bash
+python3 .specs/guardrails/scripts/validate_ship_surface.py [feature]   # when infra/AI paths in tasks
 python3 .specs/guardrails/scripts/validate_state.py .specs/features/[feature]
 python3 .specs/guardrails/scripts/validate_state.py [feature]
 python3 .specs/guardrails/scripts/validate_state.py          # single-feature projects
 npx @luizsantiago/spec-guardrails quality-checks             # when quality.checks is configured
 ```
+
+**Ship / AI surfaces (python-platform).** When `design.md` documents Ship or AI Surface, cite deploy/eval evidence in the report (CI workflow path, eval command output, or `file:line` from `tests/eval/`). `validate_ship_surface.py` checks design structure only — not eval quality or deploy safety.
 
 Checks that the report exists, the verdict is exactly PASS in the **preamble** (before the first `##` section) or under a dedicated `## Verdict` / `## Result` / `## Status` heading, every spec requirement ID shares a line with test `file:line` evidence, and no task remains open. A `- Verdict: PASS` buried under Discrimination Sensor or Coverage does not count. Preamble and `## Verdict` must not disagree. Evidence inside fenced samples or HTML comments does not count. `PASS` with any surviving mutant on a sensor/mutant line fails. `PASS` with open `Gaps` bullets or Security Review `Result: fail` fails. On Medium+ features (`design.md` with content, 4+ tasks, or 2+ phases) a discrimination-sensor **outcome** is **blocking** — the section heading alone is not enough — and a Medium+ `PASS` requires at least one `killed` mutant in the sensor focus (`injected` alone, or `killed` only under Gaps, is not enough). Below Medium+ a missing outcome is a warning (`--strict` still promotes warnings). Non-zero exit means the feature is not done.
 

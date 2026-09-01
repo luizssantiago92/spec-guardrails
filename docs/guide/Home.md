@@ -74,6 +74,7 @@ Full list: [Agent commands](agent-commands.md)
 | Every gate | [Gates](gates.md) |
 | Architecture | [Architecture](Architecture.md) |
 | FAQ | [FAQ](FAQ.md) |
+| Version history | [CHANGELOG](../CHANGELOG.md) · [Product history](Product-history.md) |
 | npm README | [GitHub README](https://github.com/luizssantiago92/spec-guardrails#readme) |
 
 Doc index: [README.md](README.md) (this folder)

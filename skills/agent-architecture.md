@@ -64,6 +64,7 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | During Verify, when `quality.checks` is configured | `python3 .specs/guardrails/scripts/run_quality_checks.py` |
 | Before declaring a feature done | `python3 .specs/guardrails/scripts/validate_state.py [feature]` |
 | Traceability (Medium+ features) | `python3 .specs/guardrails/scripts/validate_traceability.py [feature]` |
+| Ship / AI Surface (when infra or AI paths in tasks) | `python3 .specs/guardrails/scripts/validate_ship_surface.py [feature]` |
 | Quick mode evidence | `python3 .specs/guardrails/scripts/validate_quick.py [feature]` |
 | After Verify PASS | `npx @luizsantiago/spec-guardrails archive-feature [feature]` (Tier 0) |
 | Before a phase procedure (optional) | `npx @luizsantiago/spec-guardrails phase-context <phase>` |
@@ -93,7 +94,7 @@ EXPLORE (optional) → ELICIT (optional) → SPECIFY → DISCUSS (conditional) �
 | **Tasks** | No | `references/tasks.md` | `task-graph-engineering.md` | `validate_tasks.py` |
 | **Analyze** | Before task approval | `references/analyze.md` | — | `analyze_artifacts.py` |
 | **Execute** | Yes | `references/implement.md` | `engineering-standards.md` | `check_commit.py`, `check_suppressions.py` |
-| **Verify** | Yes | `references/validate.md` | `security-review.md` | `validate_traceability.py`, `validate_state.py`, `run_quality_checks.py` |
+| **Verify** | Yes | `references/validate.md` | `security-review.md` | `validate_traceability.py`, `validate_ship_surface.py`, `validate_state.py`, `run_quality_checks.py` |
 | **Archive** | After Verify PASS | `references/archive.md` | `git-handoff.md` | `archive-feature` |
 | **Converge** | On drift | `references/converge.md` | — | `analyze_artifacts.py` |
 | **Handoff** | Yes | `references/memory.md` | `git-handoff.md` | — |
@@ -113,8 +114,10 @@ Not in the default phase-map cell. Load only on `/verify` after `validate.md` + 
 | --- | --- | --- |
 | `appsec.md` | **Complex**, or auth / payments / PII / secrets / upload / SSRF / network trust boundary | Quick; Simple without those surfaces; copy/docs/styling |
 | `qa-strategy.md` | **Complex**, or multi-step user-facing flow, or owner asked for regression/QA | Quick; Simple one-file; evidence-or-zero alone is enough |
+| `python-devops.md` | Infra/docker/terraform/helm/CI paths in tasks, or `python-platform` preset | No deploy surface in the change |
+| `ai-engineering.md` | LLM/RAG/MCP/agent/prompt paths or classify-change AI signal | No AI paths in tasks |
 
-**Sequence.** If both triggers fire: AppSec → write `## AppSec` → **drop** `appsec.md` from the working set → QA → write `## QA`. Never load both together. Neither section is enforced by `validate_state.py` (verifier judgment).
+**Sequence.** If both AppSec and QA triggers fire: AppSec → write `## AppSec` → **drop** `appsec.md` → QA → write `## QA`. Never load AppSec + QA together. For platform work, `python-devops.md` and `ai-engineering.md` are independent of Verify sisters — load at most one on-demand sister during Design/Tasks/Execute when paths match; never with AppSec/QA in the same window.
 
 ## Complexity Router
 

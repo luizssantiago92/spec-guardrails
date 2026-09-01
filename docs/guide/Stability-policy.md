@@ -35,6 +35,7 @@ Structural Python gates under `.specs/guardrails/scripts/` follow the freeze lin
 
 ## Related
 
-- [Migration](Migration.md) — 3.0 clean break
+- [Product history](Product-history.md) — eras, stable version picks, how to pin npm
+- [Migration](Migration.md) — 3.0 clean break and 4.x upgrade notes
 - [CHANGELOG](../CHANGELOG.md)
 - [Gates and guarantees](Gates-and-guarantees.md)

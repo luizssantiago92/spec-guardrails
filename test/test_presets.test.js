@@ -25,6 +25,13 @@ describe("presets", () => {
     assert.ok(presets.includes("default"));
     assert.ok(presets.includes("node-ts"));
     assert.ok(presets.includes("python"));
+    assert.ok(presets.includes("python-platform"));
+  });
+
+  it("loads python-platform preset with ship_surface globs", async () => {
+    const preset = await loadPreset("python-platform");
+    assert.match(preset.context ?? "", /Python 3\.10\+/);
+    assert.ok(preset.rules?.verify?.some((rule) => /eval/i.test(rule)));
   });
 
   it("loads node-ts preset with stack context", async () => {

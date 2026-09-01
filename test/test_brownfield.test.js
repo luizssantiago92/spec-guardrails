@@ -35,6 +35,20 @@ describe("brownfield project-init", () => {
     assert.deepEqual(stack.roots, ["src"]);
   });
 
+  it("detects Python platform stack with compose and eval harness", async () => {
+    const cwd = await createTempDir("stack-py-platform-");
+    await fs.mkdir(path.join(cwd, "src"));
+    await fs.writeFile(path.join(cwd, "pyproject.toml"), "[project]\nname = 'api'\n");
+    await fs.writeFile(path.join(cwd, "Dockerfile"), "FROM python:3.12\n");
+    await fs.mkdir(path.join(cwd, "evals"), { recursive: true });
+
+    const stack = await detectProjectStack(cwd);
+    assert.equal(stack.stack, "Python");
+    assert.equal(stack.preset, "python-platform");
+    assert.equal(stack.hasCompose, true);
+    assert.equal(stack.hasEvalHarness, true);
+  });
+
   it("detects domains from packages/ layout", async () => {
     const cwd = await createTempDir("domains-");
     await fs.mkdir(path.join(cwd, "packages/auth"), { recursive: true });

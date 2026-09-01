@@ -24,6 +24,7 @@ Orchestrate tasks from `tasks.md` and `task-graph.md`: **parallel waves with sub
 1. Read this file completely.
 2. **Discover this repo’s test command** from `package.json`, `Makefile`, CI, or README — prefer the focused command the task `Gate` names. Do not assume `npm test` if the project uses another runner.
 3. Run `python3 .specs/guardrails/scripts/validate_tasks.py` when a formal `tasks.md` exists.
+4. When tasks touch infra or AI `Files`, run `validate_ship_surface.py` before the first Execute edit on those paths.
 4. If Tasks was skipped, list the atomic steps inline now. More than 5 steps or real dependencies means the Tasks phase was skipped in error — stop and create `tasks.md`.
 5. **Plan the wave** — run `python3 .specs/guardrails/scripts/loop_plan.py [feature]` (or `loop-plan --json`) at the start of Execute and after every batch completes. It lists the next runnable tasks and marks **parallel groups** (disjoint `Files`) vs inline work.
 6. When `loop-plan` shows a **parallel group** (2+ tasks), prepare isolated workspaces before dispatch:

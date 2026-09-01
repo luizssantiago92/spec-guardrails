@@ -83,12 +83,17 @@ sandbox:
     - "\\b(DROP\\s+DATABASE|DROP\\s+SCHEMA|TRUNCATE\\s+TABLE)\\b"
 
 # Verification suppressions (optional — block agents from silencing linters/tests)
+# Omit this block to keep runtime defaults from _project_config.py (9 patterns).
 suppressions:
   patterns:
     - "#\\s*noqa\\b"
-    - "eslint-disable"
+    - "nosemgrep\\b"
+    - "eslint-disable(?:-next-line|-line)?"
     - "@ts-ignore\\b"
+    - "@ts-expect-error\\b"
     - "\\bxit\\s*\\("
+    - "\\bxdescribe\\s*\\("
+    - "\\bpytest\\.mark\\.skip\\b"
     - "--no-verify\\b"
 
 # Project quality commands (optional — run during /verify)

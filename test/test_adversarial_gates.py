@@ -11,6 +11,7 @@ Run via:
 from __future__ import annotations
 
 import sys
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -19,6 +20,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 import _common  # noqa: E402
+import check_commit  # noqa: E402
+import check_suppressions  # noqa: E402
 import validate_spec  # noqa: E402
 import validate_state  # noqa: E402
 import validate_tasks  # noqa: E402
@@ -448,6 +451,37 @@ Hidden requirements must not count from HTML comments.
 """
         report = validate_spec.build_report("spec.md", spec)
         self.assertFalse(report.passed)
+
+
+class SuppressionBypassTest(unittest.TestCase):
+    """Agents must not silence linters or skip hooks in staged diffs."""
+
+    def test_noqa_in_added_line_is_blocked(self):
+        diff = "+++ b/src/app.py\n+    x = 1  # noqa\n"
+        report = check_suppressions.build_report(
+            diff,
+            check_suppressions.DEFAULT_SUPPRESSION_PATTERNS,
+        )
+        self.assertFalse(report.passed)
+        self.assertTrue(any("noqa" in e.lower() for e in report.errors))
+
+    def test_clean_added_line_passes(self):
+        diff = "+++ b/src/app.py\n+    x = 1\n"
+        report = check_suppressions.build_report(
+            diff,
+            check_suppressions.DEFAULT_SUPPRESSION_PATTERNS,
+        )
+        self.assertTrue(report.passed)
+
+
+class StagedCommitPolicyTest(unittest.TestCase):
+    def test_empty_staged_commit_is_blocked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            subprocess.run(["git", "init", "--quiet"], cwd=root, check=True)
+            report = check_commit.build_staged_report(root)
+            self.assertFalse(report.passed)
+            self.assertTrue(any("empty commit" in e.lower() for e in report.errors))
 
 
 if __name__ == "__main__":

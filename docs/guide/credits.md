@@ -35,7 +35,7 @@ The `tlc-spec-driven` skill declares `license: CC-BY-4.0` in its own front matte
 
 | Source | License | What we use (concrete) |
 | --- | --- | --- |
-| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | Idea that a gate must block linter/test bypass patterns (`check-suppressions`); project-configured commands run as verify evidence (`quality.checks` → `run_quality_checks.py`); staged-diff size and empty-commit policy in `check-commit --staged`; documentation framing of an explicit “honest limits” table, a glossary, and theme-aware SVG diagrams in the README |
+| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | Idea that a gate must block linter/test bypass patterns (`check-suppressions`); project-configured commands run as verify evidence (`quality.checks` → `run_quality_checks.py`); staged-diff size and empty-commit policy in `check-commit --staged`; documentation framing of an explicit “honest limits” table, a glossary, and proxy-safe README diagrams (SMIL animation on GitHub) |
 
 No code or SVG asset from `loopgate_harness` is vendored. Our `.assets/*.svg` files are hand-written for this project; the borrowed part is the presentation approach (inline CSS for light/dark, diagram-per-section) and the enforcement ideas above.
 

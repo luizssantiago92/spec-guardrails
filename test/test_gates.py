@@ -1315,6 +1315,44 @@ class ProjectConfigTest(unittest.TestCase):
             config = _project_config.load_project_config()
         self.assertEqual(config["quality"]["checks"], ["npm test", "npm run lint"])
 
+    def test_load_project_config_respects_cwd_argument(self):
+        config_dir = self.root / ".specs"
+        config_dir.mkdir(parents=True, exist_ok=True)
+        (config_dir / "config.yaml").write_text(
+            "commit:\n  max_staged_lines: 42\n",
+            encoding="utf-8",
+        )
+        other = self.root / "other"
+        other.mkdir()
+        config = _project_config.load_project_config(self.root)
+        self.assertEqual(config["commit"]["max_staged_lines"], 42)
+
+
+class CheckCommitStagedTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.root = Path(self.tmp.name)
+        subprocess.run(["git", "init", "--quiet"], cwd=self.root, check=True)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_blocks_empty_commit(self):
+        report = check_commit.build_staged_report(self.root)
+        self.assertFalse(report.passed)
+
+    def test_uses_max_staged_lines_from_cwd_config(self):
+        config_dir = self.root / ".specs"
+        config_dir.mkdir(parents=True, exist_ok=True)
+        (config_dir / "config.yaml").write_text(
+            "commit:\n  max_staged_lines: 1\n",
+            encoding="utf-8",
+        )
+        (self.root / "big.txt").write_text("line1\nline2\n", encoding="utf-8")
+        subprocess.run(["git", "add", "big.txt"], cwd=self.root, check=True)
+        report = check_commit.build_staged_report(self.root)
+        self.assertFalse(report.passed)
+
 
 class QualityChecksTest(unittest.TestCase):
     def setUp(self):

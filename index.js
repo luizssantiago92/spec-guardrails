@@ -101,7 +101,7 @@ Commands:
     [--no-roadmap]                   Skip ROADMAP update
     [--no-domain]                    Skip domain spec merge
     [--no-state]                     Skip STATE reset
-  classify-change [desc] [files...]  Heuristic complexity tier (quick/simple/medium/complex)
+  classify-change <desc> [files...]  Heuristic complexity tier (quick/simple/medium/complex)
     [--json]                         Machine-readable output
   feature-status [feature]           Artifact checklist + next step for a feature
     [--json]                         Machine-readable output
@@ -872,9 +872,6 @@ if (command === "--version" || command === "-v" || command === "version") {
       process.stdout.write(formatExplorationStatus(status, { json }));
     } else if (sub === "validate") {
       const featureId = rest[0];
-      if (!featureId) {
-        throw new Error("Usage: solution-explore validate <feature>");
-      }
       const result = await validateExplorationArtifact(cwd, featureId);
       process.stdout.write(formatExplorationValidation(result, { json }));
       if (!result.ok) {

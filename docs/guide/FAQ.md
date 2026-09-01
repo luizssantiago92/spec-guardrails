@@ -29,7 +29,7 @@ Both are intentional product modes. See [Guarantees matrix](Guarantees-matrix.md
 
 **Any** agent that reads repo instructions, edits files, and can run shell commands can use the **core** (`.specs/`, hub content, CLI, Python gates in Brakes mode).
 
-**Install** ships **adapters** for **Cursor, Claude Code, GitHub Copilot, and OpenAI Codex** (skills trees + always-on entry files), plus root `AGENTS.md` for other agents. See [Platform parity](Platform-parity.md).
+**Install** supports **Cursor, Claude Code, GitHub Copilot, and OpenAI Codex**. By default it detects your platform and writes **one** skill tree plus that platform's adapter entry file; use `install --all-platforms` when the repo serves multiple agents. Root `AGENTS.md` is installed for Codex and as an open-standard entry. See [Platform parity](Platform-parity.md).
 
 ## Is this a framework or a product I run in production?
 

@@ -1,7 +1,6 @@
 # Spec Guardrails
 
 [![npm version](https://img.shields.io/npm/v/@luizsantiago/spec-guardrails.svg)](https://www.npmjs.com/package/@luizsantiago/spec-guardrails)
-[![npm downloads](https://img.shields.io/npm/dm/@luizsantiago/spec-guardrails.svg)](https://www.npmjs.com/package/@luizsantiago/spec-guardrails)
 [![CI](https://github.com/luizssantiago92/spec-guardrails/actions/workflows/ci.yml/badge.svg)](https://github.com/luizssantiago92/spec-guardrails/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
@@ -39,7 +38,9 @@ npx @luizsantiago/spec-guardrails install
 npx @luizsantiago/spec-guardrails doctor
 ```
 
-`install` writes the phase guides for your agent and creates the `.specs/` folder. Re-run it after upgrading the package — your existing `.specs/` notes are preserved. After that, you work in **agent chat**, not in the terminal; the agent calls the CLI and checks when needed.
+`install` writes the phase guides for your agent and creates the `.specs/` folder. By default it detects your platform (Cursor, Claude Code, Copilot, or Codex) and installs **one** skill tree plus that platform's adapter entry file. Existing trees are preserved when you switch IDEs. Use `install --all-platforms` for every tree, or `install --platform <id>` to force one.
+
+Re-run `install` after upgrading the package — your existing `.specs/` notes are preserved. After that, you work in **agent chat**, not in the terminal; the agent calls the CLI and checks when needed.
 
 | Requirement | Role |
 | --- | --- |
@@ -139,7 +140,7 @@ Automatic checks at step boundaries — each one blocks a specific kind of short
 | `validate-traceability` | REQ → task → proof chain is broken |
 | `validate-state` | Feature is declared done without evidence |
 | `validate-quick` | Quick-mode fix broke its size or shape rules |
-| `check-commit` | Commit message does not follow the agreed format |
+| `check-commit` | Commit message is not conventional, staged diff is empty, or exceeds `commit.max_staged_lines` |
 | `check-suppressions` | Staged diff adds `# noqa`, `eslint-disable`, `@ts-ignore`, skipped tests, or `--no-verify` |
 | `quality-checks` | Configured project commands (`npm test`, …) fail during `/verify` |
 | `lessons` | A failed verify tries to skip the lesson step |
@@ -235,7 +236,7 @@ Spec Guardrails adapts patterns from open-source work. These are the projects wh
 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT | Design-discussion patterns and definition-of-done framing |
 | [graph-engineering](https://github.com/codejunkie99/graph-engineering) | MIT | Task-graph rules behind safe parallel waves |
 | [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Wave-based execution model |
-| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | Suppression-bypass blocking, project-configured quality commands as verify evidence, honest-limits and theme-aware diagram presentation |
+| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | Suppression-bypass blocking, project-configured quality commands as verify evidence, honest-limits framing, and README diagram layout (proxy-safe SVG; SMIL animation on GitHub) |
 
 Everything else — the CLI, the Python checks, the platform adapters, and the requirements-analysis phase — is original work in this repository. Full lineage, including references we cite but do not bundle: [Credits and lineage](docs/guide/credits.md).
 

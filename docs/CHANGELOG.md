@@ -6,6 +6,29 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.5.2 — Docs sync, config fixes, honest README
+
+### Fixed
+
+- **`load_project_config(cwd)`** — `check-commit`, `check-suppressions`, and `quality-checks` read `.specs/config.yaml` from the `--cwd` repository, not the shell working directory
+- **`templates/config.yaml.example`** — `suppressions.patterns` aligned with all nine runtime defaults (the old example weakened enforcement when copied)
+- **`solution-explore validate`** — optional `[feature]` resolves the active feature from `STATE.md`, matching USAGE and `lib/solution-exploration.js`
+- **`analyze_artifacts.py`** — `git branch` subprocess uses UTF-8 decoding on Windows
+- **Install message** — warns “Python 3.10+ not found” instead of “Python 3 not found”
+- **Hub** — Verify lists `validate_traceability.py`; Quick tier lists `check_suppressions.py`
+- **`check-suppressions`** — removed no-op `--strict` flag (this gate only emits blocking errors)
+
+### Changed
+
+- **Docs** — README, Quick start, Overview, FAQ, Platform parity, gates pipeline, and agent commands describe platform-aware `install` (one tree by default since 4.4) and 4.5.0+ gates; credits no longer claim “theme-aware” SVGs
+- **README badges** — removed monthly npm download counter (`npm/dm`); it measures npm installs per month, not GitHub repo popularity, and is easy to misread on a young package
+- **`classify-change` USAGE** — documents `<desc>` as required, matching the CLI handler
+- **`run_quality_checks.py` docstring** — exit codes match implementation (0 pass/skip, 1 fail)
+
+### Added
+
+- **Tests** — `load_project_config(cwd)`, staged-commit policy, and adversarial cases for suppression bypass and empty commits
+
 ## 4.5.1 — Gate encoding fix + attribution
 
 ### Fixed

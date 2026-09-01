@@ -3,6 +3,8 @@
 Plain-language guides for **Spec Guardrails 4.7.x**.  
 **New here?** Read **[Overview](Overview.md)** first, then [Quick start](Quick-start.md).
 
+The npm [README](../../README.md) summarizes the product in four pillars — **SDD**, **Gates**, **Memory**, and optional **Python Platform** — with links back here for depth.
+
 ---
 
 ## Learn the basics

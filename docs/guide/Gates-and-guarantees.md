@@ -12,11 +12,11 @@ These guarantees are locked for the **0.7.x** line onward unless a major revises
 
 | Guarantee | What it means in practice |
 |-----------|---------------------------|
-| **Hub + sisters always install** | Planning, building, and checking aren’t optional pieces of the kit (hub + eight sister skills). |
+| **Hub + sisters always install** | Planning, building, and checking aren’t optional pieces of the kit (hub + **ten** sister skills, including `python-devops` and `ai-engineering` since 4.7). |
 | **Specify before Verify** | You can’t “finish” without a written plan the gates can check against. |
 | **`.specs/` is the memory** | Plans and status live in the repo, not only in chat. |
 | **Structural gates stay on** | Thin specs, missing task fields, open task checkboxes, and missing evidence *citations* fail the gate. |
-| **Conditional sisters** | Extra reviews (security, QA, simplify, ship) load only when you ask—and **one at a time**. |
+| **Conditional sisters** | Extra reviews (security, QA, simplify, ship, platform infra/AI) load only when paths or tier match — **one at a time** for AppSec/QA. |
 | **Python gate scripts stay frozen** | The automated checker’s behavior doesn’t drift casually. |
 
 Full freeze text: [ADR 0001](../adr/0001-harness-freeze-v0.7.md).
@@ -42,6 +42,7 @@ Same checks the agent should run — from your shell after install:
 ```bash
 npx @luizsantiago/spec-guardrails validate-spec auth
 npx @luizsantiago/spec-guardrails validate-traceability auth
+npx @luizsantiago/spec-guardrails validate-ship-surface auth   # when infra/AI paths in tasks
 npx @luizsantiago/spec-guardrails check-commit --message "feat(auth): add token refresh"
 npx @luizsantiago/spec-guardrails lessons list --status confirmed
 ```
@@ -50,10 +51,11 @@ npx @luizsantiago/spec-guardrails lessons list --status confirmed
 | --- | --- |
 | `validate-spec` | Thin or incomplete written goals |
 | `validate-traceability` | REQ missing from tasks or from validation coverage lines |
+| `validate-ship-surface` | Infra/AI task paths without Ship/AI Surface in `design.md` |
 | `check-commit` | Sloppy commit titles |
 | `lessons list --status confirmed` | Nothing broken — lists hard-won rules to reuse |
 
-Fail → fix the file → re-run. Full reject lists: [Gates reference](gates.md) · [README kit inventory](https://github.com/luizssantiago92/spec-guardrails#what-is-inside-the-kit).
+Fail → fix the file → re-run. Full reject lists: [Gates reference](gates.md) · [README kit inventory](https://github.com/luizssantiago92/spec-guardrails#kit-inventory).
 
 
 ## What the gate **does not** fully enforce

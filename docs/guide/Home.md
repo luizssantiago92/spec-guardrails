@@ -24,6 +24,7 @@ Works with **Cursor, Claude Code, Copilot, Codex**, and other agents. See [Platf
 | [Requirements analysis](requirements-analysis.md) | Structured Q&A before Specify when the request is vague |
 | [How it works](How-it-works.md) | Story from idea to archive |
 | [Memory](Memory.md) | `.specs/` memory and search — when and how much |
+| [Python platform](python-platform.md) | Backend + DevOps + AI preset (4.7+) — Ship/AI Surface |
 
 ---
 
@@ -71,7 +72,9 @@ Full list: [Agent commands](agent-commands.md)
 | Topic | Doc |
 | --- | --- |
 | Product promises | [Guarantees matrix](Guarantees-matrix.md) |
-| Every gate | [Gates](gates.md) |
+| Every gate (12) | [Gates](gates.md) |
+| Python platform | [python-platform.md](python-platform.md) · [Tutorial 04](tutorials/04-python-platform-ship-surface.md) |
+| Ecosystem | [ecosystem.md](ecosystem.md) |
 | Architecture | [Architecture](Architecture.md) |
 | FAQ | [FAQ](FAQ.md) |
 | Version history | [CHANGELOG](../CHANGELOG.md) · [Product history](Product-history.md) |

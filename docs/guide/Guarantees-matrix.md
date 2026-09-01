@@ -41,8 +41,11 @@ Run `npx @luizsantiago/spec-guardrails doctor` to see whether Brakes (Python) ar
 | Verification is independent | fresh-context `/verify` + `validate.md` | Process | Phase skill (not exit-code) |
 | Knowledge survives chats | `.specs/` + `archive-feature` | Process | Install + CLI |
 | Failures become reusable rules | `lessons` | Brakes | Hard gate (post-verify FAIL) |
+| Deploy/AI surfaces documented when paths match *(4.7+, optional preset)* | `validate-ship-surface` | Brakes | Hard gate (structural — Ship/AI fields in `design.md` only) |
 
 **Brakes rows** follow the frozen contract in [ADR 0001](../adr/0001-harness-freeze-v0.7.md). Loosening them requires a major and an explicit ADR — not a docs tweak.
+
+`validate-ship-surface` is **additive** (minor 4.7): it runs only when task `Files` match infra/AI globs from config. Repos without `python-platform` are unaffected until they opt in. See [python-platform.md](python-platform.md).
 
 ## Phase flow (guarantees at boundaries)
 
@@ -81,6 +84,8 @@ These stay in **guides** (judgment and authoring quality), not in exit codes:
 | Conversation depth before coding | Process habit — skills teach it; no chat checksum |
 | Perfect task graphs | Templates + guidance; not a full dependency engine |
 | Product taste and security nuance | Humans and conditional sisters (AppSec, QA) still matter |
+| Deploy safety or eval quality | `validate-ship-surface` checks that Ship/AI fields exist — not that rollback works or evals are good |
+| Live LLM traces in production | Git contracts + `/verify` only — see [ecosystem.md](ecosystem.md) |
 
 **Rule of thumb:** if it is not in the matrix (or the Brakes freeze), do not promise users that Spec Guardrails “guarantees” it.
 

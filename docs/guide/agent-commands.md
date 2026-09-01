@@ -246,6 +246,7 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `doctor [path]` | Install readiness score + Execute hint; banners if Python is missing |
 | `classify-change "desc" [files…]` | Heuristic complexity tier (`--json` optional) |
 | `feature-status [feature]` | Artifacts present, task counts, next recommended gate |
+| `feature-overview [feature] [--write]` | REQ → task → evidence dashboard; `--write` saves `overview.md` |
 | `validate-traceability [feature]` | REQ → tasks → validation coverage chain |
 | `validate-quick [quick-folder]` | Quick-mode structural gate |
 | `phase-context <phase>` | Print `.specs/config.yaml` rules for a phase |

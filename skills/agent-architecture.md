@@ -67,6 +67,7 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | Quick mode evidence | `python3 .specs/guardrails/scripts/validate_quick.py [feature]` |
 | After Verify PASS | `npx @luizsantiago/spec-guardrails archive-feature [feature]` (Tier 0) |
 | Before a phase procedure (optional) | `npx @luizsantiago/spec-guardrails phase-context <phase>` |
+| Feature dashboard (human-readable) | `npx @luizsantiago/spec-guardrails feature-overview [feature] [--write]` |
 | After a FAIL verdict | `python3 .specs/guardrails/scripts/lessons.py add --source .specs/features/[feature]/validation.md` |
 
 Gates accept a feature name, a feature directory, or a path to the artifact. With no argument they auto-detect when the project has exactly one feature; with several they list candidates and exit 2. A spec is rejected unless every criterion uses `SHALL` or `MUST` and `## Assumptions` is present.

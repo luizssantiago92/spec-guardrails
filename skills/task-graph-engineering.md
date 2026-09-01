@@ -72,6 +72,7 @@ The shape serious systems converge to for splittable work:
 | --- | --- | --- |
 | Plan | Single planner | Produces `tasks.md` + `task-graph.md` |
 | Workers | 1–3 parallel agents | Disjoint file ownership only |
+| Batch review | Orchestrator (two stages) | Spec compliance, then code quality — before merge |
 | Verify | Fresh verifier context | Never the code author |
 | Merge | One merge owner | Resolves conflicts, runs harness |
 | Result | Commits + evidence | Handoff to `/archive` when done |

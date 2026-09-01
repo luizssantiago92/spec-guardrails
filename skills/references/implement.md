@@ -64,8 +64,9 @@ loop-plan → dispatch (parallel sub-agents | inline) → merge → loop-plan �
 2. **Dispatch**
    - **Parallel group (2+ tasks):** one sub-agent per task with the worker brief in `sub-agents.md`. Cap at 3 workers + 1 verifier (see `task-graph-engineering.md`).
    - **Single task:** run the per-task cycle below inline (or as sole worker).
-3. **Merge** — After a parallel round, confirm every task is `[x]`, commits exist, and the project harness passes once on the integrated tree.
-4. **Repeat** — Run `loop-plan` again until all tasks are complete, then close Execute.
+3. **Two-stage batch review** — After workers return and before merge, the orchestrator reviews each batch twice (see `sub-agents.md`): spec compliance, then code quality. Do not merge until both pass.
+4. **Merge** — Confirm every task is `[x]`, commits exist, and the project harness passes once on the integrated tree.
+5. **Repeat** — Run `loop-plan` again until all tasks are complete, then close Execute.
 
 Do not start the next wave until the current wave is fully committed. Parallelism is **inside** a wave only when `Files` do not overlap.
 
@@ -194,8 +195,9 @@ docs(spec): record validation report for auth
 When the last task is complete:
 
 1. Run the full project harness once more (tests, linter, build).
-2. Trigger `/verify` with a fresh context — mandatory, never prompted. See `validate.md`.
-3. Do not declare the feature done until `validate_state.py` passes.
+2. Refresh the feature dashboard: `npx @luizsantiago/spec-guardrails feature-overview [feature] --write` (writes `overview.md`).
+3. Trigger `/verify` with a fresh context — mandatory, never prompted. See `validate.md`.
+4. Do not declare the feature done until `validate_state.py` passes.
 
 ## Next
 

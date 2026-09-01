@@ -21,6 +21,7 @@ Where Spec Guardrails sits among harness, loop, and graph engineering — and wh
 | Fresh verify (Process + Brakes) | `references/validate.md`, independent context |
 | Brownfield onboarding | `project-init`, `PROJECT.md`, domain stubs |
 | Readiness audit | `doctor` |
+| Feature dashboard | `feature-overview` → `overview.md` (REQ → task → evidence) |
 | Agent-agnostic core | `.specs/` + CLI + gates; [Architecture](Architecture.md) |
 
 ## Adjacent projects (curated)
@@ -34,6 +35,16 @@ Where Spec Guardrails sits among harness, loop, and graph engineering — and wh
 | [awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | Curated index | Taxonomy reference |
 | [DeepCode](https://github.com/HKUDS/DeepCode) | Full agent runtime | Adjacent product |
 | [RepoGraph](https://github.com/ozyyshr/RepoGraph) | Repo-level code graph | Optional brownfield context (not bundled) |
+| [github/spec-kit](https://github.com/github/spec-kit) | Official SDD CLI + integrations | Same problem space — we add Brakes gates and `.specs/` memory; see [tutorials](tutorials/README.md) |
+| [dceoy/speckit-agent-skills](https://github.com/dceoy/speckit-agent-skills) | Spec Kit skills + CI regeneration | Reference for multi-platform skill trees |
+| [alfredoperez/speckit-companion](https://github.com/alfredoperez/speckit-companion) | VS Code spec workspace UI | Complementary — we ship `feature-overview` markdown instead |
+| [obra/superpowers](https://github.com/obra/superpowers) | Auto-trigger skills + subagent workflow | Two-stage batch review pattern adapted in `sub-agents.md` |
+| [anthropics/skills](https://github.com/anthropics/skills) · [google/skills](https://github.com/google/skills) | Agent Skills standard + catalogs | Portable `SKILL.md` format; scan third-party packs with SkillSpector |
+| [NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) | Skill security scanner | Recommended before installing untrusted skills — see `security-review.md` |
+| [NVIDIA/SkillEvaluator](https://github.com/NVIDIA/skillevaluator) | Skill publication eval harness | Complementary QA for skill authors |
+| [coze-dev/coze-loop](https://github.com/coze-dev/coze-loop) | Agent ops platform (eval, traces, prompts) | Adjacent — runtime observability, not repo-local SDD |
+| [kkawailab/speckit-tutorial](https://github.com/kkawailab/speckit-tutorial) | Progressive Spec Kit tutorials | External onboarding reference |
+| [Shubhamsaboo/awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) | Curated LLM app index | Discovery only |
 
 ## What we are not building
 

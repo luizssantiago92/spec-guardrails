@@ -69,6 +69,23 @@ Every worker returns this shape — no narrative dump:
 - Blockers: none | [gate output excerpt]
 ```
 
+## Two-stage batch review (orchestrator)
+
+After workers return and **before** merge, the orchestrator runs both stages. Workers do not self-certify merge readiness.
+
+| Stage | Question | Evidence |
+| --- | --- | --- |
+| **1 — Spec compliance** | Does each commit satisfy its task `Done when` and the REQ IDs on that task? | Re-read task blocks + diff; compare to spec criteria |
+| **2 — Code quality** | Is the integrated harness green, free of new suppressions, and scoped to task `Files`? | Project harness + `check_suppressions.py` on staged diff |
+
+| Outcome | Action |
+| --- | --- |
+| Stage 1 FAIL | Send worker back, or rewrite the task — do not merge |
+| Stage 2 FAIL | Fix or revert before merge — do not weaken tests |
+| Both PASS | Merge owner integrates worktrees, runs harness once, proceeds |
+
+Pattern adapted from [Superpowers subagent-driven-development](https://github.com/obra/superpowers) — compliance before polish.
+
 ## Failure handling
 
 | Event | Action |

@@ -25,6 +25,10 @@ import {
   savePolicyState,
 } from "./lib/execution-policy.js";
 import { featureInit } from "./lib/feature.js";
+import {
+  featureOverview,
+  formatFeatureOverview,
+} from "./lib/feature-overview.js";
 import { featureStatus, formatFeatureStatus } from "./lib/feature-status.js";
 import { GATE_COMMANDS, AUX_COMMANDS, runGate, runGuardrailsScript } from "./lib/gates.js";
 import { install } from "./lib/install.js";
@@ -105,6 +109,9 @@ Commands:
     [--json]                         Machine-readable output
   feature-status [feature]           Artifact checklist + next step for a feature
     [--json]                         Machine-readable output
+  feature-overview [feature]           REQ → task → evidence dashboard (markdown)
+    [--write]                        Save .specs/features/<feature>/overview.md
+    [--json]                         Machine-readable output (no markdown body)
   phase-context <phase>              Print .specs/config.yaml context + rules for a phase
   doctor [path]                      Audit guardrails readiness (score + next actions)
     [--json]                         Machine-readable output
@@ -1074,6 +1081,33 @@ if (command === "--version" || command === "-v" || command === "version") {
       console.log(JSON.stringify(status, null, 2));
     } else {
       process.stdout.write(formatFeatureStatus(status));
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "feature-overview") {
+  try {
+    let json = false;
+    let write = false;
+    const positional = [];
+    for (const arg of args) {
+      if (arg === "--json") {
+        json = true;
+      } else if (arg === "--write") {
+        write = true;
+      } else {
+        positional.push(arg);
+      }
+    }
+    const overview = await featureOverview(positional[0], { write });
+    if (json) {
+      console.log(JSON.stringify(overview, null, 2));
+    } else {
+      process.stdout.write(formatFeatureOverview(overview));
+      if (overview.writtenTo) {
+        process.stderr.write(`\nWrote ${overview.writtenTo}\n`);
+      }
     }
   } catch (err) {
     console.error(`❌ ${err.message}`);

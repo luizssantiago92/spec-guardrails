@@ -85,6 +85,7 @@ More gates (tasks, loop-plan, “are we actually done?”): [Gates reference](ga
 
 ## Next
 
+- **Hands-on paths** → [Tutorials](tutorials/README.md) (Quick → Medium → Parallel)
 - **Full picture** → [Overview](Overview.md)  
 - Save money on context → [Token efficiency](Token-efficiency.md)  
 - Common questions → [FAQ](FAQ.md)  

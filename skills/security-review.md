@@ -26,6 +26,22 @@ For changes with **no** auth, API, user input, payments, or infrastructure impac
 
 Full OWASP checklist remains mandatory for anything touching auth, data, APIs, or infra.
 
+## Third-party agent skills (supply chain)
+
+Spec Guardrails ships skills you install with `npx @luizsantiago/spec-guardrails install`. When adding **other** skill packs from GitHub, marketplaces (`skills.sh`, plugin stores), or zip files:
+
+1. **Read before trust** — inspect `SKILL.md` and any bundled scripts; skills run with agent privileges.
+2. **Scan when risk is non-trivial** — use [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) for static (and optional LLM) analysis before install:
+
+   ```bash
+   skillspector scan https://github.com/user/some-skill --no-llm
+   ```
+
+3. **Prefer signed catalogs** — NVIDIA Verified Skills and official plugin marketplaces reduce supply-chain risk; still review high-privilege skills.
+4. **Never bypass Brakes** — third-party skills do not replace Spec Guardrails gates (`check-suppressions`, `validate-state`, …).
+
+For publication-quality skill evaluation (overlap detection, live agent eval), see [SkillEvaluator](https://github.com/NVIDIA/SkillEvaluator) — complementary to this package, not a replacement.
+
 ## Pre-Review Setup
 
 - Verifier must have **clean context** (not the code author).

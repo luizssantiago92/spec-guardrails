@@ -28,10 +28,12 @@ Updated `tasks.md` with new tasks for uncovered work (append only — do not rew
 
 1. **Re-read the spec** — list every REQ and whether tests exist for its outcome.
 2. **Audit the diff** — files changed outside task `Files` fields are scope drift or missing tasks.
-3. **Run analyze** — `analyze_artifacts.py [feature]`.
-4. **Append tasks** for gaps using the standard task template in `tasks.md`.
-5. **Update STATE** Next Step to the first open task.
-6. **Commit** `.specs/` changes (Tier 0) — no push.
+3. **Living-spec drift (lightweight)** — when `domains/<slug>/spec.md` exists, spot-check that files still match declared globs or modules; append a task if production code moved without updating domain memory.
+4. **Run analyze** — `analyze_artifacts.py [feature]`.
+5. **Append tasks** for gaps using the standard task template in `tasks.md`.
+6. **Refresh dashboard** — `npx @luizsantiago/spec-guardrails feature-overview [feature] --write`.
+7. **Update STATE** Next Step to the first open task.
+8. **Commit** `.specs/` changes (Tier 0) — no push.
 
 ## Rules
 

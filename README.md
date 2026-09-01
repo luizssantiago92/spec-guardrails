@@ -10,7 +10,7 @@
 
 Spec Guardrails installs a working method into your repository: the agent writes down what it is going to build, gets your approval, implements in small waves, and proves the result before calling it done. Nothing about your stack changes — you get written requirements, a task plan, and verification evidence stored as files in the project.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.5.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.6.x**
 
 ---
 
@@ -60,7 +60,7 @@ In short: Python turns "trust the agent" into "the agent has to prove it."
 
 Which checks exist and what each one requires: [Gates](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md)
 
-Read more: [Quick start](docs/guide/Quick-start.md) · [Platform parity](docs/guide/Platform-parity.md) · [CHANGELOG](docs/CHANGELOG.md)
+Read more: [Quick start](docs/guide/Quick-start.md) · [Tutorials](docs/guide/tutorials/README.md) · [Platform parity](docs/guide/Platform-parity.md) · [CHANGELOG](docs/CHANGELOG.md)
 
 ---
 

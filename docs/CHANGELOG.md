@@ -6,6 +6,21 @@ Version history for `@luizsantiago/spec-guardrails`. Upgrade steps: [Migration](
 
 —
 
+## 4.6.0 — Tutorials, feature dashboard, subagent review
+
+### Added
+
+- **`feature-overview`** — CLI dashboard (REQ → task → test evidence); `--write` saves `.specs/features/<feature>/overview.md`
+- **Tutorials** — three progressive guides: Quick fix, Medium feature, Parallel worktrees (`docs/guide/tutorials/`)
+- **Two-stage batch review** — spec compliance then code quality before merging parallel worker batches (`implement.md`, `sub-agents.md`, `task-graph-engineering.md`)
+- **Third-party skill supply chain** — SkillSpector guidance in `security-review.md`
+- **Ecosystem map** — Spec Kit, Superpowers, SkillSpector, Coze Loop, anthropics/google skills catalogs
+
+### Changed
+
+- **Converge** — lightweight living-spec drift check + refresh `overview.md` after gap analysis
+- **Hub** — documents `feature-overview` in the deterministic gates table
+
 ## 4.5.2 — Docs sync, config fixes, honest README
 
 ### Fixed

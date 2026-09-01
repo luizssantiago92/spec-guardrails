@@ -55,7 +55,7 @@ npx @luizsantiago/spec-guardrails lessons list --status confirmed
 | `check-commit` | Sloppy commit titles |
 | `lessons list --status confirmed` | Nothing broken — lists hard-won rules to reuse |
 
-Fail → fix the file → re-run. Full reject lists: [Gates reference](gates.md) · [README kit inventory](https://github.com/luizssantiago92/spec-guardrails#kit-inventory).
+Fail → fix the file → re-run. Full reject lists: [Gates reference](gates.md) · [README — Install & gates](https://github.com/luizssantiago92/spec-guardrails#install).
 
 
 ## What the gate **does not** fully enforce

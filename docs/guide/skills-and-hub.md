@@ -66,7 +66,7 @@ Loaded **one per turn** (plus hub). Each file is a step-by-step procedure.
 
 **Conditional rule:** load **at most one** conditional sister at a time for Verify extras (AppSec, QA). Sequence: AppSec → drop → QA → drop. Platform sisters (`python-devops`, `ai-engineering`) load during Design/Tasks/Execute when paths match — never together with AppSec/QA in the same window.
 
-**Install set:** hub + **10** sister skills + **19** phase references — see [README kit inventory](https://github.com/luizssantiago92/spec-guardrails#kit-inventory).
+**Install set:** hub + **10** sister skills + **19** phase references — see [README](https://github.com/luizssantiago92/spec-guardrails#spec-driven-development-sdd) and [Skills and hub](skills-and-hub.md) (this page).
 
 ## Always-on project rule
 

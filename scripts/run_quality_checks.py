@@ -14,7 +14,7 @@ Configure under:
         - npm test
         - npm run lint
 
-Exit codes: 0 all passed, 1 one or more failed, 2 usage/config error.
+Exit codes: 0 all passed or skipped (no checks configured), 1 one or more failed.
 """
 
 from __future__ import annotations
@@ -61,7 +61,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     cwd = Path(args.cwd).resolve()
-    checks = load_project_config().get("quality", {}).get("checks") or []
+    checks = load_project_config(cwd).get("quality", {}).get("checks") or []
 
     if not checks:
         message = {

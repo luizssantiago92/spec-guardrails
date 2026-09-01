@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-CONFIG_PATH = Path(".specs/config.yaml")
+CONFIG_RELATIVE = Path(".specs") / "config.yaml"
 
 DEFAULT_SUPPRESSION_PATTERNS = [
     r"#\s*noqa\b",
@@ -20,6 +20,11 @@ DEFAULT_SUPPRESSION_PATTERNS = [
 ]
 
 DEFAULT_MAX_STAGED_LINES = 500
+
+
+def config_path(cwd: Path | str | None = None) -> Path:
+    root = Path(cwd) if cwd is not None else Path.cwd()
+    return root / CONFIG_RELATIVE
 
 
 def _parse_scalar(raw: str):
@@ -52,7 +57,7 @@ def _parse_list_block(lines: list[str], start_index: int, parent_indent: int) ->
     return items, index
 
 
-def load_project_config() -> dict:
+def load_project_config(cwd: Path | str | None = None) -> dict:
     """Return quality, suppressions, and commit policy blocks with defaults."""
 
     config = {
@@ -61,14 +66,13 @@ def load_project_config() -> dict:
         "commit": {"max_staged_lines": DEFAULT_MAX_STAGED_LINES},
     }
 
-    if not CONFIG_PATH.is_file():
+    path = config_path(cwd)
+    if not path.is_file():
         return config
 
-    lines = CONFIG_PATH.read_text(encoding="utf-8").splitlines()
+    lines = path.read_text(encoding="utf-8").splitlines()
     section = None
     section_indent = 0
-    subsection = None
-    subsection_indent = 0
 
     index = 0
     while index < len(lines):
@@ -83,27 +87,23 @@ def load_project_config() -> dict:
         if stripped == "quality:":
             section = "quality"
             section_indent = indent
-            subsection = None
             index += 1
             continue
 
         if stripped == "suppressions:":
             section = "suppressions"
             section_indent = indent
-            subsection = None
             index += 1
             continue
 
         if stripped == "commit:":
             section = "commit"
             section_indent = indent
-            subsection = None
             index += 1
             continue
 
         if section and indent <= section_indent and not stripped.endswith(":"):
             section = None
-            subsection = None
 
         if section == "quality" and stripped == "checks:":
             items, index = _parse_list_block(lines, index + 1, indent)

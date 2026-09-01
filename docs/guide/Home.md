@@ -33,6 +33,8 @@ Works with **Cursor, Claude Code, Copilot, Codex**, and other agents. See [Platf
 npx @luizsantiago/spec-guardrails install
 ```
 
+By default this installs **one** platform tree (auto-detected). Use `install --all-platforms` when the repo serves multiple agents.
+
 Optional: `npx @luizsantiago/spec-guardrails doctor`
 
 **Node 18+** required. **Python 3.10+** is optional — same process with or without it; Python adds automatic proof at each step (see [FAQ → Process vs Brakes](FAQ.md#process-vs-brakes)).

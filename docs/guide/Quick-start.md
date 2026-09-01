@@ -8,7 +8,7 @@ In your project folder (not in the Spec Guardrails source repo):
 
     npx @luizsantiago/spec-guardrails install
 
-You should see skills land in **four adapter trees** (Cursor, Claude, Copilot, Codex), plus root `AGENTS.md`, a `.specs/` folder, and Python gate scripts for **Brakes mode**.
+You should see skills land in **your detected platform tree** (for example `.cursor/skills/` in Cursor), that platform's adapter entry file, a `.specs/` folder, and Python gate scripts for **Brakes mode**. Multi-agent repos can use `install --all-platforms`; see [Platform parity](Platform-parity.md).
 
 Optional sanity check:
 

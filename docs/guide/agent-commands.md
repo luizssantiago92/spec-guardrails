@@ -179,7 +179,7 @@ Implement approved tasks — test-first, one commit per task, gates between step
 
 1. `loop-plan [feature]` — next wave + parallel groups
 2. **Parallel group (2+ tasks):** `workspace-prepare [feature] --tasks T1,T2` → dispatch sub-agents (you confirm) per `sub-agents.md`; each worker uses its git worktree under `.specs/workspaces/`
-3. **Single task:** test first → implement → gate → `check-commit` → mark `[x]` in `tasks.md`
+3. **Single task:** test first → implement → `check-suppressions` → `check-commit` → mark `[x]` in `tasks.md`
 4. Before touching files: `execution-policy check-path <path>` when scope is configured in `.specs/config.yaml`
 5. On gate retry: `execution-policy record-retry Tn` (respects `max_retries_per_task`)
 6. Merge after parallel rounds; `workspace-cleanup [feature] --force`; repeat until done → `/verify`
@@ -194,7 +194,8 @@ Prove the spec was met — with test `file:line` evidence, not self-report. Veri
 
 1. Drafts `validation.md` with coverage lines
 2. Runs `validate-traceability` (REQ → tasks → coverage)
-3. Runs `validate-state` (PASS verdict, evidence, sensor on Medium+)
+3. Runs `quality-checks` when `quality.checks` is configured in `.specs/config.yaml`
+4. Runs `validate-state` (PASS verdict, evidence, sensor on Medium+)
 
 **Never skip** (except Quick tier uses a lighter path inside `quick-mode.md` + `validate-quick`).
 

@@ -59,7 +59,7 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | Retrieve related context | `npx @luizsantiago/spec-guardrails memory-retrieve "<query>"` |
 | Rebuild / embed memory index | `npx @luizsantiago/spec-guardrails memory-index rebuild` · `memory-index embed` |
 | On gate retry (Execute playbook) | `npx @luizsantiago/spec-guardrails execution-policy record-retry Tn` |
-| On each commit | `python3 .specs/guardrails/scripts/check_commit.py --message "<message>"` |
+| On each commit | `python3 .specs/guardrails/scripts/check_commit.py --message "<message>"` · `check_commit.py --staged` |
 | Before each commit (staged diff) | `python3 .specs/guardrails/scripts/check_suppressions.py` |
 | During Verify, when `quality.checks` is configured | `python3 .specs/guardrails/scripts/run_quality_checks.py` |
 | Before declaring a feature done | `python3 .specs/guardrails/scripts/validate_state.py [feature]` |
@@ -92,11 +92,11 @@ EXPLORE (optional) → ELICIT (optional) → SPECIFY → DISCUSS (conditional) �
 | **Tasks** | No | `references/tasks.md` | `task-graph-engineering.md` | `validate_tasks.py` |
 | **Analyze** | Before task approval | `references/analyze.md` | — | `analyze_artifacts.py` |
 | **Execute** | Yes | `references/implement.md` | `engineering-standards.md` | `check_commit.py`, `check_suppressions.py` |
-| **Verify** | Yes | `references/validate.md` | `security-review.md` | `validate_state.py`, `run_quality_checks.py` |
+| **Verify** | Yes | `references/validate.md` | `security-review.md` | `validate_traceability.py`, `validate_state.py`, `run_quality_checks.py` |
 | **Archive** | After Verify PASS | `references/archive.md` | `git-handoff.md` | `archive-feature` |
 | **Converge** | On drift | `references/converge.md` | — | `analyze_artifacts.py` |
 | **Handoff** | Yes | `references/memory.md` | `git-handoff.md` | — |
-| **Quick** | Alternative | `references/quick-mode.md` | — | `check_commit.py`, `validate_quick.py` |
+| **Quick** | Alternative | `references/quick-mode.md` | — | `check_commit.py`, `check_suppressions.py`, `validate_quick.py` |
 | **Context** | Always | `references/context-limits.md` | — | — |
 | **Sub-agents** | When batched | `references/sub-agents.md` | `task-graph-engineering.md` | — |
 | **Solution exploration** | Explicit fork | `references/solution-exploration.md` | — | `solution-explore validate` |
@@ -121,7 +121,7 @@ Complexity determines depth. Do not run every phase on every change.
 
 | Tier | Scope | Path |
 | --- | --- | --- |
-| **Quick** | ≤3 files, no design decisions, no new dependencies | `references/quick-mode.md` — describe, implement, verify, commit; gates: `check_commit.py` + `validate-quick` |
+| **Quick** | ≤3 files, no design decisions, no new dependencies | `references/quick-mode.md` — describe, implement, verify, commit; gates: `check_commit.py`, `check_suppressions.py`, `validate-quick` |
 | **Simple** | 2–5 files, localized change | Specify → Execute → Verify |
 | **Medium** | New feature, <10 tasks | Specify → Tasks → Execute → Verify |
 | **Complex** | New architecture, API surface, infra | Specify → Discuss → Design → Tasks → Execute → Verify |
@@ -131,7 +131,7 @@ Complexity determines depth. Do not run every phase on every change.
 
 **Rules**
 
-- **Specify and Verify are always required on the full pipeline** — you must know WHAT was asked and prove it was delivered. **Quick** is the exception: the express lane in `references/quick-mode.md` (describe → implement → verify → commit) with `check_commit.py` on each commit and `validate-quick` as the close/evidence gate.
+- **Specify and Verify are always required on the full pipeline** — you must know WHAT was asked and prove it was delivered. **Quick** is the exception: the express lane in `references/quick-mode.md` (describe → implement → verify → commit) with `check_commit.py`, `check_suppressions.py` on each commit, and `validate-quick` as the close/evidence gate.
 - **Design is skipped** when there are no architectural decisions and no new patterns.
 - **Tasks is skipped** when there are ≤3 obvious steps.
 - **Discuss is triggered inside Specify** when the feature touches persistence, external calls, auth, payments, concurrency, or state transitions, or when the owner's intent is ambiguous.

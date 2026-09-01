@@ -16,8 +16,8 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | | 3 | `analyze-artifacts` |
 | | 4 | `validate-tasks` |
 | | 4b | `validate-traceability` (REQ ↔ tasks; again when `validation.md` exists) |
-| **Building** | 5 | `loop-plan` → implement → `check-commit` (repeat per wave) |
-| **Closing** | 6 | `validate-traceability` (full coverage lines) → `validate-state` |
+| **Building** | 5 | `loop-plan` → implement → `check-commit` + `check-suppressions` (repeat per wave) |
+| **Closing** | 6 | `validate-traceability` (full coverage lines) → `quality-checks` (when configured) → `validate-state` |
 | | 7 | `archive-feature` (CLI) |
 | | — | `lessons` (after Verify FAIL) |
 

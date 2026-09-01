@@ -2,6 +2,8 @@
 
 Spec Guardrails is **not limited to one AI product**. This page lists **shipped adapters**. The [Architecture](Architecture.md) core works with any agent that can read repo files and run shell commands.
 
+**Default install (since 4.4):** `install` detects your platform and writes **one** skill tree plus that platform's adapter entry file. Existing trees are refreshed when you switch IDEs. Use `install --all-platforms` for every tree, or `install --platform cursor|claude|copilot|codex` to force one.
+
 ## What install writes
 
 | Asset | Cursor | Claude Code | GitHub Copilot | OpenAI Codex |

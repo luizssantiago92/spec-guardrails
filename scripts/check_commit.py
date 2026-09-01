@@ -29,7 +29,7 @@ import sys
 from pathlib import Path
 
 from _common import EXIT_OK, EXIT_USAGE, Report
-from _project_config import load_project_config
+from _project_config import DEFAULT_MAX_STAGED_LINES, load_project_config
 
 GATE = "check-commit"
 
@@ -84,8 +84,8 @@ def count_staged_lines(numstat_text: str) -> int:
 
 def build_staged_report(cwd: Path) -> Report:
     report = Report(gate=GATE, target="staged changes")
-    config = load_project_config()
-    max_lines = int(config.get("commit", {}).get("max_staged_lines") or 500)
+    config = load_project_config(cwd)
+    max_lines = int(config.get("commit", {}).get("max_staged_lines") or DEFAULT_MAX_STAGED_LINES)
 
     if not (cwd / ".git").exists():
         report.error("not a git repository")

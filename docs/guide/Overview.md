@@ -102,7 +102,7 @@ Think of four layers — **only the first two are mandatory** for daily use:
 
 ### 1. Skills (instructions for the agent)
 
-Installed under `.cursor/skills/`, `.github/skills/`, etc.
+Installed under your **detected platform tree** (for example `.cursor/skills/` in Cursor). Use `install --all-platforms` if you need every adapter tree in one repo.
 
 - **Hub** — map and rules (`agent-architecture.md`)
 - **References** — one file per phase (`specify.md`, `implement.md`, …)

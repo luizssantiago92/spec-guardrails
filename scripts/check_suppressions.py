@@ -4,7 +4,7 @@
 Run before commit when agents might silence linters or skip hooks:
 
     python3 check_suppressions.py
-    python3 check_suppressions.py --strict
+    python3 check_suppressions.py --cwd /path/to/repo
 
 Scans `git diff --cached` for patterns such as `# noqa`, `eslint-disable`,
 `@ts-ignore`, skipped tests, or `--no-verify`. Patterns are configurable under
@@ -86,11 +86,6 @@ def main(argv: list[str] | None = None) -> int:
         default=".",
         help="repository root (default: current directory)",
     )
-    parser.add_argument(
-        "--strict",
-        action="store_true",
-        help="treat warnings as blocking failures",
-    )
     args = parser.parse_args(argv)
 
     cwd = Path(args.cwd).resolve()
@@ -99,7 +94,7 @@ def main(argv: list[str] | None = None) -> int:
         print("  error   not a git repository")
         return EXIT_USAGE
 
-    config = load_project_config()
+    config = load_project_config(cwd)
     patterns = config.get("suppressions", {}).get("patterns") or DEFAULT_SUPPRESSION_PATTERNS
 
     try:
@@ -110,7 +105,7 @@ def main(argv: list[str] | None = None) -> int:
         return EXIT_USAGE
 
     report = build_report(diff_text, patterns)
-    return report.emit(strict=args.strict)
+    return report.emit()
 
 
 if __name__ == "__main__":

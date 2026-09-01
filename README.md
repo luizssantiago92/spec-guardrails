@@ -12,11 +12,18 @@ Agents are fast — and optimistic. They ship code, summarize what they *think* 
 
 You keep control: the agent proposes; you approve specs and tasks; push, merge, and deploy stay on your terms.
 
+| Without Spec Guardrails | With Spec Guardrails |
+| --- | --- |
+| Jumps to code and says “done” | Written goal first; “done” needs evidence |
+| Each chat starts from zero | `.specs/` survives sessions and handoffs |
+| Same ceremony for a typo and a payment flow | Complexity router matches depth to risk |
+| Whole playbook pasted every turn | One skill per turn — lower cost, sharper focus |
+
+Works with **Cursor, Claude Code, Copilot, Codex**, and other agents.
+
 npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.7.x**
 
 **Docs:** [Overview](docs/guide/Overview.md) · [Quick start](docs/guide/Quick-start.md) · [Full guide index](docs/guide/README.md)
-
----
 
 ## Install
 
@@ -39,6 +46,12 @@ npx @luizsantiago/spec-guardrails doctor
 ## Why teams adopt it — three pillars
 
 Most agent failures are not “bad code in one file.” They are **wrong goal**, **lost context**, or **fake done**. Spec Guardrails attacks those three problems directly.
+
+| Problem | Pillar | One-line win |
+| --- | --- | --- |
+| Built the wrong feature | **Requirements analysis** | Agree on intent before `spec.md` |
+| Skipped steps and called it done | **Gates (Brakes)** | Proof at boundaries, not trust |
+| Every chat starts from zero | **Memory** | `.specs/` in git beats chat history |
 
 ### 1. Requirements analysis — stop building the wrong thing
 
@@ -99,17 +112,89 @@ Twelve gates cover planning, building, and closing (including `validate-ship-sur
 
 ---
 
-## Spec-driven development (SDD)
+## Capabilities we strongly recommend — not afterthoughts
 
-Under those three pillars sits a full **spec-driven** method: the agent follows phases instead of improvising. Lineage includes [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/main/packages/skills-catalog/skills/(development)/tlc-spec-driven) (SDD + `.specs/`), [loop-engineering](https://github.com/cobusgreyling/loop-engineering) (waves), [graph-engineering](https://github.com/codejunkie99/graph-engineering) (safe parallel tasks), and [loopgate_harness](https://github.com/rxdt/loopgate_harness) (enforcement patterns). You get a **repo-native harness** — not another desktop runtime.
+Beyond the three pillars, these ship in every install and matter as soon as you run real features. They are why teams **stay** on the method — not only why they try it once.
 
-### Hub, complexity, and skills
+### Independent Verify — the author does not grade their own homework
 
-The **hub** (`agent-architecture.md`) is the map: contract, gate schedule, git tiers, and a **complexity router** (Quick → Parallel). A typo does not get a task graph; a payments integration does not skip review.
+**Without it:** The same chat that wrote the code declares victory. Confirmation bias is built in — the model “remembers” intent, not what the diff actually does.
+
+**With `/verify`:** A **fresh context** (when possible) writes `validation.md`: PASS or FAIL, gaps listed, evidence as `file:line` citations. The hub enforces **author ≠ verifier**. You get a second opinion that is procedural, not polite.
+
+**Go deeper:** [How it works → Verify](docs/guide/How-it-works.md) · [validate.md](docs/guide/agent-commands.md)
+
+---
+
+### Traceability — every requirement earns a proof path
+
+**Without it:** “We tested auth” means nothing in review. Nobody can tell which acceptance criterion maps to which test line.
+
+**With traceability gates:** Every `REQ` must appear in tasks; `validation.md` must cite coverage lines. The chain **REQ → task → evidence** is structural — gaps fail the gate before you merge. It does not prove tests are *good* (we are honest about that), but it proves you cannot close a feature with orphan requirements or empty proof.
+
+**Go deeper:** [Guarantees matrix](docs/guide/Guarantees-matrix.md) · [feature-overview](docs/guide/agent-commands.md)
+
+---
+
+### Lessons — failures become team rules
+
+**Without it:** The agent hits the same verify FAIL twice — wrong assumption about sessions, missed edge case on uploads — because nothing persisted except chat regret.
+
+**With `lessons`:** A failed verify produces grounded entries in `lessons.json`, promoted to **confirmed** rules over time. The next feature loads them before Design and Execute. Memory tells you *what* happened; lessons tell the agent *what not to repeat*.
+
+**Go deeper:** [Memory → lessons](docs/guide/Memory.md) · [lessons gate](docs/guide/gates.md)
+
+---
+
+### Complexity router — right ceremony for the risk
+
+**Without it:** A one-line typo gets a twelve-page spec; a payment integration ships on vibes because “it felt small.”
+
+**With `classify-change` + hub tiers:** Quick → Parallel picks depth before phases load — express lane for ≤3 files, full design + task graph when architecture or parallel work demands it. You save tokens **and** avoid under-governing risky changes.
 
 ![Complexity tiers — Quick, Simple, Medium, Complex, Parallel](https://raw.githubusercontent.com/luizssantiago92/spec-guardrails/main/.assets/tiers.svg)
 
-**Skills load one at a time** — hub → one phase guide → optional sister. Loading the entire playbook every turn burns context and money (~70% more skill tokens than progressive loading on typical Medium features). Sisters (security, QA, task-graph, platform infra/AI, …) appear only when the work needs them.
+**Go deeper:** [Concepts → complexity tiers](docs/guide/concepts.md#complexity-tiers--how-the-agent-chooses-depth) · [Token efficiency](docs/guide/Token-efficiency.md)
+
+---
+
+### Brownfield onboarding — existing repos, not greenfield fantasies
+
+**Without it:** `.specs/` is empty while `src/` has years of history. The agent guesses stack and boundaries every session.
+
+**With `project-init`:** Detects stack (Node, Python, compose, CI, AI signals), scaffolds `PROJECT.md`, domains, `ROADMAP.md`, and suggests presets (`python-platform` when infra/AI paths show up). Optional `code-index` gives lightweight symbol search — not a full RepoGraph, but enough to stop blind edits.
+
+**Go deeper:** [Brownfield context](docs/guide/brownfield-context.md) · [project-init](docs/guide/agent-commands.md)
+
+---
+
+### Safe parallel execution — speed without file collisions
+
+**Without it:** Two agents edit the same module; merges become archaeology. Or parallelism never happens because it feels unsafe.
+
+**With `loop-plan` + `task-graph.md` + `workspace-prepare`:** Waves pick runnable tasks; parallel groups require **disjoint `Files`**; git worktrees isolate batches; sub-agents follow a hub protocol with one merge owner. [graph-engineering](https://github.com/codejunkie99/graph-engineering) ideas, repo-native.
+
+**Go deeper:** [Loop patterns](docs/guide/loop-patterns.md) · [Tutorial 03 — parallel worktrees](docs/guide/tutorials/03-parallel-worktrees.md)
+
+---
+
+### Git tiers — autonomy with a safety rail
+
+**Without it:** Approving a spec feels like giving the agent carte blanche to push, merge, or touch production.
+
+**With tiers in the hub contract:** Approving spec/tasks authorizes **Tier 0 only** — local branch, local commits, `.specs/` in the same repo. Push, PR, merge, deploy need **your** explicit go-ahead. The agent can move fast locally without becoming a liability on shared branches.
+
+**Go deeper:** [git-handoff](docs/guide/agent-commands.md) · [Hub contract](docs/guide/skills-and-hub.md)
+
+---
+
+## Spec-driven development (SDD)
+
+Under the pillars and capabilities above sits the full **spec-driven** method. Lineage: [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/main/packages/skills-catalog/skills/(development)/tlc-spec-driven), [loop-engineering](https://github.com/cobusgreyling/loop-engineering), [graph-engineering](https://github.com/codejunkie99/graph-engineering), [loopgate_harness](https://github.com/rxdt/loopgate_harness). **Repo-native harness** — not another desktop runtime.
+
+### Hub and progressive skills
+
+The **hub** (`agent-architecture.md`) is the map: contract, gate schedule, phase order. **Skills load one at a time** — hub → one phase guide → optional sister (~70% fewer skill tokens than dumping the full kit each turn). Sisters (AppSec, QA, security-review, task-graph, platform infra/AI, …) load only when paths or tier demand them.
 
 ### Artifacts and feature flow
 
@@ -118,17 +203,15 @@ The **hub** (`agent-architecture.md`) is the map: contract, gate schedule, git t
 | Stage | Purpose |
 | --- | --- |
 | **Explore** (optional) | Research before a feature folder exists |
-| **Elicit** (optional) | Requirements brief — pillar §1 |
+| **Elicit** (optional) | Requirements brief — [pillar §1](#1-requirements-analysis--stop-building-the-wrong-thing) |
 | **Specify** | `spec.md` — you approve |
-| **Discuss / Design** (when needed) | Gray product choices and technical approach |
+| **Discuss / Design** (when needed) | Product gray areas; `solution-explore` when architectures truly fork |
 | **Tasks** | Atomic jobs + file ownership — you approve |
-| **Execute** | `/loop` waves — implement, gate, commit |
-| **Verify** | Independent `validation.md` — author ≠ verifier |
-| **Archive** | Merge into domain memory and roadmap |
+| **Execute** | `/loop` waves — [loop-plan](docs/guide/loop-patterns.md), gate, commit |
+| **Verify** | Independent proof — [recommended §](#independent-verify--the-author-does-not-grade-their-own-homework) |
+| **Archive** | Domain memory + roadmap |
 
-**Sub-agents** scale Execute when many tasks are parallel-safe: batched dispatch, disjoint files, one merge owner — protocol in the hub, not chaotic multi-agent free-for-all.
-
-**Go deeper:** [How it works](docs/guide/How-it-works.md) · [Skills and hub](docs/guide/skills-and-hub.md) · [Loop patterns](docs/guide/loop-patterns.md) · [Token efficiency](docs/guide/Token-efficiency.md) · [Ecosystem map](docs/guide/ecosystem.md)
+**Go deeper:** [How it works](docs/guide/How-it-works.md) · [Skills and hub](docs/guide/skills-and-hub.md) · [Ecosystem map](docs/guide/ecosystem.md)
 
 ---
 
@@ -161,30 +244,25 @@ Repos without `python-platform` are unchanged.
 
 ## More capabilities
 
-Everything below ships in the package. The three pillars above are why most teams install; these tools matter when the work grows.
+Still shipped — useful when policy, visibility, or architecture forks matter. Less central than the pillars and sections above; none are throwaways.
 
 | Capability | Without it | With it |
 | --- | --- | --- |
-| **`classify-change`** | Same depth for every request | Heuristic tier (quick → complex) before phases load |
 | **`doctor`** | Guess if install is healthy | Process + Brakes scores and fix hints |
 | **`feature-status` / `feature-overview`** | Hunt through folders | Checklist + REQ → task → evidence dashboard |
-| **`project-init`** | Brownfield = blank `.specs/` | Map stack, domains, `PROJECT.md` from existing code |
 | **Presets** (`default`, `node-ts`, `python`, `python-platform`) | Generic rules only | Stack-aware `config.yaml` seeds |
-| **`loop-plan`** | Agent picks tasks ad hoc | Next runnable wave; parallel groups when files disjoint |
-| **Workspaces** (`workspace-prepare`) | Parallel agents collide on files | Git worktrees per parallel task batch |
 | **`execution-policy`** | Unbounded agent scope | Path allow/deny, retry and run budgets |
 | **`context-guard`** | Edits outside approved scope | Check before edit / before “complete” |
 | **`sandbox check-command`** | Destructive shell slips through | Warn or block `rm -rf`, force-push, … |
 | **`solution-explore`** | Architecture fork in chat only | `exploration.md`, candidates, recorded decision |
 | **`/quick` lane** | Tiny fixes over-processed | ≤3 files, express evidence path |
-| **Sister skills** | One generic security pass | On-demand AppSec, QA, security-review, ship-ready, code-simplify |
-| **`lessons`** | Same failure twice | Grounded rules from verify FAIL |
+| **Sister skills** | One generic pass | On-demand AppSec, QA, security-review, ship-ready, code-simplify |
 | **`converge`** | Drift silently grows | Recover when spec and tasks diverge |
 | **`constitution`** | Principles only in chat | Once-per-project principles artifact |
-| **Tutorials** | Learn by trial and error | Progressive guides (quick fix → parallel → python platform) |
-| **Git tiers** | Agent pushes when it feels done | Tier 0 local only until you approve share/merge |
+| **Tutorials** | Learn by trial and error | Progressive guides (quick → parallel → python platform) |
+| **Semantic memory** (optional) | Keyword search only | `memory-index embed` when vocabulary drifts |
 
-**Go deeper:** [Agent commands](docs/guide/agent-commands.md) · [Tutorials](docs/guide/tutorials/README.md) · [Architecture](docs/guide/Architecture.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md)
+**Go deeper:** [Agent commands](docs/guide/agent-commands.md) · [Tutorials](docs/guide/tutorials/README.md) · [Architecture](docs/guide/Architecture.md)
 
 ---
 

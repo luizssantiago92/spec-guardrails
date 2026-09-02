@@ -25,6 +25,7 @@ Works with **Cursor, Claude Code, Copilot, Codex**, and other agents. See [Platf
 | [How it works](How-it-works.md) | Story from idea to archive |
 | [Memory](Memory.md) | `.specs/` memory and search — when and how much |
 | [Python platform](python-platform.md) | Backend + DevOps + AI preset (4.7+) — Ship/AI Surface |
+| [Loop patterns](loop-patterns.md) | Operational loops CLI (`loop list`, 5.0+) |
 
 ---
 

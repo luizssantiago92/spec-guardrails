@@ -250,6 +250,9 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `feature-overview [feature] [--write]` | REQ → task → evidence dashboard; `--write` saves `overview.md` |
 | `feature-pr-body [feature] [--json]` | PR description from overview (Tier 1 handoff) |
 | `install-hooks [--remove]` | Opt-in pre-commit hook (`check-commit --staged`) |
+| `loop list [--json]` | Operational loop pattern catalog (triage, CI, deps, …) |
+| `loop show <pattern-id> [--json]` | One operational pattern (constraints, stop rules) |
+| `loop run <pattern-id> [--dry-run] [--json]` | Structured agent brief for an operational loop |
 | `validate-traceability [feature]` | REQ → tasks → validation coverage chain |
 | `validate-quick [quick-folder]` | Quick-mode structural gate |
 | `phase-context <phase>` | Print `.specs/config.yaml` rules for a phase |

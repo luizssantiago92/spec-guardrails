@@ -30,14 +30,14 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | --- | --- | --- | --- |
 | **validate-req-analysis** | `validate_req_analysis.py` | Before `/specify` when using `/elicit` | Approved requirements brief shape and discovery citations |
 | **req-analysis-diff** | `req_analysis_diff.py` | After `/specify` (optional) | Brief **Capabilities** bullets without heuristic REQ mapping in `spec.md` |
-| **validate-spec** | `validate_spec.py` | Before you approve `spec.md` | Required sections, `SHALL`/`MUST` criteria, assumptions; optional brief/NFR policy from config |
+| **validate-spec** | `validate_spec.py` | Before you approve `spec.md` | Required sections, `SHALL`/`MUST` criteria; optional brief/NFR/Test Plan policy from config |
 | **validate-design** | `validate_design.py` | Before task approval (Complex) | `design.md` has Context, Decision, Alternatives, Risks |
 | **analyze-artifacts** | `analyze_artifacts.py` | Before task approval; on drift | Every REQ has task coverage; no orphan tasks |
 | **validate-tasks** | `validate_tasks.py` | Before you approve `tasks.md` | Task shape, binary done criteria, `task-graph.md` when 3+ tasks, file overlap |
 | **validate-traceability** | `validate_traceability.py` | After tasks; again with `validation.md` | REQ → tasks → same-line coverage evidence (structural only) |
 | **validate-ship-surface** | `validate_ship_surface.py` | After tasks; before Verify when infra/AI Files | Ship Surface + AI Surface fields in `design.md` (structural only) |
 | **validate-quick** | `validate_quick.py` | End of `/quick` | TASK.md / SUMMARY.md shape; ≤3 files; no sensitive paths |
-| **loop-plan** | `loop_plan.py` | Start of each `/loop` wave | Next runnable tasks; parallel groups (disjoint files) |
+| **loop-plan** | `loop_plan.py` | Start of each `/loop` wave | Next runnable tasks; parallel groups; optional `converge_hint` (config) |
 | **check-commit** | `check_commit.py` | Every commit | Conventional Commits shape; optional `--staged` for empty/oversized diffs |
 | **check-suppressions** | `check_suppressions.py` | Before commit (staged diff) | Blocks linter/test bypass patterns in added lines |
 | **quality-checks** | `run_quality_checks.py` | During `/verify` | Runs `quality.checks` commands from config |

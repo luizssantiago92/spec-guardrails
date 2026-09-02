@@ -27,7 +27,9 @@ No further package renames. Older names exist only in history below.
 | **Platform install** | **4.4** | same | One agent tree by default; `--all-platforms` / `--platform` |
 | **Enforcement hardening** | **4.5** | same | `check-suppressions`, `quality-checks`, staged commit limits, README honesty |
 | **Onboarding & visibility** | **4.6** | same | Tutorials 01–03, `feature-overview`, batch review docs |
-| **Python platform** | **4.7+** | same | `python-platform` preset, Ship/AI Surface, `validate-ship-surface` |
+| **Python platform** | **4.7–4.8** | same | `python-platform` preset, Ship/AI Surface, `validate-ship-surface` |
+| **SDLC integration** | **4.8** | same | Elicitation policy, `validate-design`, CI template, `install-hooks`, `feature-pr-body` |
+| **Operational loops** | **5.0+** | same | `loop list|show|run`, brownfield `code-index`, converge hints, Test Plan on Complex |
 
 ```mermaid
 timeline
@@ -44,6 +46,8 @@ timeline
     4.5 enforcement : 2026
     4.6 tutorials overview : 2026
     4.7 python platform : 2026
+    4.8 sdlc integration : 2026
+    5.0 operational loops : 2026
 ```
 
 ---
@@ -54,8 +58,10 @@ There is no single “best” version — pick by **what you need** and **how mu
 
 | Your goal | Suggested pin | Why |
 | --- | --- | --- |
-| **New project, general SDD** | Latest **4.7.x** (or current npm) | Full hub, gates, tutorials, optional python-platform |
+| **New project, general SDD** | Latest **5.0.x** (or current npm) | Full hub, gates, tutorials, operational loops CLI, optional python-platform |
 | **Python backend + DevOps + AI** | **4.7.0+** with `python-platform` preset | Ship/AI Surface + `validate-ship-surface` — see [python-platform.md](python-platform.md) |
+| **Requirements + CI hardening** | **4.8.0+** | Elicitation policy, `validate-design`, PR CI template, `install-hooks` — see [requirements-analysis.md](requirements-analysis.md) |
+| **Operational cadence (triage, CI, deps)** | **5.0.0+** | `loop list` / `loop run` — see [loop-patterns.md](loop-patterns.md) |
 | **Stable SDD without platform pack** | **4.6.0** | Mature tutorials + `feature-overview`; no Ship/AI gate surface |
 | **Minimal moving parts, proven gates** | **4.5.2** | Suppressions + quality-checks + config fixes; pre-tutorial wave |
 | **Multi-agent repo (Cursor + Claude + …)** | **4.4.0+** | Platform-aware `install` — see [Migration → 4.4](Migration.md#upgrading-to-44-platform-aware-install) |
@@ -94,7 +100,7 @@ Replace `4.6.0` with the version you chose from the table above.
 ```json
 {
   "devDependencies": {
-    "@luizsantiago/spec-guardrails": "4.7.0"
+    "@luizsantiago/spec-guardrails": "5.0.0"
   },
   "scripts": {
     "guardrails": "spec-guardrails"
@@ -115,7 +121,7 @@ npm run guardrails -- doctor
 Pin the same version in CI as local dev:
 
 ```bash
-npx @luizsantiago/spec-guardrails@4.7.0 doctor
+npx @luizsantiago/spec-guardrails@5.0.0 doctor
 ```
 
 ---
@@ -129,6 +135,8 @@ npx @luizsantiago/spec-guardrails@4.7.0 doctor
 | 4.2.x | 4.3+ | [Hooks removed](Migration.md#upgrading-to-43-cursor-hooks-removed) |
 | 4.3.x | 4.4+ | [Platform install](Migration.md#upgrading-to-44-platform-aware-install) |
 | 4.6.x | 4.7+ | [python-platform.md](python-platform.md) + CHANGELOG 4.7.0 |
+| 4.7.x | 4.8+ | [requirements-analysis.md](requirements-analysis.md) + CHANGELOG 4.8.0 |
+| 4.8.x | 5.0+ | [loop-patterns.md](loop-patterns.md) + CHANGELOG 5.0.0 |
 
 After any bump: `install` → `doctor` → spot-check one gate (`validate-spec` or `validate-ship-surface` if you use platform pack).
 
@@ -139,6 +147,7 @@ After any bump: `install` → `doctor` → spot-check one gate (`validate-spec` 
 | Document | Contents |
 | --- | --- |
 | [CHANGELOG](../CHANGELOG.md) | Every release — **source of truth** for features, fixes, limitations |
+| [Releases.md](Releases.md) | npm vs GitHub Releases; recent version index |
 | [Product history](Product-history.md) | Eras + version pick guide (this page) |
 | [Migration](Migration.md) | Breaking steps between major eras and selected minors |
 | [Stability policy](Stability-policy.md) | SemVer, gate freeze, name freeze |

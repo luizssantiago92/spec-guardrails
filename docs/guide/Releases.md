@@ -9,7 +9,7 @@ How to find **what shipped** and where to read release notes.
 | **[CHANGELOG](../CHANGELOG.md)** | Every version — features, fixes, limitations (**authoritative prose**) |
 | **npm** `@luizsantiago/spec-guardrails` | Published packages consumers install (`npm view … version`) |
 | **Git tags** `vX.Y.Z` | Git pointers at publish time |
-| **GitHub → Releases** | Human-facing release pages (may lag npm for older 4.x lines) |
+| **GitHub → Releases** | Human-facing release pages — aligned through **v5.0.0** (Latest) as of Sep 2026 |
 
 **Current stable (npm):** check with:
 
@@ -32,12 +32,12 @@ npm view @luizsantiago/spec-guardrails version
 
 Version picking: [Product history](Product-history.md). Upgrade steps: [Migration](Migration.md).
 
-## GitHub Releases gap (4.3 → 4.7)
+## GitHub Releases (aligned)
 
-The GitHub **Releases** tab may still show **4.2.0** as “Latest” while npm already ships **5.0.0**. That is a **documentation/UI lag**, not missing npm packages.
+The GitHub **Releases** tab tracks npm from **v4.2.1** through **v5.0.0** (Latest). Older gaps (4.3–4.7 pages missing before Sep 2026) were backfilled from [CHANGELOG](../CHANGELOG.md).
 
-- **Consumers:** use npm + CHANGELOG — not the Releases page alone.
-- **Maintainers:** when publishing via Actions, consider `gh release create vX.Y.Z --notes-file …` from the matching CHANGELOG section so GitHub catches up.
+- **Consumers:** npm + CHANGELOG remain authoritative; Releases pages mirror the same version notes.
+- **Maintainers:** when publishing via Actions, add `gh release create vX.Y.Z --notes-file …` from the matching CHANGELOG section so GitHub stays in sync.
 
 ## After upgrading
 

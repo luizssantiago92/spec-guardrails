@@ -63,6 +63,10 @@ Tiny or backend-only changes skip those extras. Optional **ship-ready** is only 
 
 After a pass, the feature folds into long-lived project memory. **Push and merge still need your go-ahead** — the guardrails stops at local commits unless you say otherwise.
 
+### Operational loops (5.0+)
+
+Recurring repo work — triage, CI sweeper, dependency bumps — uses the **`loop list` / `loop run`** CLI, separate from feature `/loop` waves. See [Loop patterns](loop-patterns.md).
+
 ## What you get day to day
 
 - Fewer “it works in the chat” moments  

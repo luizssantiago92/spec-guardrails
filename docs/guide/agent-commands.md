@@ -150,7 +150,7 @@ Lock product decisions before the spec is final — auth rules, data model, edge
 
 ## `/plan` — technical design (optional, Complex tier)
 
-Document architecture, APIs, and patterns **before** tasks. Writes `design.md`. Runs `validate-design` on Complex tier. **Stops for your approval** before `/tasks`.
+Document architecture, APIs, and patterns **before** tasks. Writes `design.md`. Runs `validate-design` when `design.md` exists on Complex/Medium+ features. **Stops for your approval** before `/tasks`.
 
 ---
 
@@ -249,7 +249,7 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `feature-status [feature]` | Artifacts present, task counts, next recommended gate |
 | `feature-overview [feature] [--write]` | REQ → task → evidence dashboard; `--write` saves `overview.md` |
 | `feature-pr-body [feature] [--json]` | PR description from overview (Tier 1 handoff) |
-| `install-hooks [--remove]` | Opt-in pre-commit hook (`check-commit --staged`) |
+| `install-hooks [--remove]` | Opt-in pre-commit hook (`check-suppressions` + `check-commit --staged`) |
 | `loop list [--json]` | Operational loop pattern catalog (triage, CI, deps, …) |
 | `loop show <pattern-id> [--json]` | One operational pattern (constraints, stop rules) |
 | `loop run <pattern-id> [--dry-run] [--json]` | Structured agent brief for an operational loop |

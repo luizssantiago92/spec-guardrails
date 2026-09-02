@@ -27,7 +27,7 @@ The `tlc-spec-driven` skill declares `license: CC-BY-4.0` in its own front matte
 
 | Source | License | What we use (concrete) |
 | --- | --- | --- |
-| [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Execute wave model; operational vs feature loops documented in [loop-patterns.md](loop-patterns.md) |
+| [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Execute wave model; operational vs feature loops documented in [loop-patterns.md](loop-patterns.md); **`loop list|show|run` CLI** (5.0+) |
 | [Addy Osmani — Loop engineering](https://addyosmani.com/blog/loop-engineering/) | Essay | Referenced in loop-patterns guide for loop taxonomy |
 | [awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | CC0 | Ecosystem positioning vocabulary (harness vs app); not copied as code |
 
@@ -58,10 +58,13 @@ We mention these for context or future plugins. **No code from these repos ships
 
 Beyond adaptations above, this package adds:
 
-- Node CLI (`install`, `doctor`, `feature-init`, memory-index, execution policy, req-analysis, …)
+- Node CLI (`install`, `doctor`, `feature-init`, memory-index, execution policy, req-analysis, operational `loop` CLI, …)
 - Python structural gates under `scripts/` (installed to `.specs/guardrails/scripts/`)
 - Platform adapters (Cursor, Claude, Copilot, Codex, `AGENTS.md`)
 - Elicitation phase (`/elicit`, requirements briefs, `validate-req-analysis`)
+- Python Platform pack (4.7+) — Ship/AI Surface preset and `validate-ship-surface`
+- SDLC integration helpers (4.8+) — `validate-design`, CI template, `install-hooks`, `feature-pr-body`
+- Operational loops catalog (5.0+) — `loop list|show|run` for recurring repo work
 
 ---
 

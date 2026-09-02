@@ -26,6 +26,7 @@ elicitation:
   require_brief: false          # when true, every feature needs an approved brief before validate-spec
   require_brief_complex: true   # Complex-tier features need a brief (default)
   require_nfr_complex: warn     # warn | error | off — NFR section on Complex specs
+  require_test_plan_complex: warn  # warn | error | off — ## Test Plan on Complex specs (validate-spec)
 ```
 
 Workshop walkthrough: [Tutorial 05 — Requirements analysis](tutorials/05-requirements-analysis-workshop.md)

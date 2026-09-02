@@ -73,7 +73,7 @@ Full list: [Agent commands](agent-commands.md)
 | Topic | Doc |
 | --- | --- |
 | Product promises | [Guarantees matrix](Guarantees-matrix.md) |
-| Every gate (12) | [Gates](gates.md) |
+| Gates reference (14+) | [Gates](gates.md) |
 | Python platform | [python-platform.md](python-platform.md) · [Tutorial 04](tutorials/04-python-platform-ship-surface.md) |
 | Ecosystem | [ecosystem.md](ecosystem.md) |
 | Architecture | [Architecture](Architecture.md) |

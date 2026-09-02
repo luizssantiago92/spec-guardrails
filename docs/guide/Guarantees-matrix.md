@@ -23,6 +23,9 @@ Run `npx @luizsantiago/spec-guardrails doctor` to see whether Brakes (Python) ar
 | --- | --- | --- | --- |
 | Intent exists before code | `validate-spec` | Brakes | Hard gate (Python) |
 | Requirements brief approved (optional `/elicit`) | `validate-req-analysis` | Brakes | Hard gate (Python) |
+| Brief capabilities reflected in spec (optional) | `req-analysis diff` | Brakes | Heuristic gate (optional) |
+| Technical design documented (when `design.md` exists) | `validate-design` | Brakes | Hard gate (structural) |
+| Test approach documented on Complex (optional policy) | `validate-spec` (`require_test_plan_complex`) | Brakes | Config-driven warn/error/off |
 | Tasks derive from requirements | `analyze-artifacts` | Brakes | Hard gate |
 | Requirements stay traceable | `validate-traceability` | Brakes | Hard gate |
 | Task shape is buildable | `validate-tasks` | Brakes | Hard gate |

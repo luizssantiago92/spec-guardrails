@@ -14,7 +14,7 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | | 1b | `validate-req-analysis` (requirements brief before `/specify`) |
 | | 1c | `req-analysis diff` (optional — brief ↔ spec drift after Specify) |
 | | 2 | `validate-spec` |
-| | 2b | `validate-design` (Complex tier — after `design.md`) |
+| | 2b | `validate-design` (Complex/Medium+ when `design.md` exists) |
 | | 3 | `analyze-artifacts` |
 | | 4 | `validate-tasks` |
 | | 4b | `validate-traceability` (REQ ↔ tasks; again when `validation.md` exists) |
@@ -31,7 +31,7 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | **validate-req-analysis** | `validate_req_analysis.py` | Before `/specify` when using `/elicit` | Approved requirements brief shape and discovery citations |
 | **req-analysis-diff** | `req_analysis_diff.py` | After `/specify` (optional) | Brief **Capabilities** bullets without heuristic REQ mapping in `spec.md` |
 | **validate-spec** | `validate_spec.py` | Before you approve `spec.md` | Required sections, `SHALL`/`MUST` criteria; optional brief/NFR/Test Plan policy from config |
-| **validate-design** | `validate_design.py` | Before task approval (Complex) | `design.md` has Context, Decision, Alternatives, Risks |
+| **validate-design** | `validate_design.py` | Before task approval (when `design.md` exists on Complex/Medium+) | `design.md` has Context, Decision, Alternatives, Risks |
 | **analyze-artifacts** | `analyze_artifacts.py` | Before task approval; on drift | Every REQ has task coverage; no orphan tasks |
 | **validate-tasks** | `validate_tasks.py` | Before you approve `tasks.md` | Task shape, binary done criteria, `task-graph.md` when 3+ tasks, file overlap |
 | **validate-traceability** | `validate_traceability.py` | After tasks; again with `validation.md` | REQ → tasks → same-line coverage evidence (structural only) |
@@ -102,7 +102,7 @@ Copy `node_modules/@luizsantiago/spec-guardrails/templates/ci/guardrails-pr.yml`
 npx @luizsantiago/spec-guardrails install-hooks
 ```
 
-Installs a hook that runs `check-commit --staged` before each commit. Remove with `install-hooks --remove`.
+Installs a hook that runs `check-suppressions` on the staged diff and `check-commit --staged` when a commit message is available. Remove with `install-hooks --remove`.
 
 `doctor` checks that scripts exist, Python works, and suggests `loop-plan` when Execute is next.
 

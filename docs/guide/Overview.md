@@ -42,7 +42,7 @@ Full story: [How it works](How-it-works.md)
 | **B — Brownfield** | Existing code, Guardrails just installed | `/project-init` → `/elicit` (project)? → `/specify` |
 | **C — Chat direct** | Clear one-line request in chat | `/specify` — or `/elicit` (feature) if still vague |
 
-**`/elicit` is always optional.** The agent may suggest it; it never blocks `/specify`.
+**`/elicit` is suggested, not mandatory.** The agent may propose it first; you can go straight to `/specify` when the request is clear. Config policy (`require_brief*`) can block `validate-spec` on Complex until a brief is approved — see [requirements-analysis](requirements-analysis.md).
 
 ---
 
@@ -127,9 +127,9 @@ Handoff rules: [Memory skill](../../skills/references/memory.md) (installed copy
 
 ### 3. Gates (optional automatic checks — Brakes mode)
 
-Python scripts in `.specs/guardrails/scripts/` — **12 gates** including `validate-ship-surface` for python-platform teams. **Exit ≠ 0 means stop and fix.**
+Python scripts in `.specs/guardrails/scripts/` — **14 structural gates** (plus aux scripts such as `loop-plan`). Includes `validate-design`, `validate-req-analysis`, and `validate-ship-surface` when the python-platform preset matches. **Exit ≠ 0 means stop and fix.**
 
-Examples: incomplete spec, tasks not tracing to requirements, “done” without test evidence, missing Ship/AI Surface when infra/AI paths appear in tasks.
+Examples: incomplete spec, missing design sections, tasks not tracing to requirements, “done” without test evidence, missing Ship/AI Surface when infra/AI paths appear in tasks.
 
 You do not run these manually every day — the agent runs them at phase boundaries.
 
@@ -234,6 +234,7 @@ Semantic search is **optional** — useful with **lots** of archived features an
 | Vague request — Q&A before Specify | [Requirements analysis](requirements-analysis.md) |
 | Understand memory and search | [Memory](Memory.md) |
 | See every chat command | [Agent commands](agent-commands.md) |
+| Operational cadence (triage, CI, deps) | [Loop patterns](loop-patterns.md) |
 | See product promises | [Guarantees matrix](Guarantees-matrix.md) |
 | Python + DevOps + AI in one repo | [python-platform.md](python-platform.md) · [Tutorial 04](tutorials/04-python-platform-ship-surface.md) |
 | Questions | [FAQ](FAQ.md) |

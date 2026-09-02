@@ -4,8 +4,8 @@ The Spec Guardrails governs **feature work**: Specify → Tasks → Execute → 
 **Loop engineering** governs **recurring work** on the same repo: triage, CI babysitting, dependency sweeps.
 
 This guide maps when to use each. Patterns below are inspired by the open-source
-[loop-engineering](https://github.com/cobusgreyling/loop-engineering) project (MIT) —
-we do not ship their CLI; we document the *shape* so you can combine it with Spec Guardrails.
+[loop-engineering](https://github.com/cobusgreyling/loop-engineering) project (MIT).
+Spec Guardrails ships its own **`loop list|show|run` CLI** (5.0+) with a catalog in `templates/loops/catalog.json` — we do not bundle the loop-engineering runtime.
 
 ## Two loops, one repo
 
@@ -38,11 +38,25 @@ Run an audit before relying on Spec Guardrails in production:
 npx @luizsantiago/spec-guardrails doctor
 npx @luizsantiago/spec-guardrails doctor --json
 npx @luizsantiago/spec-guardrails loop list
+npx @luizsantiago/spec-guardrails loop show ci-sweeper
+npx @luizsantiago/spec-guardrails loop run ci-sweeper --dry-run
 ```
 
 `doctor` checks skills in all adapter trees, platform entry contracts, gates, config, STATE, optional PROJECT.md, and (for the active feature with 3+ tasks) `task-graph.md`. It prints **Operating modes** with separate **Process** and **Brakes** scores, **Guardrails Ready: N/100**, up to three next actions, and an **Execute hint** (`loop-plan` when tasks are in progress, or `validate-state` when every task is marked complete).
 
-`loop list` shows **operational** patterns (triage, CI sweeper, dependency bumps) — complementary to feature `loop-plan` waves. Use `loop run <id>` to print a structured agent brief.
+`loop list` shows **operational** patterns (triage, CI sweeper, dependency bumps) — complementary to feature `loop-plan` waves. Use `loop show <id>` for constraints and stop rules; `loop run <id>` prints a structured agent brief.
+
+### Catalog IDs (5.0+)
+
+| ID | Pattern |
+| --- | --- |
+| `daily-triage` | Daily triage |
+| `pr-babysitter` | PR babysitter |
+| `ci-sweeper` | CI sweeper |
+| `dependency-sweeper` | Dependency sweeper |
+| `changelog-drafter` | Changelog drafter |
+| `post-merge-cleanup` | Post-merge cleanup |
+| `issue-triage` | Issue triage |
 
 Inspired by loop-engineering’s Loop Ready score — scoped to **this package’s** install surface, not their full foundry stack.
 

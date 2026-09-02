@@ -1,0 +1,151 @@
+{
+  "patterns": {
+    "daily-triage": {
+      "title": "Daily triage",
+      "tier": "quick",
+      "cadence": "daily",
+      "posture": "Read-only scan → short report; no feature folder unless a fix ships",
+      "description": "Inbox, issues, and open threads pile up — produce a prioritized snapshot without coding.",
+      "constraints": [
+        "One pattern per session — no mixing with dependency sweeps",
+        "Read-only until owner approves a fix scope",
+        "Cap output to one screen of findings"
+      ],
+      "stop_rules": [
+        "Stop after the report is written",
+        "Escalate to feature-init only when owner picks an item to ship"
+      ],
+      "suggested_steps": [
+        "Run doctor for readiness baseline",
+        "Scan open issues / PR comments / failing CI badges",
+        "classify-change on any fix candidate before Specify"
+      ]
+    },
+    "pr-babysitter": {
+      "title": "PR babysitter",
+      "tier": "medium",
+      "cadence": "per PR",
+      "posture": "Watch CI on open PRs; propose minimal fixes",
+      "description": "Open PRs waiting on CI — diagnose failures and suggest the smallest fix.",
+      "constraints": [
+        "One PR at a time",
+        "No scope expansion beyond the PR intent",
+        "Prefer Medium tier with tasks when the fix touches 3+ files"
+      ],
+      "stop_rules": [
+        "Stop when CI is green or owner defers",
+        "Never force-push main"
+      ],
+      "suggested_steps": [
+        "List open PRs and failing checks",
+        "Reproduce the failure locally",
+        "If fix needs spec/tasks → feature-init or append tasks on existing feature"
+      ]
+    },
+    "ci-sweeper": {
+      "title": "CI sweeper",
+      "tier": "medium",
+      "cadence": "on red main",
+      "posture": "Cautious fixes — one failure at a time",
+      "description": "Main branch or default pipeline is red or flaky — restore green before new features.",
+      "constraints": [
+        "Fix the first failing job only",
+        "Record discrimination sensor notes when behavior changes",
+        "No drive-by refactors"
+      ],
+      "stop_rules": [
+        "Stop when quality.checks pass",
+        "Hand off to feature loop if root cause needs product spec"
+      ],
+      "suggested_steps": [
+        "Run quality-checks or project test command",
+        "Isolate the failing step from CI logs",
+        "check-suppressions before any commit"
+      ]
+    },
+    "dependency-sweeper": {
+      "title": "Dependency sweeper",
+      "tier": "simple",
+      "cadence": "weekly",
+      "posture": "Patch-only bumps; run full test suite",
+      "description": "Outdated packages — apply patch/minor bumps with tests.",
+      "constraints": [
+        "Patch (and agreed minor) only — no major without owner",
+        "One ecosystem at a time (npm OR pip, not both)",
+        "Lockfile commits are atomic"
+      ],
+      "stop_rules": [
+        "Stop after one bump wave passes tests",
+        "Defer breaking upgrades to a Specify feature"
+      ],
+      "suggested_steps": [
+        "Audit outdated deps (npm outdated / pip list --outdated)",
+        "Bump one package or group",
+        "Run project test command + check-commit"
+      ]
+    },
+    "changelog-drafter": {
+      "title": "Changelog drafter",
+      "tier": "quick",
+      "cadence": "pre-release",
+      "posture": "Summarize merged work — docs only",
+      "description": "Before release — draft CHANGELOG / release notes from merged PRs.",
+      "constraints": [
+        "No code changes",
+        "Link PR numbers and owner-facing outcomes",
+        "Match semver section in CHANGELOG"
+      ],
+      "stop_rules": [
+        "Stop when draft is ready for owner review",
+        "Owner publishes — agent never npm publish"
+      ],
+      "suggested_steps": [
+        "git log since last tag",
+        "Group by feat/fix/docs",
+        "Align with docs/CHANGELOG.md format"
+      ]
+    },
+    "post-merge-cleanup": {
+      "title": "Post-merge cleanup",
+      "tier": "quick",
+      "cadence": "after large merge",
+      "posture": "Dead code, TODOs, format — stay inside merged scope",
+      "description": "After a large merge — hygiene pass without new features.",
+      "constraints": [
+        "Only files touched by the merge",
+        "No behavior changes without tests",
+        "Quick tier unless scope grows"
+      ],
+      "stop_rules": [
+        "Stop after validate-quick or owner says done",
+        "Promote to Medium if 4+ files need logic changes"
+      ],
+      "suggested_steps": [
+        "Review merge diff for stray TODOs and debug logs",
+        "Run linter/format on touched paths",
+        "check-commit with chore scope"
+      ]
+    },
+    "issue-triage": {
+      "title": "Issue triage",
+      "tier": "quick",
+      "cadence": "backlog grooming",
+      "posture": "Label, dedupe, propose — no code",
+      "description": "Backlog grooming — organize issues without implementing.",
+      "constraints": [
+        "No code commits",
+        "Propose feature slugs for ROADMAP candidates",
+        "Use Explore, not Execute"
+      ],
+      "stop_rules": [
+        "Stop when triage report is written",
+        "Elicit only when owner picks an issue to specify"
+      ],
+      "suggested_steps": [
+        "Dedupe and label open issues",
+        "classify-change per candidate",
+        "Append ROADMAP.md candidates (owner approves)"
+      ]
+    }
+  }
+}

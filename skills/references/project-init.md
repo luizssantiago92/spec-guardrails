@@ -25,6 +25,7 @@ Map an existing codebase into `.specs/` project memory before the first `/specif
 - `.specs/project/ROADMAP.md` — planned domain drafting items
 - `.specs/domains/[domain]/spec.md` — brownfield stubs (one per detected/manual domain)
 - `.specs/config.yaml` — from auto-detected or chosen preset (when missing)
+- `.specs/memory/code-index.json` — shallow symbol map (unless `--no-code-index`)
 
 ## Procedure
 
@@ -47,6 +48,7 @@ Map an existing codebase into `.specs/` project memory before the first `/specif
 | `--domains a,b` | Manual domain list (overrides auto-detect) |
 | `--no-domains` | Skip domain folder scaffolding |
 | `--no-project` | Skip `PROJECT.md` |
+| `--no-code-index` | Skip `code-index rebuild` after init |
 | `--force` | Overwrite generated project/domain/config files |
 
 ## Rules

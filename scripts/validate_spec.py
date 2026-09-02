@@ -87,6 +87,10 @@ NFR_HEADING = re.compile(
     r"^(?P<level>#{2,6})\s*Non-Functional Requirements\b",
     re.MULTILINE | re.IGNORECASE,
 )
+TEST_PLAN_HEADING = re.compile(
+    r"^(?P<level>#{2,6})\s*Test Plan\b",
+    re.MULTILINE | re.IGNORECASE,
+)
 FEATURE_BRIEFS = Path(".specs/project/feature-briefs")
 PROJECT_BRIEF = Path(".specs/project/requirements-brief.md")
 COMPLEX_TASK_FLOOR = 10
@@ -177,6 +181,32 @@ def validate_nfr_section(report: Report, visible: str, feature_dir: Path) -> Non
     message = (
         "Complex-tier feature missing ## Non-Functional Requirements "
         "(performance, security, availability, …)"
+    )
+    if mode == "error":
+        report.error(message)
+    else:
+        report.warn(message)
+
+
+def validate_test_plan_section(report: Report, visible: str, feature_dir: Path) -> None:
+    root = feature_dir.parent.parent.parent
+    policy = load_elicitation_config(root)
+    mode = str(policy.get("require_test_plan_complex", "warn")).lower()
+    if mode == "off" or not is_complex_tier(feature_dir):
+        return
+
+    body = section_body(visible, TEST_PLAN_HEADING)
+    if body and body.strip() and not re.fullmatch(
+        r"\s*[-*]?\s*(none|n/a)\s*",
+        body.strip(),
+        re.IGNORECASE,
+    ):
+        report.ok("Test Plan section present")
+        return
+
+    message = (
+        "Complex-tier feature missing ## Test Plan "
+        "(acceptance scenarios per REQ before tasks)"
     )
     if mode == "error":
         report.error(message)
@@ -437,6 +467,7 @@ def build_report(target: str, text: str, feature_dir: Path | None = None) -> Rep
 
     if feature_dir is not None and not delta:
         validate_nfr_section(report, visible, feature_dir)
+        validate_test_plan_section(report, visible, feature_dir)
 
     for malformed in MALFORMED_ID.finditer(visible):
         raw = malformed.group(0).lstrip("# ").strip()

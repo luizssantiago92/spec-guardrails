@@ -77,6 +77,13 @@ elicitation:
   require_brief_complex: true
   # warn | error | off — NFR section on Complex-tier full specs
   require_nfr_complex: warn
+  # warn | error | off — Test Plan section on Complex-tier full specs
+  require_test_plan_complex: warn
+
+# Converge hints during Execute (loop-plan --json)
+converge:
+  every_n_tasks: 5
+  mode: suggest   # suggest | warn | off
 
 # Soft OS sandbox (optional — policy, not containers; enforced via sandbox CLI)
 sandbox:

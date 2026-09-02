@@ -74,6 +74,20 @@ class LoopPlanTest(unittest.TestCase):
         parsed = json.loads(payload)
         self.assertIn("groups", parsed)
         self.assertIn("recommend_sub_agents", parsed)
+        self.assertIn("completed_count", parsed)
+
+    def test_converge_hint_at_threshold(self):
+        plan = loop_plan.build_plan(PARALLEL_TASKS)
+        tasks_path = Path(".specs/features/001-export/tasks.md")
+        loop_plan.apply_converge_hint(plan, tasks_path)
+        self.assertNotIn("converge_hint", plan)
+
+        plan_five = loop_plan.build_plan(PARALLEL_TASKS)
+        plan_five["completed"] = ["T1", "T2", "T3", "T4", "T5"]
+        plan_five["completed_count"] = 5
+        loop_plan.apply_converge_hint(plan_five, tasks_path)
+        self.assertTrue(plan_five.get("converge_suggest"))
+        self.assertIn("converge_hint", plan_five)
 
 
 if __name__ == "__main__":

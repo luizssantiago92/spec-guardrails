@@ -67,6 +67,14 @@ import {
   listPresets,
   loadPresetText,
 } from "./lib/presets.js";
+import {
+  formatLoopListJson,
+  formatLoopPattern,
+  formatLoopRunBrief,
+  getLoopPattern,
+  listLoopPatterns,
+  loadLoopCatalog,
+} from "./lib/operational-loops.js";
 
 const USAGE = `Usage: ${CLI_NAME} <command> [args]
 
@@ -85,6 +93,7 @@ Commands:
     [--domains a,b,c]                Explicit domain slugs (overrides auto-detect)
     [--no-domains]                   Skip .specs/domains/ scaffolding
     [--no-project]                   Skip PROJECT.md generation
+    [--no-code-index]                Skip code-index rebuild after init
     [--force]                        Overwrite generated project/domain/config files
     [--dry-run]                      Print scan results without writing files
   feature-init "<description>"       Allocate NNN-slug feature, STATE, local branch (Tier 0)
@@ -188,6 +197,13 @@ Commands:
   analyze-artifacts [feature]        Cross-artifact consistency before task approval
   validate-tasks [tasks.md|feature]  Granularity gate for a task breakdown
   loop-plan [tasks.md|feature]       Next Execute wave — parallel groups + sub-agent hints
+  loop list                          Operational loop patterns (repo health, CI, triage)
+    [--json]                         Machine-readable catalog
+  loop show <pattern-id>             Show one operational loop pattern
+    [--json]                         Machine-readable output
+  loop run <pattern-id>              Print agent brief for an operational loop
+    [--dry-run]                      Same output (explicit no-op label)
+    [--json]                         Machine-readable brief
     [--json]                         Machine-readable plan for agents
   validate-traceability [feature]    REQ → tasks → validation coverage chain
   validate-ship-surface [feature]    Ship Surface + AI Surface when infra/AI paths in tasks
@@ -335,11 +351,83 @@ if (command === "--version" || command === "-v" || command === "version") {
     console.error(`❌ ${err.message}`);
     process.exit(1);
   }
+} else if (command === "loop") {
+  try {
+    const sub = args[0];
+    const rest = args.slice(1);
+    const json = rest.includes("--json");
+    const dryRun = rest.includes("--dry-run");
+    const positional = rest.filter((arg) => !arg.startsWith("--"));
+
+    if (sub === "list") {
+      const patterns = await loadLoopCatalog();
+      if (json) {
+        console.log(JSON.stringify(formatLoopListJson(patterns), null, 2));
+      } else {
+        const ids = await listLoopPatterns();
+        console.log("Operational loop patterns:");
+        for (const id of ids) {
+          const pattern = patterns[id];
+          console.log(`  ${id} — ${pattern.title} (${pattern.tier}, ${pattern.cadence})`);
+        }
+        console.log(`\nShow detail: ${CLI_NAME} loop show <pattern-id>`);
+      }
+      process.exit(0);
+    }
+
+    if (sub === "show") {
+      const id = positional[0];
+      if (!id) {
+        throw new Error("Usage: loop show <pattern-id> [--json]");
+      }
+      const pattern = await getLoopPattern(id);
+      if (!pattern) {
+        const available = (await listLoopPatterns()).join(", ");
+        throw new Error(`Unknown pattern "${id}". Available: ${available}`);
+      }
+      if (json) {
+        console.log(JSON.stringify({ id, ...pattern }, null, 2));
+      } else {
+        console.log(formatLoopPattern(id, pattern));
+      }
+      process.exit(0);
+    }
+
+    if (sub === "run") {
+      const id = positional[0];
+      if (!id) {
+        throw new Error("Usage: loop run <pattern-id> [--dry-run] [--json]");
+      }
+      const pattern = await getLoopPattern(id);
+      if (!pattern) {
+        const available = (await listLoopPatterns()).join(", ");
+        throw new Error(`Unknown pattern "${id}". Available: ${available}`);
+      }
+      if (json) {
+        console.log(
+          JSON.stringify(
+            { id, dry_run: dryRun, brief: formatLoopRunBrief(id, pattern, { dryRun }) },
+            null,
+            2,
+          ),
+        );
+      } else {
+        console.log(formatLoopRunBrief(id, pattern, { dryRun }));
+      }
+      process.exit(0);
+    }
+
+    throw new Error("Usage: loop list | loop show <pattern-id> | loop run <pattern-id>");
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
 } else if (command === "project-init") {
   try {
     const initOptions = {
       skipDomains: false,
       skipProject: false,
+      skipCodeIndex: false,
       force: false,
       dryRun: false,
     };
@@ -361,6 +449,8 @@ if (command === "--version" || command === "-v" || command === "version") {
         initOptions.skipDomains = true;
       } else if (arg === "--no-project") {
         initOptions.skipProject = true;
+      } else if (arg === "--no-code-index") {
+        initOptions.skipCodeIndex = true;
       } else if (arg === "--force") {
         initOptions.force = true;
       } else if (arg === "--dry-run") {

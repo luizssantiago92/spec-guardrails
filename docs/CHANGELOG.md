@@ -10,6 +10,25 @@ Version history for `@luizsantiago/spec-guardrails`.
 
 —
 
+## 4.8.0 — SDLC requirements + integration helpers
+
+### Added
+
+- **`elicitation` config policy** — `require_brief`, `require_brief_complex`, `require_nfr_complex` in `.specs/config.yaml`
+- **`validate-spec`** — optional approved brief requirement (config + Complex tier); NFR section warning/error on Complex specs
+- **`req-analysis diff`** — heuristic drift check between brief capabilities and `spec.md` REQs
+- **`validate-design`** — structural gate for `design.md` on Complex / Medium+ features
+- **`validate-state`** — records `Verifier-Mode` metadata warning (`fresh_chat` | `subagent` | `same_session`)
+- **`feature-pr-body`** — generate GitHub PR description from `feature-overview` traceability
+- **`install-hooks`** — optional git `pre-commit` for `check-suppressions` + `check-commit --staged`
+- **CI template** — `templates/ci/guardrails-pr.yml` for PR gate workflow
+- **Tutorial 05** — [requirements analysis workshop](guide/tutorials/05-requirements-analysis-workshop.md)
+
+### Changed
+
+- **`design.md` skill** — template sections aligned with `validate-design` (Context, Decision, Alternatives, Risks)
+- **`validate.md` skill** — `Verifier-Mode` in validation preamble template
+
 ## 4.7.0 — Python platform pack (backend + DevOps + AI)
 
 ### Added

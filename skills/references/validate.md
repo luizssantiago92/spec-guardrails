@@ -133,6 +133,7 @@ The gate cannot judge whether a cited test actually asserts the criterion. Run `
 # Validation: [Feature]
 
 - Verifier: independent agent (clean context)
+- Verifier-Mode: fresh_chat | subagent | same_session
 - Date: [ISO date]
 - Diff range: [base..head]
 - Verdict: PASS

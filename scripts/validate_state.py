@@ -89,6 +89,11 @@ TEST_EVIDENCE = re.compile(
 PASS_VERDICTS = {"PASS", "PASSED"}
 FAIL_VERDICTS = {"FAIL", "FAILED"}
 MEDIUM_TASK_FLOOR = 4
+VERIFIER_MODE = re.compile(
+    r"^\s*[-*]?\s*\*{0,2}Verifier[- ]Mode\*{0,2}\s*:\s*(?P<value>[^\n]+)",
+    re.IGNORECASE | re.MULTILINE,
+)
+VALID_VERIFIER_MODES = frozenset({"fresh_chat", "subagent", "same_session"})
 
 
 def validation_preamble(text: str) -> str:
@@ -99,6 +104,38 @@ def validation_preamble(text: str) -> str:
     if not match:
         return visible
     return visible[: match.start()]
+
+
+def find_verifier_mode(text: str) -> str | None:
+    preamble = validation_preamble(text)
+    match = VERIFIER_MODE.search(preamble)
+    if not match:
+        return None
+    return re.sub(r"\s+", "_", match.group("value").strip().lower())
+
+
+def validate_verifier_mode(report: Report, validation: str, medium_plus: bool) -> None:
+    mode = find_verifier_mode(validation)
+    if not mode:
+        report.warn(
+            "Verifier-Mode not recorded — add "
+            "'Verifier-Mode: fresh_chat | subagent | same_session' to the preamble"
+        )
+        return
+
+    if mode not in VALID_VERIFIER_MODES:
+        report.warn(
+            f"unknown Verifier-Mode '{mode}' — use fresh_chat, subagent, or same_session"
+        )
+        return
+
+    if mode == "same_session" and medium_plus:
+        report.warn(
+            "Verifier-Mode is same_session on Medium+ feature — "
+            "prefer subagent or fresh_chat for independent verify"
+        )
+    else:
+        report.ok(f"Verifier-Mode recorded: {mode}")
 
 
 def find_verdict(text: str) -> re.Match[str] | None:
@@ -306,6 +343,8 @@ def build_report(feature_dir: Path) -> Report:
         )
 
     medium_plus = is_medium_plus(feature_dir)
+    validate_verifier_mode(report, validation, medium_plus)
+
     has_sensor = bool(SENSOR.search(validation) and SENSOR_RESULT.search(focus))
     if has_sensor:
         if (

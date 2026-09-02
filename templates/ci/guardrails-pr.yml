@@ -1,0 +1,78 @@
+# Spec Guardrails — PR gate workflow (copy to .github/workflows/guardrails-pr.yml)
+#
+# Runs structural gates on pull requests so Brakes checks do not depend on the agent
+# remembering to run them locally. Requires Python 3.10+ on the runner.
+#
+# Install once in your repo:
+#   npx @luizsantiago/spec-guardrails install
+#   mkdir -p .github/workflows && cp node_modules/@luizsantiago/spec-guardrails/templates/ci/guardrails-pr.yml .github/workflows/
+# Or copy from the package templates/ci/ after install.
+
+name: Spec Guardrails PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - ".specs/**"
+      - "src/**"
+      - "lib/**"
+      - "app/**"
+      - "tests/**"
+      - "test/**"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - "**/*.js"
+      - "**/*.py"
+
+jobs:
+  guardrails:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install Spec Guardrails (gates + scripts)
+        run: npx @luizsantiago/spec-guardrails@latest install
+
+      - name: Doctor (Process + Brakes readiness)
+        run: npx @luizsantiago/spec-guardrails doctor
+
+      - name: Validate specs (all features touched in PR)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t FEATURES < <(git diff --name-only "${{ github.event.pull_request.base.sha }}" HEAD -- '.specs/features/*' | sed -n 's#^\.specs/features/\([^/]*\)/.*#\1#p' | sort -u)
+          if [ "${#FEATURES[@]}" -eq 0 ]; then
+            echo "No .specs/features/ changes in this PR — skipping feature gates."
+            exit 0
+          fi
+          for feature in "${FEATURES[@]}"; do
+            echo "=== validate-spec: $feature ==="
+            python3 .specs/guardrails/scripts/validate_spec.py "$feature"
+            if [ -f ".specs/features/$feature/tasks.md" ]; then
+              echo "=== validate-tasks: $feature ==="
+              python3 .specs/guardrails/scripts/validate_tasks.py "$feature"
+              echo "=== analyze-artifacts: $feature ==="
+              python3 .specs/guardrails/scripts/analyze_artifacts.py "$feature"
+            fi
+            if [ -f ".specs/features/$feature/validation.md" ]; then
+              echo "=== validate-traceability: $feature ==="
+              python3 .specs/guardrails/scripts/validate_traceability.py "$feature"
+              echo "=== validate-state: $feature ==="
+              python3 .specs/guardrails/scripts/validate_state.py "$feature"
+            fi
+            if [ -f ".specs/features/$feature/design.md" ]; then
+              echo "=== validate-design: $feature ==="
+              python3 .specs/guardrails/scripts/validate_design.py "$feature"
+            fi
+          done

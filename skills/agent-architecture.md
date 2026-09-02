@@ -41,9 +41,10 @@ Structural gates run **before** owner review, so they cannot drift when the mode
 | When | Command |
 | --- | --- |
 | Before `/specify` (Medium+) | `npx @luizsantiago/spec-guardrails feature-init "<description>"` (Tier 0) |
-| Optional elicitation (vague kickoff or request) | `/elicit` → `req-analysis init` — **suggested only**, never blocks Specify |
+| Optional elicitation (vague kickoff or request) | `/elicit` → `req-analysis init` — **suggested only**; `require_brief*` config may block `validate-spec` on Complex |
 | Optional project config | `init-config --preset node-ts` or `install --preset python` (see `preset list`) |
 | Before confirming a spec | `python3 .specs/guardrails/scripts/validate_spec.py [feature]` |
+| Before Tasks (Complex / Medium+ design) | `python3 .specs/guardrails/scripts/validate_design.py [feature]` |
 | Before approving tasks | `python3 .specs/guardrails/scripts/analyze_artifacts.py [feature]` |
 | Before presenting tasks for approval | `python3 .specs/guardrails/scripts/validate_tasks.py [feature]` |
 | Before Execute waves (3+ tasks) | `npx @luizsantiago/spec-guardrails loop-plan [feature]` |
@@ -90,7 +91,7 @@ EXPLORE (optional) → ELICIT (optional) → SPECIFY → DISCUSS (conditional) �
 | **Constitution** | Once per project | `references/constitution.md` | — | — |
 | **Specify** | Yes | `references/specify.md` | — | `validate_spec.py` |
 | **Discuss** | Conditional | `references/discuss.md` | — | — |
-| **Design** | No | `references/design.md` | — | — |
+| **Design** | No | `references/design.md` | — | `validate_design.py` (when design.md exists, Medium+) |
 | **Tasks** | No | `references/tasks.md` | `task-graph-engineering.md` | `validate_tasks.py` |
 | **Analyze** | Before task approval | `references/analyze.md` | — | `analyze_artifacts.py` |
 | **Execute** | Yes | `references/implement.md` | `engineering-standards.md` | `check_commit.py`, `check_suppressions.py` |

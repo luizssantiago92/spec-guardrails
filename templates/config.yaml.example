@@ -71,6 +71,12 @@ elicitation:
     - docs/brief.md
     - docs/prd.md
     - .specs/project/kickoff.md
+  # When true, validate-spec requires an approved requirements-brief.md
+  require_brief: false
+  # When true (default), Complex-tier features require a brief even if require_brief is false
+  require_brief_complex: true
+  # warn | error | off — NFR section on Complex-tier full specs
+  require_nfr_complex: warn
 
 # Soft OS sandbox (optional — policy, not containers; enforced via sandbox CLI)
 sandbox:

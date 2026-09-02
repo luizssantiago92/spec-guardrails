@@ -80,6 +80,7 @@ More gates (tasks, loop-plan, “are we actually done?”): [Gates reference](ga
 
 - **Pull requests:** copy `templates/ci/guardrails-pr.yml` from the package into `.github/workflows/` — runs spec/tasks/state gates on PRs. See [Gates → CI template](gates.md#ci-template-integration-phase).
 - **Local commits:** `npx @luizsantiago/spec-guardrails install-hooks` — opt-in Conventional Commits check on staged files.
+- **Operational cadence (5.0+):** `npx @luizsantiago/spec-guardrails loop list` — triage, CI, deps patterns. See [Loop patterns](loop-patterns.md).
 
 ## If something feels stuck
 

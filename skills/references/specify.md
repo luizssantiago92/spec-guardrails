@@ -92,6 +92,16 @@ Checks required sections (`Requirements`, `Assumptions`, `Out of Scope`), well-f
 ## Assumptions
 - [Anything inferred rather than confirmed]
 
+## Non-Functional Requirements
+<!-- Complex tier — optional unless require_nfr_complex is off in config -->
+- Performance: [e.g. p95 login < 200ms]
+- Security: [e.g. sessions expire after 24h]
+
+## Test Plan
+<!-- Complex tier — optional unless require_test_plan_complex is off in config -->
+- REQ-001: [integration test path or scenario]
+- REQ-002: [edge case scenario]
+
 ## Out of Scope
 - [Explicitly excluded work]
 ```

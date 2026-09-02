@@ -1,6 +1,6 @@
 # Documentation
 
-Plain-language guides for **Spec Guardrails 4.7.x**.  
+Plain-language guides for **Spec Guardrails 5.0.x**.  
 **New here?** Read **[Overview](Overview.md)** first, then [Quick start](Quick-start.md).
 
 The npm [README](../../README.md) is the product entry point: **Install** → three pillars (**requirements analysis**, **gates**, **memory**) → **SDD** → **Python Platform** → more capabilities → limitations — with links back here for technical depth.
@@ -42,7 +42,8 @@ The npm [README](../../README.md) is the product entry point: **Install** → th
 | --- | --- |
 | [skills-and-hub.md](skills-and-hub.md) | Hub, references, sister skills |
 | [Token-efficiency.md](Token-efficiency.md) | Progressive skill loading |
-| [loop-patterns.md](loop-patterns.md) | Feature vs operational loops |
+| [loop-patterns.md](loop-patterns.md) | Feature vs operational loops; `loop list` CLI (5.0+) |
+| [Releases.md](Releases.md) | npm versions vs GitHub Releases; where to read notes |
 | [brownfield-context.md](brownfield-context.md) | Brownfield and deferred code graphs |
 | [Restart-prd-seed.md](Restart-prd-seed.md) | PRD template for greenfield product |
 | [Migration.md](Migration.md) | Older package names and platform-aware install (4.4+) |

@@ -146,7 +146,7 @@ Fifteen+ gates cover planning through close — including `validate-design` (Com
 
 The **markdown artifacts alone** already beat chat-only workflows for any team that ships more than one feature. Optional search (keyword, graph, semantic embed) — see [Optional capabilities](#optional-capabilities-off-by-default).
 
-**Go deeper:** [Memory guide](docs/guide/Memory.md) · [Brownfield context](docs/guide/brownfield-context.md)
+**Go deeper:** [Memory guide](docs/guide/Memory.md) · [Brownfield context](docs/guide/brownfield-context.md) · [Loop patterns](docs/guide/loop-patterns.md) (operational loops, 5.0+)
 
 ---
 
@@ -181,6 +181,8 @@ Lineage: [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/
 **Traceability:** REQ → task → evidence at verify ([pillar §2](#2-gates-brakes--done-has-to-be-provable)); semantic test quality is still your judgment.
 
 **Parallel work:** `loop-plan` picks the next wave; `task-graph.md` and git worktrees (`workspace-prepare`) keep parallel agents off the same files.
+
+**Operational loops (5.0+):** recurring repo work (triage, CI, deps) uses `loop list` / `loop run` — separate from feature `loop-plan`. See [loop-patterns](docs/guide/loop-patterns.md).
 
 **Git tiers:** approving spec/tasks authorizes **local work only** (Tier 0). Push, PR, merge, and deploy need your explicit go-ahead — see [git-handoff](docs/guide/agent-commands.md).
 

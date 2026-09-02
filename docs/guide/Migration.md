@@ -93,6 +93,8 @@ After **3.0**, the package name stays **Spec Guardrails**. Major themes by minor
 | **4.5** | `check-suppressions`, `quality-checks`, config fixes | Update `config.yaml.example` patterns if you copied old template |
 | **4.6** | Tutorials, `feature-overview` | Additive — no breaking CLI |
 | **4.7** | `python-platform` preset, Ship/AI Surface gate | [python-platform.md](python-platform.md); optional preset |
+| **4.8** | Elicitation policy, `validate-design`, CI template, verifier metadata | [requirements-analysis.md](requirements-analysis.md); config additive |
+| **5.0** | Operational `loop` CLI, brownfield code-index, converge hints | [loop-patterns.md](loop-patterns.md); config additive |
 
 **Version picking:** see [Product history](Product-history.md) for which pin fits your team.
 
@@ -107,6 +109,32 @@ After **3.0**, the package name stays **Spec Guardrails**. Major themes by minor
 | Pin older line without platform pack | `npx @luizsantiago/spec-guardrails@4.6.0 install` — see [Product history](Product-history.md) |
 
 See [CHANGELOG](../CHANGELOG.md#470--python-platform-pack-backend--devops--ai).
+
+## Upgrading to 4.8 (SDLC requirements + integration)
+
+**4.8.0** adds optional elicitation policy, `validate-design`, `req-analysis diff`, CI template, `install-hooks`, and `feature-pr-body`. Defaults preserve fast paths (`require_brief: false`).
+
+| Situation | Action |
+| --- | --- |
+| Complex teams want brief before spec | Set `elicitation.require_brief_complex: true` (default) or `require_brief: true` in `.specs/config.yaml` |
+| PR CI gates | Copy `templates/ci/guardrails-pr.yml` to `.github/workflows/` |
+| Local commit hygiene | `install-hooks` (opt-in) |
+| Design gate on Complex | Run `validate-design` after `design.md` |
+
+See [CHANGELOG](../CHANGELOG.md#480--sdlc-requirements--integration-helpers) and [requirements-analysis.md](requirements-analysis.md).
+
+## Upgrading to 5.0 (operational loops + brownfield)
+
+**5.0.0** adds operational loop CLI, automatic `code-index` on `project-init`, converge hints in `loop-plan`, and optional `## Test Plan` on Complex specs.
+
+| Situation | Action |
+| --- | --- |
+| Repo health / triage automation | `loop list` → `loop run <pattern-id>` — see [loop-patterns.md](loop-patterns.md) |
+| Brownfield onboarding | Re-run `project-init` (or fresh install) — code index rebuilds unless `--no-code-index` |
+| Long Execute sessions | Optional `converge.every_n_tasks` in config; watch `converge_hint` in `loop-plan --json` |
+| Complex specs | Add `## Test Plan` or set `require_test_plan_complex: off` |
+
+See [CHANGELOG](../CHANGELOG.md#500--operational-loops-cli--brownfield--converge-hints).
 
 ## From `spec-seatbelt` 2.x
 

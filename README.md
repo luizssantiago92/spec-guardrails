@@ -167,7 +167,7 @@ Lineage: [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/
 | **Constitution** | Once per project | Project principles (`/constitution`) | Once |
 | **Specify** | Yes (full path) | Written requirements | **Spec** |
 | **Discuss** | When product is gray | Options A/B/C, decision records | As needed |
-| **Design** | When architecture matters | Technical approach in `design.md`; `validate-design` on Complex | As needed |
+| **Design** | When architecture matters | Technical approach in `design.md`; `validate-design` when design exists on Complex/Medium+ | As needed |
 | **Solution explore** | When architectures fork (optional — [off by default](#optional-capabilities-off-by-default)) | Compare candidates; record decision | Decision |
 | **Tasks** | When work needs a job list | Atomic tasks, file ownership, REQ coverage | **Tasks** |
 | **Execute** | Yes | `/loop` waves — implement, gate, commit; parallel when files are disjoint | — |
@@ -301,13 +301,13 @@ Patterns adapted from open source. **Shipped influences** (skills, gates, or lay
 | [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/main/packages/skills-catalog/skills/(development)/tlc-spec-driven) | CC-BY-4.0 | Spec → tasks → execute → verify phases; `.specs/features/`, `STATE.md`; gate “brakes” philosophy |
 | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT | Discuss-phase options A/B/C; definition-of-done in verify/archive |
 | [graph-engineering](https://github.com/codejunkie99/graph-engineering) | MIT | Task-graph rules; `validate-tasks` graph hygiene |
-| [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Execute wave model; [loop-patterns.md](docs/guide/loop-patterns.md) |
+| [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Execute wave model; operational vs feature loops in [loop-patterns.md](docs/guide/loop-patterns.md); **`loop list|show|run` CLI** (5.0+) |
 | [Addy Osmani — Loop engineering](https://addyosmani.com/blog/loop-engineering/) | Essay | Loop taxonomy in loop-patterns guide |
 | [awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | CC0 | Harness vs app vocabulary in [ecosystem.md](docs/guide/ecosystem.md) |
 | [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | `check-suppressions`; `quality.checks` as verify evidence; `check-commit --staged`; honest-limits framing; README diagram approach |
 | [obra/superpowers](https://github.com/obra/superpowers) | MIT | Two-stage subagent review in `sub-agents.md` |
 
-**Original work here:** Node CLI, Python gates, platform adapters, elicitation (`/elicit`), Python Platform pack (4.7+), SDLC integration helpers (4.8+), memory-index, execution policy, req-analysis tooling.
+**Original work here:** Node CLI, Python gates, platform adapters, elicitation (`/elicit`), Python Platform pack (4.7+), SDLC integration helpers (4.8+), operational loops CLI (5.0+), memory-index, execution policy, req-analysis tooling.
 
 **Cited, not vendored:** [DeepCode](https://github.com/HKUDS/DeepCode), [RepoGraph](https://github.com/ozyyshr/RepoGraph), [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) — see [credits.md](docs/guide/credits.md).
 

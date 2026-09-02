@@ -28,9 +28,9 @@ KG and RepoGraph attack (2) and (3) with graphs. Spec Guardrails already covers 
 
 ### What we do instead
 
-- `project-init` → `PROJECT.md` + optional domain stubs
+- `project-init` → `PROJECT.md` + optional domain stubs; **`code-index rebuild` runs by default** (5.0+) unless `--no-code-index`
 - `archive-feature` → merge verified specs into `.specs/domains/`
-- **`code-index rebuild`** → lightweight `.specs/memory/code-index.json` (files, symbols, imports) — **shipped in 3.9.0**
+- **`code-index rebuild`** → lightweight `.specs/memory/code-index.json` (files, symbols, imports) — shipped in **3.9.0**; brownfield onboarding triggers it automatically since **5.0.0**
 - Manual **REQ → file → test** links in specs and validation (gate-enforced)
 
 A future **optional plugin** could still add full RepoGraph or a triple-store KG — the core package stops at the markdown + shallow index middle ground.

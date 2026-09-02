@@ -118,7 +118,7 @@ See [CHANGELOG](../CHANGELOG.md#470--python-platform-pack-backend--devops--ai).
 | --- | --- |
 | Complex teams want brief before spec | Set `elicitation.require_brief_complex: true` (default) or `require_brief: true` in `.specs/config.yaml` |
 | PR CI gates | Copy `templates/ci/guardrails-pr.yml` to `.github/workflows/` |
-| Local commit hygiene | `install-hooks` (opt-in) |
+| Local commit hygiene | `install-hooks` (opt-in — `check-suppressions` + `check-commit --staged`) |
 | Design gate on Complex | Run `validate-design` after `design.md` |
 
 See [CHANGELOG](../CHANGELOG.md#480--sdlc-requirements--integration-helpers) and [requirements-analysis.md](requirements-analysis.md).

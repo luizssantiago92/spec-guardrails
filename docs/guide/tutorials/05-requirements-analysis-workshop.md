@@ -54,11 +54,12 @@ elicitation:
   require_brief: false
   require_brief_complex: true
   require_nfr_complex: warn
+  require_test_plan_complex: warn
 ```
 
 When `require_brief_complex` is true, Complex-tier features **must** have an approved brief before `validate-spec` passes.
 
-Add `## Non-Functional Requirements` to the spec for performance, security, or availability constraints.
+Add `## Non-Functional Requirements` and `## Test Plan` to Complex specs when policy is `warn` or `error`.
 
 ## 6. Drift check (brief ↔ spec)
 

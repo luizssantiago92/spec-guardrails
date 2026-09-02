@@ -1211,6 +1211,7 @@ describe("CLI", () => {
     assert.equal(code, 0);
     assert.match(stdout, /project-init/);
     assert.match(stdout, /loop-plan/);
+    assert.match(stdout, /loop list/);
     assert.match(stdout, /feature-init/);
     assert.match(stdout, /archive-feature/);
     assert.match(stdout, /phase-context/);

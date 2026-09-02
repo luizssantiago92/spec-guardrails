@@ -93,6 +93,11 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
             "require_brief": False,
             "require_brief_complex": True,
             "require_nfr_complex": "warn",
+            "require_test_plan_complex": "warn",
+        },
+        "converge": {
+            "every_n_tasks": 5,
+            "mode": "suggest",
         },
     }
 
@@ -144,6 +149,12 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
             index += 1
             continue
 
+        if stripped == "converge:":
+            section = "converge"
+            section_indent = indent
+            index += 1
+            continue
+
         if section and indent <= section_indent and not stripped.endswith(":"):
             section = None
 
@@ -189,6 +200,19 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
                 config["elicitation"]["require_nfr_complex"] = str(
                     _parse_scalar(match.group(1))
                 ).lower()
+            match = re.match(r"^require_test_plan_complex:\s*(.+)$", stripped)
+            if match:
+                config["elicitation"]["require_test_plan_complex"] = str(
+                    _parse_scalar(match.group(1))
+                ).lower()
+
+        if section == "converge":
+            match = re.match(r"^every_n_tasks:\s*(.+)$", stripped)
+            if match:
+                config["converge"]["every_n_tasks"] = int(_parse_scalar(match.group(1)))
+            match = re.match(r"^mode:\s*(.+)$", stripped)
+            if match:
+                config["converge"]["mode"] = str(_parse_scalar(match.group(1))).lower()
 
         index += 1
 
@@ -205,3 +229,9 @@ def load_elicitation_config(cwd: Path | str | None = None) -> dict:
     """Return elicitation policy with defaults for validate_spec and req-analysis."""
 
     return load_project_config(cwd)["elicitation"]
+
+
+def load_converge_config(cwd: Path | str | None = None) -> dict:
+    """Return converge policy for loop-plan hints."""
+
+    return load_project_config(cwd)["converge"]

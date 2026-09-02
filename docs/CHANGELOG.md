@@ -10,6 +10,19 @@ Version history for `@luizsantiago/spec-guardrails`.
 
 —
 
+## 5.0.0 — Operational loops CLI + brownfield + converge hints
+
+### Added
+
+- **`loop list|show|run`** — operational loop catalog from `templates/loops/catalog.json` (triage, CI, deps, changelog, …)
+- **`project-init`** — rebuilds `code-index` after brownfield scan (opt out with `--no-code-index`)
+- **`converge` config** — `every_n_tasks` + `mode` (`suggest`|`warn`|`off`); `loop-plan` emits `converge_hint` in JSON/human output
+- **`validate-spec`** — optional `## Test Plan` section on Complex specs (`require_test_plan_complex`: warn|error|off)
+
+### Changed
+
+- **`loop-plan`** — plan payload includes `completed_count` and optional converge suggestion
+
 ## 4.8.0 — SDLC requirements + integration helpers
 
 ### Added

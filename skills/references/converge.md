@@ -41,6 +41,7 @@ Updated `tasks.md` with new tasks for uncovered work (append only — do not rew
 - Never weaken tests to match partial implementation.
 - New tasks need Requirement, Files, Depends on, Tests, Gate, Done when.
 - Re-run `validate_tasks.py` after editing tasks.
+- When `loop-plan --json` shows `converge_suggest`, run this procedure before more Execute.
 
 ## Next
 

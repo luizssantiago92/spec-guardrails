@@ -37,9 +37,12 @@ Run an audit before relying on Spec Guardrails in production:
 ```bash
 npx @luizsantiago/spec-guardrails doctor
 npx @luizsantiago/spec-guardrails doctor --json
+npx @luizsantiago/spec-guardrails loop list
 ```
 
 `doctor` checks skills in all adapter trees, platform entry contracts, gates, config, STATE, optional PROJECT.md, and (for the active feature with 3+ tasks) `task-graph.md`. It prints **Operating modes** with separate **Process** and **Brakes** scores, **Guardrails Ready: N/100**, up to three next actions, and an **Execute hint** (`loop-plan` when tasks are in progress, or `validate-state` when every task is marked complete).
+
+`loop list` shows **operational** patterns (triage, CI sweeper, dependency bumps) — complementary to feature `loop-plan` waves. Use `loop run <id>` to print a structured agent brief.
 
 Inspired by loop-engineering’s Loop Ready score — scoped to **this package’s** install surface, not their full foundry stack.
 

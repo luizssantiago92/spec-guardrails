@@ -24,6 +24,7 @@ import sys
 from pathlib import Path
 
 from _common import resolve_artifact, visible_markdown
+from _project_config import load_converge_config
 from validate_tasks import parse_dependencies, parse_fields, parse_files, split_tasks
 
 GATE = "loop-plan"
@@ -132,7 +133,37 @@ def build_plan(text: str, *, task_graph_text: str | None = None) -> dict:
         "blocked": blocked,
         "all_done": not incomplete,
         "recommend_sub_agents": any(group["sub_agents"] for group in groups),
+        "completed_count": len(completed),
     }
+
+
+def apply_converge_hint(plan: dict, tasks_path: Path) -> None:
+    """Attach /converge suggestion when completed tasks hit configured threshold."""
+
+    feature_dir = tasks_path.parent
+    if feature_dir.parent.name != "features":
+        return
+
+    root = feature_dir.parent.parent.parent
+    policy = load_converge_config(root)
+    mode = str(policy.get("mode", "suggest")).lower()
+    every = int(policy.get("every_n_tasks", 5) or 0)
+
+    if mode == "off" or every <= 0:
+        return
+
+    completed = plan.get("completed_count", len(plan.get("completed", [])))
+    if completed <= 0 or completed % every != 0:
+        return
+
+    plan["converge_suggest"] = True
+    plan["converge_mode"] = mode
+    plan["converge_hint"] = (
+        f"{completed} tasks complete — run /converge: analyze-artifacts, append gaps, "
+        "feature-overview --write"
+    )
+    if mode == "warn":
+        plan["converge_warning"] = True
 
 
 def format_plan(plan: dict) -> str:
@@ -179,6 +210,11 @@ def format_plan(plan: dict) -> str:
             waiting = ", ".join(item["waiting_on"])
             lines.append(f"  {item['id']}: after {waiting}")
 
+    if plan.get("converge_hint"):
+        lines.append("")
+        prefix = "Converge (warn): " if plan.get("converge_warning") else "Converge (suggest): "
+        lines.append(prefix + plan["converge_hint"])
+
     return "\n".join(lines)
 
 
@@ -200,6 +236,7 @@ def main(argv: list[str] | None = None) -> int:
         graph_path.read_text(encoding="utf-8") if graph_path.is_file() else None
     )
     plan = build_plan(text, task_graph_text=graph_text)
+    apply_converge_hint(plan, path)
 
     if args.json:
         print(json.dumps(plan, indent=2))

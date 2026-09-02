@@ -21,7 +21,7 @@ You keep control: the agent proposes; you approve specs and tasks; push, merge, 
 
 **Platform adapters.** The same kit installs into the skill tree your agent already reads — **Cursor** (`.cursor/skills/`), **Claude Code** (`.claude/skills/`), **GitHub Copilot** (`.github/skills/`), **OpenAI Codex** (`.codex/skills/`), plus root `AGENTS.md` for other tools. By default `install` detects one platform and writes **one** tree; use `--all-platforms` when the repo serves multiple agents. Existing trees are preserved when you switch IDEs.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.8.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **5.0.x**
 
 **Docs:** [Overview](docs/guide/Overview.md) · [Quick start](docs/guide/Quick-start.md) · [Full guide index](docs/guide/README.md)
 

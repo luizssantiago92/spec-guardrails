@@ -89,6 +89,11 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
             "infra_globs": list(DEFAULT_INFRA_GLOBS),
             "ai_globs": list(DEFAULT_AI_GLOBS),
         },
+        "elicitation": {
+            "require_brief": False,
+            "require_brief_complex": True,
+            "require_nfr_complex": "warn",
+        },
     }
 
     path = config_path(cwd)
@@ -133,6 +138,12 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
             index += 1
             continue
 
+        if stripped == "elicitation:":
+            section = "elicitation"
+            section_indent = indent
+            index += 1
+            continue
+
         if section and indent <= section_indent and not stripped.endswith(":"):
             section = None
 
@@ -164,6 +175,21 @@ def load_project_config(cwd: Path | str | None = None) -> dict:
             if match:
                 config["commit"]["max_staged_lines"] = int(_parse_scalar(match.group(1)))
 
+        if section == "elicitation":
+            match = re.match(r"^require_brief:\s*(.+)$", stripped)
+            if match:
+                config["elicitation"]["require_brief"] = bool(_parse_scalar(match.group(1)))
+            match = re.match(r"^require_brief_complex:\s*(.+)$", stripped)
+            if match:
+                config["elicitation"]["require_brief_complex"] = bool(
+                    _parse_scalar(match.group(1))
+                )
+            match = re.match(r"^require_nfr_complex:\s*(.+)$", stripped)
+            if match:
+                config["elicitation"]["require_nfr_complex"] = str(
+                    _parse_scalar(match.group(1))
+                ).lower()
+
         index += 1
 
     return config
@@ -173,3 +199,9 @@ def load_ship_surface_config(cwd: Path | str | None = None) -> dict:
     """Return ship_surface globs with defaults for validate_ship_surface.py."""
 
     return load_project_config(cwd)["ship_surface"]
+
+
+def load_elicitation_config(cwd: Path | str | None = None) -> dict:
+    """Return elicitation policy with defaults for validate_spec and req-analysis."""
+
+    return load_project_config(cwd)["elicitation"]

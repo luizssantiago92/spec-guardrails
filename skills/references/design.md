@@ -44,8 +44,25 @@ Skipping Design is the default for Simple and Medium tiers.
 ```markdown
 # Design: [Feature]
 
-## Approach
+## Context
+[Why this design is needed — constraints, scale, and links to REQ IDs.]
+
+## Decision
 [The chosen approach in two or three sentences.]
+
+## Alternatives considered
+| Option | Pros | Cons | Why not |
+| --- | --- | --- | --- |
+| A | … | … | … |
+| B (chosen) | … | … | selected |
+
+## Risks
+| Risk | Mitigation |
+| --- | --- |
+| … | … |
+
+## Approach
+[Optional summary — may mirror Decision.]
 
 ## Components
 

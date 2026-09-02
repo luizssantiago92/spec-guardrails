@@ -15,7 +15,20 @@ Chat: the agent suggests **`/elicit`**. CLI scaffold: `req-analysis init`.
 | Brownfield repo just got Spec Guardrails | **Project** — enrich `PROJECT.md` and `ROADMAP.md` before the first feature |
 | Request is already testable and scoped | **Skip** — go straight to Specify |
 
-**Suggest, never block.** If you prefer Specify directly, the agent proceeds. Elicitation is optional.
+**Suggest by default.** If you prefer Specify directly, the agent proceeds — unless `.specs/config.yaml` sets `elicitation.require_brief` or `require_brief_complex` (see below).
+
+---
+
+## Policy (optional — `.specs/config.yaml`)
+
+```yaml
+elicitation:
+  require_brief: false          # when true, every feature needs an approved brief before validate-spec
+  require_brief_complex: true   # Complex-tier features need a brief (default)
+  require_nfr_complex: warn     # warn | error | off — NFR section on Complex specs
+```
+
+Workshop walkthrough: [Tutorial 05 — Requirements analysis](tutorials/05-requirements-analysis-workshop.md)
 
 ---
 
@@ -31,7 +44,19 @@ If the project is already in progress, the agent reads `STATE.md` and continues 
 
 ---
 
-## What gets written
+## Drift check (brief ↔ spec)
+
+After `/specify`:
+
+```bash
+npx @luizsantiago/spec-guardrails req-analysis diff
+```
+
+Flags **Capabilities** bullets from the brief that have no heuristic REQ mapping in `spec.md`.
+
+---
+
+## Gate before Specify (Brakes mode)
 
 | Scope | Primary file | Also updates |
 | --- | --- | --- |
@@ -42,7 +67,7 @@ Required brief sections: **Goal**, **Context sources**, **Current state**, **Cap
 
 ---
 
-## Gate before Specify (Brakes mode)
+## Validate brief (Brakes mode)
 
 When Python is available:
 
@@ -63,6 +88,7 @@ npx @luizsantiago/spec-guardrails req-analysis init "description" --scope projec
 npx @luizsantiago/spec-guardrails req-analysis discover
 npx @luizsantiago/spec-guardrails req-analysis context --scope feature --slug settings-page
 npx @luizsantiago/spec-guardrails req-analysis promote --scope feature
+npx @luizsantiago/spec-guardrails req-analysis diff
 ```
 
 Full command reference: [Agent commands → /elicit](agent-commands.md)

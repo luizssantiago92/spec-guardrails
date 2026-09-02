@@ -76,6 +76,11 @@ Replace `auth` with your feature folder name under `.specs/features/`. A non-zer
 
 More gates (tasks, loop-plan, “are we actually done?”): [Gates reference](gates.md) · [Guarantees matrix](Guarantees-matrix.md).
 
+### Optional: CI and pre-commit
+
+- **Pull requests:** copy `templates/ci/guardrails-pr.yml` from the package into `.github/workflows/` — runs spec/tasks/state gates on PRs. See [Gates → CI template](gates.md#ci-template-integration-phase).
+- **Local commits:** `npx @luizsantiago/spec-guardrails install-hooks` — opt-in Conventional Commits check on staged files.
+
 ## If something feels stuck
 
 - **No Python?** Node alone is enough — the agent follows the same phases and checklists manually. Install Python 3.10+ when you want automatic proof at each step (Brakes mode).  

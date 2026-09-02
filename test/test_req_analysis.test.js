@@ -113,6 +113,7 @@ describe("req-analysis CLI", () => {
     });
     assert.equal(result.status, 0);
     assert.match(result.stdout + result.stderr, /req-analysis init/);
+    assert.match(result.stdout + result.stderr, /req-analysis diff/);
     assert.match(result.stdout + result.stderr, /req-analysis discover/);
   });
 });

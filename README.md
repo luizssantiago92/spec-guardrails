@@ -21,7 +21,7 @@ You keep control: the agent proposes; you approve specs and tasks; push, merge, 
 
 **Platform adapters.** The same kit installs into the skill tree your agent already reads — **Cursor** (`.cursor/skills/`), **Claude Code** (`.claude/skills/`), **GitHub Copilot** (`.github/skills/`), **OpenAI Codex** (`.codex/skills/`), plus root `AGENTS.md` for other tools. By default `install` detects one platform and writes **one** tree; use `--all-platforms` when the repo serves multiple agents. Existing trees are preserved when you switch IDEs.
 
-npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.7.x**
+npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantiago/spec-guardrails) **4.8.x**
 
 **Docs:** [Overview](docs/guide/Overview.md) · [Quick start](docs/guide/Quick-start.md) · [Full guide index](docs/guide/README.md)
 
@@ -109,6 +109,8 @@ Most agent failures are not “bad code in one file.” They are **wrong goal**,
 
 It is **suggested**, not mandatory — clear requests can go straight to `/specify`. The win is catching ambiguity **before** the agent treats a half-sentence as a contract.
 
+**4.8+:** optional `elicitation` policy (`require_brief` on Complex), NFR section checks, and `req-analysis diff` for brief↔spec drift — [workshop](docs/guide/tutorials/05-requirements-analysis-workshop.md).
+
 **Go deeper:** [Requirements analysis](docs/guide/requirements-analysis.md) · [/elicit in agent commands](docs/guide/agent-commands.md)
 
 ---
@@ -122,10 +124,10 @@ It is **suggested**, not mandatory — clear requests can go straight to `/speci
 | **Before spec approval** | Criteria are testable (`SHALL`/`MUST`), assumptions documented |
 | **Before task approval** | Every REQ maps to a task; tasks have shape and file ownership |
 | **Each commit** | Conventional message, no empty staged diff, no linter/test bypass in the diff |
-| **Before “feature done”** | Traceability REQ → task → `file:line` evidence; PASS verdict in `validation.md` |
+| **Before “feature done”** | Traceability REQ → task → `file:line` evidence; PASS verdict and `Verifier-Mode` in `validation.md` |
 | **After verify FAIL** | Lessons are recorded — failures become rules, not forgotten |
 
-Twelve gates cover planning through close — including optional [Python Platform](#python-platform-optional--47) checks when paths match. Command list and pipeline order: [gates reference](docs/guide/gates.md).
+Fifteen+ gates cover planning through close — including `validate-design` (Complex), optional [Python Platform](#python-platform-optional--47) checks, CI template (`templates/ci/guardrails-pr.yml`), and opt-in `install-hooks` for pre-commit. Command list and pipeline order: [gates reference](docs/guide/gates.md).
 
 ---
 
@@ -165,7 +167,7 @@ Lineage: [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/
 | **Constitution** | Once per project | Project principles (`/constitution`) | Once |
 | **Specify** | Yes (full path) | Written requirements | **Spec** |
 | **Discuss** | When product is gray | Options A/B/C, decision records | As needed |
-| **Design** | When architecture matters | Technical approach in `design.md` | As needed |
+| **Design** | When architecture matters | Technical approach in `design.md`; `validate-design` on Complex | As needed |
 | **Solution explore** | When architectures fork (optional — [off by default](#optional-capabilities-off-by-default)) | Compare candidates; record decision | Decision |
 | **Tasks** | When work needs a job list | Atomic tasks, file ownership, REQ coverage | **Tasks** |
 | **Execute** | Yes | `/loop` waves — implement, gate, commit; parallel when files are disjoint | — |
@@ -303,7 +305,7 @@ Patterns adapted from open source. **Shipped influences** (skills, gates, or lay
 | [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | `check-suppressions`; `quality.checks` as verify evidence; `check-commit --staged`; honest-limits framing; README diagram approach |
 | [obra/superpowers](https://github.com/obra/superpowers) | MIT | Two-stage subagent review in `sub-agents.md` |
 
-**Original work here:** Node CLI, Python gates, platform adapters, elicitation (`/elicit`), Python Platform pack (4.7+), memory-index, execution policy, req-analysis tooling.
+**Original work here:** Node CLI, Python gates, platform adapters, elicitation (`/elicit`), Python Platform pack (4.7+), SDLC integration helpers (4.8+), memory-index, execution policy, req-analysis tooling.
 
 **Cited, not vendored:** [DeepCode](https://github.com/HKUDS/DeepCode), [RepoGraph](https://github.com/ozyyshr/RepoGraph), [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) — see [credits.md](docs/guide/credits.md).
 

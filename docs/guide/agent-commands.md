@@ -127,6 +127,7 @@ Out of scope: PDF export and scheduled emails.
 | `req-analysis validate [brief.md]` | Gate: approved requirements brief before `/specify` |
 | `req-analysis context [--scope …] [--slug …]` | Kickoff + brief bundle for Specify |
 | `req-analysis promote --scope …` | Print next steps after owner approves brief |
+| `req-analysis diff [feature]` | Drift check: brief capabilities vs spec REQs |
 | `validate-req-analysis [brief.md]` | Same gate (direct Python entry) |
 
 **Skip when:** Request is already testable — go to `/specify`. Owner can always refuse Elicitation.
@@ -149,7 +150,7 @@ Lock product decisions before the spec is final — auth rules, data model, edge
 
 ## `/plan` — technical design (optional, Complex tier)
 
-Document architecture, APIs, and patterns **before** tasks. Writes `design.md`. **Stops for your approval** before `/tasks`.
+Document architecture, APIs, and patterns **before** tasks. Writes `design.md`. Runs `validate-design` on Complex tier. **Stops for your approval** before `/tasks`.
 
 ---
 
@@ -247,6 +248,8 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `classify-change "desc" [files…]` | Heuristic complexity tier (`--json` optional) |
 | `feature-status [feature]` | Artifacts present, task counts, next recommended gate |
 | `feature-overview [feature] [--write]` | REQ → task → evidence dashboard; `--write` saves `overview.md` |
+| `feature-pr-body [feature] [--json]` | PR description from overview (Tier 1 handoff) |
+| `install-hooks [--remove]` | Opt-in pre-commit hook (`check-commit --staged`) |
 | `validate-traceability [feature]` | REQ → tasks → validation coverage chain |
 | `validate-quick [quick-folder]` | Quick-mode structural gate |
 | `phase-context <phase>` | Print `.specs/config.yaml` rules for a phase |

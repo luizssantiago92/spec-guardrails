@@ -1,0 +1,49 @@
+#!/bin/sh
+# Spec Guardrails — optional pre-commit hook (Brakes helpers)
+#
+# Install: npx @luizsantiago/spec-guardrails install-hooks
+# Uninstall: npx @luizsantiago/spec-guardrails install-hooks --remove
+
+set -e
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+if [ ! -d ".specs/guardrails/scripts" ]; then
+  echo "[spec-guardrails] .specs/guardrails/scripts missing — run: npx @luizsantiago/spec-guardrails install"
+  exit 1
+fi
+
+PYTHON=""
+for candidate in python3 python "py -3"; do
+  if command -v ${candidate%% *} >/dev/null 2>&1; then
+    if $candidate --version 2>&1 | grep -qE 'Python 3\.(1[0-9]|[2-9][0-9])'; then
+      PYTHON="$candidate"
+      break
+    fi
+  fi
+done
+
+if [ -z "$PYTHON" ]; then
+  echo "[spec-guardrails] Python 3.10+ not found — skipping Brakes pre-commit checks (Process mode)."
+  exit 0
+fi
+
+STAGED="$(git diff --cached --name-only)"
+if [ -z "$STAGED" ]; then
+  exit 0
+fi
+
+echo "[spec-guardrails] check-suppressions (staged diff)"
+$PYTHON .specs/guardrails/scripts/check_suppressions.py
+
+MSG_FILE="$(git rev-parse --git-path COMMIT_EDITMSG)"
+if [ -f "$MSG_FILE" ]; then
+  MSG="$(head -n 1 "$MSG_FILE" 2>/dev/null || true)"
+  if [ -n "$MSG" ]; then
+    echo "[spec-guardrails] check-commit"
+    $PYTHON .specs/guardrails/scripts/check_commit.py --message "$MSG" --staged
+  fi
+fi
+
+exit 0

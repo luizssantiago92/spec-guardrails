@@ -12,7 +12,9 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | --- | ---: | --- |
 | **Planning** | 1 | `feature-init` (CLI) |
 | | 1b | `validate-req-analysis` (requirements brief before `/specify`) |
+| | 1c | `req-analysis diff` (optional — brief ↔ spec drift after Specify) |
 | | 2 | `validate-spec` |
+| | 2b | `validate-design` (Complex tier — after `design.md`) |
 | | 3 | `analyze-artifacts` |
 | | 4 | `validate-tasks` |
 | | 4b | `validate-traceability` (REQ ↔ tasks; again when `validation.md` exists) |
@@ -27,7 +29,9 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | Gate | Script / CLI | When | What it checks |
 | --- | --- | --- | --- |
 | **validate-req-analysis** | `validate_req_analysis.py` | Before `/specify` when using `/elicit` | Approved requirements brief shape and discovery citations |
-| **validate-spec** | `validate_spec.py` | Before you approve `spec.md` | Required sections, `SHALL`/`MUST` criteria, assumptions |
+| **req-analysis-diff** | `req_analysis_diff.py` | After `/specify` (optional) | Brief **Capabilities** bullets without heuristic REQ mapping in `spec.md` |
+| **validate-spec** | `validate_spec.py` | Before you approve `spec.md` | Required sections, `SHALL`/`MUST` criteria, assumptions; optional brief/NFR policy from config |
+| **validate-design** | `validate_design.py` | Before task approval (Complex) | `design.md` has Context, Decision, Alternatives, Risks |
 | **analyze-artifacts** | `analyze_artifacts.py` | Before task approval; on drift | Every REQ has task coverage; no orphan tasks |
 | **validate-tasks** | `validate_tasks.py` | Before you approve `tasks.md` | Task shape, binary done criteria, `task-graph.md` when 3+ tasks, file overlap |
 | **validate-traceability** | `validate_traceability.py` | After tasks; again with `validation.md` | REQ → tasks → same-line coverage evidence (structural only) |
@@ -37,7 +41,7 @@ Gates are **Python scripts** in `.specs/guardrails/scripts/`. The agent (or you)
 | **check-commit** | `check_commit.py` | Every commit | Conventional Commits shape; optional `--staged` for empty/oversized diffs |
 | **check-suppressions** | `check_suppressions.py` | Before commit (staged diff) | Blocks linter/test bypass patterns in added lines |
 | **quality-checks** | `run_quality_checks.py` | During `/verify` | Runs `quality.checks` commands from config |
-| **validate-state** | `validate_state.py` | Before declaring feature done | PASS verdict, evidence cites `file:line`, no open gaps |
+| **validate-state** | `validate_state.py` | Before declaring feature done | PASS verdict, evidence cites `file:line`, `Verifier-Mode` metadata, no open gaps |
 | **lessons** | `lessons.py` | After Verify FAIL | Grounded lessons only — no self-declared wisdom |
 | **archive-feature** | CLI | After Verify PASS | Merges feature into domain memory |
 
@@ -79,12 +83,26 @@ Freeze policy for maintainers: [Gates and guarantees](Gates-and-guarantees.md) �
 
 ```bash
 npx @luizsantiago/spec-guardrails validate-spec auth
+npx @luizsantiago/spec-guardrails validate-design auth
 npx @luizsantiago/spec-guardrails validate-tasks auth
+npx @luizsantiago/spec-guardrails req-analysis diff auth
 npx @luizsantiago/spec-guardrails loop-plan auth --json
 npx @luizsantiago/spec-guardrails validate-state auth
 npx @luizsantiago/spec-guardrails check-commit --message "feat(auth): add session"
 npx @luizsantiago/spec-guardrails lessons list --status confirmed
 ```
+
+### CI template (integration phase)
+
+Copy `node_modules/@luizsantiago/spec-guardrails/templates/ci/guardrails-pr.yml` to `.github/workflows/` (or run `install` and copy from `.specs/guardrails/templates/ci/`). Runs `validate-spec`, `validate-tasks`, and `validate-state` on pull requests.
+
+### Pre-commit hook (opt-in)
+
+```bash
+npx @luizsantiago/spec-guardrails install-hooks
+```
+
+Installs a hook that runs `check-commit --staged` before each commit. Remove with `install-hooks --remove`.
 
 `doctor` checks that scripts exist, Python works, and suggests `loop-plan` when Execute is next.
 

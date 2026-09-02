@@ -29,9 +29,11 @@ import {
   featureOverview,
   formatFeatureOverview,
 } from "./lib/feature-overview.js";
+import { featurePrBody } from "./lib/feature-pr-body.js";
 import { featureStatus, formatFeatureStatus } from "./lib/feature-status.js";
 import { GATE_COMMANDS, AUX_COMMANDS, runGate, runGuardrailsScript } from "./lib/gates.js";
 import { install } from "./lib/install.js";
+import { installHooks } from "./lib/install-hooks.js";
 import { parsePlatformArg } from "./lib/platform-detect.js";
 import {
   cleanupWorkspaces,
@@ -95,6 +97,7 @@ Commands:
   req-analysis promote                 Print next steps after brief approval
     [--scope project|feature]          Match the brief scope
   req-analysis validate [brief.md]     Gate: approved requirements brief before /specify
+  req-analysis diff [feature]          Compare brief capabilities vs spec REQ coverage
   req-analysis context                 Assemble kickoff + brief context for Specify
     [--scope project|feature]          Scope (default: project)
     [--slug <feature-slug>]            Feature slug when scope=feature
@@ -112,6 +115,10 @@ Commands:
   feature-overview [feature]           REQ → task → evidence dashboard (markdown)
     [--write]                        Save .specs/features/<feature>/overview.md
     [--json]                         Machine-readable output (no markdown body)
+  feature-pr-body [feature]            Generate GitHub PR description from overview
+    [--json]                         Machine-readable output
+  install-hooks                      Install optional git pre-commit (check-commit, suppressions)
+    [--remove]                       Remove Spec Guardrails-managed pre-commit hook
   phase-context <phase>              Print .specs/config.yaml context + rules for a phase
   doctor [path]                      Audit guardrails readiness (score + next actions)
     [--json]                         Machine-readable output
@@ -186,6 +193,8 @@ Commands:
   validate-ship-surface [feature]    Ship Surface + AI Surface when infra/AI paths in tasks
   validate-quick [quick-folder]      Quick-mode TASK.md / SUMMARY.md structural gate
   validate-req-analysis [brief.md]   Requirements brief gate before /specify (/elicit)
+  validate-design [feature]          design.md structure gate (Complex / Medium+)
+  req-analysis-diff [feature]        Brief capabilities vs spec REQ drift (heuristic)
   validate-state [feature]           Completion gate before declaring a feature done
   check-commit --message "<msg>"     Conventional Commits gate
     [--staged]                       Also reject empty commits and oversized staged diffs
@@ -247,6 +256,28 @@ if (command === "--version" || command === "-v" || command === "version") {
     }
 
     await install(installOptions);
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "install-hooks") {
+  try {
+    let remove = false;
+    for (const arg of args) {
+      if (arg === "--remove") {
+        remove = true;
+      } else {
+        throw new Error("Usage: install-hooks [--remove]");
+      }
+    }
+    const result = await installHooks(process.cwd(), { remove });
+    if (result.action === "installed") {
+      console.log(`✅ Installed pre-commit hook at ${result.path}`);
+    } else if (result.action === "removed") {
+      console.log(`✅ Removed Spec Guardrails pre-commit hook`);
+    } else {
+      console.log(`ℹ️  No Spec Guardrails hook to remove`);
+    }
   } catch (err) {
     console.error(`❌ ${err.message}`);
     process.exit(1);
@@ -999,6 +1030,10 @@ if (command === "--version" || command === "-v" || command === "version") {
       const briefPath = rest.find((arg) => !arg.startsWith("--"));
       const code = await runGate("validate-req-analysis", briefPath ? [briefPath] : []);
       process.exit(code);
+    } else if (sub === "diff") {
+      const featureArg = rest.find((arg) => !arg.startsWith("--"));
+      const code = await runGate("req-analysis-diff", featureArg ? [featureArg] : []);
+      process.exit(code);
     } else if (sub === "context") {
       let scope = "project";
       let slug = "";
@@ -1029,7 +1064,7 @@ if (command === "--version" || command === "-v" || command === "version") {
       const code = await runGuardrailsScript("req-context", scriptArgs);
       process.exit(code);
     } else {
-      throw new Error("Usage: req-analysis init | discover | promote | validate | context");
+      throw new Error("Usage: req-analysis init | discover | promote | validate | diff | context");
     }
   } catch (err) {
     console.error(`❌ ${err.message}`);
@@ -1109,6 +1144,27 @@ if (command === "--version" || command === "-v" || command === "version") {
       if (overview.writtenTo) {
         process.stderr.write(`\nWrote ${overview.writtenTo}\n`);
       }
+    }
+  } catch (err) {
+    console.error(`❌ ${err.message}`);
+    process.exit(1);
+  }
+} else if (command === "feature-pr-body") {
+  try {
+    let json = false;
+    const positional = [];
+    for (const arg of args) {
+      if (arg === "--json") {
+        json = true;
+      } else {
+        positional.push(arg);
+      }
+    }
+    const result = await featurePrBody(positional[0]);
+    if (json) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      process.stdout.write(result.body);
     }
   } catch (err) {
     console.error(`❌ ${err.message}`);

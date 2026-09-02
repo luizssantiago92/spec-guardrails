@@ -32,6 +32,7 @@ from __future__ import annotations
 import argparse
 import re
 import sys
+from pathlib import Path
 
 from _common import (
     REQUIREMENTS_HEADING,
@@ -42,6 +43,8 @@ from _common import (
     section_body,
     visible_markdown,
 )
+from _project_config import load_elicitation_config
+import validate_req_analysis
 
 GATE = "validate-spec"
 
@@ -80,6 +83,105 @@ OUT_OF_SCOPE_HEADING = re.compile(
     re.MULTILINE | re.IGNORECASE,
 )
 REMOVED_ID = re.compile(r"^\s*(?:-\s*)?(?P<id>[A-Z][A-Z0-9]{1,9}-\d{2,4})\b", re.MULTILINE)
+NFR_HEADING = re.compile(
+    r"^(?P<level>#{2,6})\s*Non-Functional Requirements\b",
+    re.MULTILINE | re.IGNORECASE,
+)
+FEATURE_BRIEFS = Path(".specs/project/feature-briefs")
+PROJECT_BRIEF = Path(".specs/project/requirements-brief.md")
+COMPLEX_TASK_FLOOR = 10
+TASK_HEADING = re.compile(r"^#{2,6}\s*T\d{1,6}\b", re.MULTILINE | re.IGNORECASE)
+
+
+def feature_slug(feature_name: str) -> str:
+    return re.sub(r"^\d{3}-", "", feature_name)
+
+
+def resolve_feature_brief(feature_dir: Path, root: Path) -> Path | None:
+    brief = root / FEATURE_BRIEFS / feature_slug(feature_dir.name) / "requirements-brief.md"
+    if brief.is_file():
+        return brief
+    project_brief = root / PROJECT_BRIEF
+    if project_brief.is_file():
+        return project_brief
+    return None
+
+
+def is_complex_tier(feature_dir: Path) -> bool:
+    if (feature_dir / "context.md").is_file():
+        return True
+    design_path = feature_dir / "design.md"
+    if design_path.is_file() and design_path.read_text(encoding="utf-8").strip():
+        return True
+    tasks_path = feature_dir / "tasks.md"
+    if tasks_path.is_file():
+        tasks = tasks_path.read_text(encoding="utf-8")
+        if len(TASK_HEADING.findall(tasks)) >= COMPLEX_TASK_FLOOR:
+            return True
+    spec_path = feature_dir / "spec.md"
+    if spec_path.is_file():
+        spec = spec_path.read_text(encoding="utf-8")
+        if re.search(
+            r"^##\s*Complexity\s*:\s*Complex\b",
+            spec,
+            re.MULTILINE | re.IGNORECASE,
+        ):
+            return True
+    return False
+
+
+def validate_requirements_brief(report: Report, feature_dir: Path) -> None:
+    root = feature_dir.parent.parent.parent
+    policy = load_elicitation_config(root)
+    needs_brief = policy.get("require_brief") or (
+        policy.get("require_brief_complex", True) and is_complex_tier(feature_dir)
+    )
+    if not needs_brief:
+        report.ok("requirements brief not required by config")
+        return
+
+    brief_path = resolve_feature_brief(feature_dir, root)
+    if brief_path is None:
+        report.error(
+            "requirements brief required — run /elicit, approve brief, then validate-req-analysis"
+        )
+        return
+
+    brief_report = validate_req_analysis.build_report(brief_path)
+    if brief_report.passed:
+        report.ok(f"requirements brief approved: {brief_path.as_posix()}")
+    else:
+        report.error(
+            f"requirements brief fails validate-req-analysis: {brief_path.as_posix()}"
+        )
+        for error in brief_report.errors[:5]:
+            report.error(f"  brief: {error}")
+
+
+def validate_nfr_section(report: Report, visible: str, feature_dir: Path) -> None:
+    root = feature_dir.parent.parent.parent
+    policy = load_elicitation_config(root)
+    mode = str(policy.get("require_nfr_complex", "warn")).lower()
+    if mode == "off" or not is_complex_tier(feature_dir):
+        return
+
+    body = section_body(visible, NFR_HEADING)
+    if body and body.strip() and not re.fullmatch(
+        r"\s*[-*]?\s*(none|n/a)\s*",
+        body.strip(),
+        re.IGNORECASE,
+    ):
+        report.ok("Non-Functional Requirements section present")
+        return
+
+    message = (
+        "Complex-tier feature missing ## Non-Functional Requirements "
+        "(performance, security, availability, …)"
+    )
+    if mode == "error":
+        report.error(message)
+    else:
+        report.warn(message)
 
 
 def is_delta_spec(text: str) -> bool:
@@ -276,10 +378,13 @@ def validate_out_of_scope(report: Report, text: str) -> None:
     report.ok("Out of Scope section documents explicit boundaries")
 
 
-def build_report(target: str, text: str) -> Report:
+def build_report(target: str, text: str, feature_dir: Path | None = None) -> Report:
     report = Report(gate=GATE, target=target)
     visible = visible_markdown(text)
     delta = is_delta_spec(text)
+
+    if feature_dir is not None:
+        validate_requirements_brief(report, feature_dir)
 
     if not has_section(visible, "Goal"):
         report.error("missing required section: ## Goal")
@@ -330,6 +435,9 @@ def build_report(target: str, text: str) -> Report:
 
         validate_out_of_scope(report, visible)
 
+    if feature_dir is not None and not delta:
+        validate_nfr_section(report, visible, feature_dir)
+
     for malformed in MALFORMED_ID.finditer(visible):
         raw = malformed.group(0).lstrip("# ").strip()
         if not REQUIREMENT_HEADING.match(f"### {raw}"):
@@ -368,7 +476,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     path, text = resolve_artifact(args.spec, "spec.md", GATE)
-    report = build_report(str(path), text)
+    feature_dir = path.parent if path.name == "spec.md" else None
+    report = build_report(str(path), text, feature_dir=feature_dir)
     return report.emit(strict=args.strict)
 
 

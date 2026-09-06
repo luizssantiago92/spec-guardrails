@@ -8,6 +8,8 @@
 
 **Governed spec-driven development for AI coding agents.**
 
+More than a Spec Kit — a **repo-native governance harness** (specs, gates, memory, and human approvals) for AI coding agents.
+
 Agents are fast — and optimistic. They ship code, summarize what they *think* they did, and move on. Spec Guardrails installs a **repeatable contract** into your repo: agree on the goal in writing, break work into provable steps, implement in waves, and verify with evidence that lives in **git**, not in a chat scrollback.
 
 You keep control: the agent proposes; you approve specs and tasks; push, merge, and deploy stay on your terms.
@@ -27,7 +29,7 @@ npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantia
 
 ## What it is
 
-Spec Guardrails is a **governance layer for spec-driven AI coding agents** — not an IDE, not an autonomous agent, and not an MLOps platform. It installs a working method into your repository so agents operate through:
+Spec Guardrails is not just another Spec Kit or a pack of prompt templates. It is a **governance layer** — a repo-native harness for AI coding agents: the spec-driven method plus executable brakes, durable `.specs/` memory, and human control of git. It is not an IDE, not an autonomous agent, and not an MLOps platform. It installs a working method into your repository so agents operate through:
 
 - **Requirements** — structured discovery when intent is vague
 - **Specifications** — written goals with testable criteria

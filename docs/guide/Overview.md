@@ -6,15 +6,15 @@ This page explains **what Spec Guardrails is**, **how you use it**, and **how mu
 
 ## Definition
 
-**Spec Guardrails** is a **spec-driven process kit** for AI coding agents. It installs:
+**Spec Guardrails** is a **repo-native governance harness** for AI coding agents. The method is spec-driven (write → plan → build → prove); the system is the harness: phase guides, `.specs/` memory, and optional Python gates. It is not “just another Spec Kit” — and it is not your application: your stack, languages, and tests stay yours.
+
+It installs:
 
 - **Phase guides** (skills) the agent reads one step at a time
 - **Project memory** (`.specs/`) that survives chat sessions
 - **Optional automatic checks** (Python gates) that block incomplete work
 
-It answers one problem: agents jump to code, say “done”, and leave thin specs and missing proof. Spec Guardrails makes **write → plan → build → prove** the default path.
-
-**It is not your application.** Your stack, languages, and tests stay yours.
+It answers one problem: agents jump to code, say “done”, and leave thin specs and missing proof.
 
 ---
 

@@ -25,6 +25,8 @@ npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantia
 
 **Docs:** [Overview](docs/guide/Overview.md) · [Quick start](docs/guide/Quick-start.md) · [Full guide index](docs/guide/README.md)
 
+[What it is](#what-it-is) · [Install](#1-install) · [Verify](#2-verify-readiness) · [First feature](#3-run-your-first-feature) · [Checklist](#getting-started-checklist) · [How it works](#how-it-works) · [Commands](#commands-cheat-sheet) · [Docs](#documentation) · [Credits](#credits)
+
 ---
 
 ## What it is
@@ -44,7 +46,31 @@ You do not need to already know “spec-driven development.” The kit teaches t
 
 ---
 
-## Install
+## The problem
+
+AI agents are fast. They can also:
+
+- build the **wrong thing** (inferred intent ≠ actual intent)
+- declare **fake done** (confidence without evidence)
+- **lose context** between sessions (decisions live only in chat)
+- **drift** from requirements mid-build
+- touch files **outside** the intended scope
+- run **parallel work** without isolation
+
+Spec Guardrails maps each failure mode to a mechanism:
+
+| Failure mode | Mechanism |
+| --- | --- |
+| **Wrong goal** | Requirements analysis (`/elicit`, requirements brief) |
+| **Fake done** | Gates (Brakes) + independent `/verify` |
+| **Lost context** | Persistent memory (`.specs/`, archive, lessons) |
+| **Unclear implementation** | Specification + design + tasks |
+| **Uncontrolled execution** | Feature loops, task graph, workspace isolation |
+| **Unsafe autonomy** | Human approvals + git governance tiers |
+
+---
+
+## 1. Install
 
 Two commands — run both once in your project root:
 
@@ -104,27 +130,70 @@ Add Python when you want checklists enforced by **exit codes** instead of agent 
 
 ---
 
-## The problem
+## 2. Verify readiness
 
-AI agents are fast. They can also:
+After install, run `doctor` again anytime you upgrade or change machines:
 
-- build the **wrong thing** (inferred intent ≠ actual intent)
-- declare **fake done** (confidence without evidence)
-- **lose context** between sessions (decisions live only in chat)
-- **drift** from requirements mid-build
-- touch files **outside** the intended scope
-- run **parallel work** without isolation
+```bash
+npx @luizsantiago/spec-guardrails doctor
+```
 
-Spec Guardrails maps each failure mode to a mechanism:
+What “ready” looks like:
 
-| Failure mode | Mechanism |
-| --- | --- |
-| **Wrong goal** | Requirements analysis (`/elicit`, requirements brief) |
-| **Fake done** | Gates (Brakes) + independent `/verify` |
-| **Lost context** | Persistent memory (`.specs/`, archive, lessons) |
-| **Unclear implementation** | Specification + design + tasks |
-| **Uncontrolled execution** | Feature loops, task graph, workspace isolation |
-| **Unsafe autonomy** | Human approvals + git governance tiers |
+- Skills are present in your agent tree (for example `.cursor/skills/` in Cursor)
+- `.specs/` exists with the memory scaffold
+- Gate scripts are available when you want Brakes mode (Python 3.10+)
+- Your AI coding agent can open the project and see the installed hub skill
+
+**Multi-agent repos:** `install --all-platforms` writes every supported skill tree. By default `install` detects one platform. See [Platform parity](docs/guide/Platform-parity.md).
+
+<details>
+<summary>Working in this source repository (contributors)?</summary>
+
+Do **not** use `npx @luizsantiago/spec-guardrails install` here — it can resolve incorrectly. Use:
+
+```bash
+npm install
+npm run guardrails -- install
+npm run guardrails -- doctor
+npm test
+```
+
+</details>
+
+---
+
+## 3. Run your first feature
+
+Open your AI coding agent in the project and ask for a concrete written goal, for example:
+
+> Specify a small feature: users can sign in with email and password and get a session. Keep social login out of scope.
+
+Ask it to follow the installed Spec Guardrails hub skill. Agent commands (`/specify`, `/loop`, `/verify`, …) are **chat phrases** — not shell commands.
+
+| Step | You do | Agent does |
+| --- | --- | --- |
+| 1 | Approve the written goal (`spec.md`) | Runs specify + `validate-spec` when Brakes are on |
+| 2 | Approve the task list (if not a quick fix) | Breaks work into owned jobs |
+| 3 | Let it build one job at a time | `/loop` waves with gates and commits |
+| 4 | Demand independent proof | Fresh-context `/verify` → `validation.md` |
+
+If the agent jumps straight to code: *Stop. Finish the written goal and run the specify check first.*
+
+**Go deeper:** [Quick start](docs/guide/Quick-start.md) · [Tutorials](docs/guide/tutorials/README.md) · [Agent commands](docs/guide/agent-commands.md)
+
+---
+
+## Getting started checklist
+
+- [ ] Node.js 18+ is available (`node --version`)
+- [ ] Ran `npx @luizsantiago/spec-guardrails install` in the project root
+- [ ] `doctor` reports Process readiness (and Brakes if Python 3.10+ is installed)
+- [ ] Opened the project in your AI coding agent and confirmed skills are visible
+- [ ] Asked for a written goal and approved `spec.md` before implementation
+- [ ] Know where docs live: [Quick start](docs/guide/Quick-start.md) · [Full guide](docs/guide/README.md)
+
+Stuck? See [Quick start — If something feels stuck](docs/guide/Quick-start.md#if-something-feels-stuck) and the [FAQ](docs/guide/FAQ.md).
 
 ---
 
@@ -443,6 +512,55 @@ Advanced enforcement exists without making every project pay the same complexity
 
 ---
 
+## Commands cheat sheet
+
+Run from your project root (where you ran `install`). Prefer `npx @luizsantiago/spec-guardrails <command>` unless the CLI is on your `PATH`.
+
+| Command | What it does |
+| --- | --- |
+| `install` | Install skills, `.specs/`, and gate scripts |
+| `doctor` | Audit Process / Brakes readiness |
+| `init-config --preset <name>` | Seed `.specs/config.yaml` |
+| `preset list` | List built-in presets |
+| `project-init` | Map a brownfield repo into `.specs/` |
+| `feature-init "<description>"` | Allocate feature folder, STATE, local branch |
+| `classify-change <desc>` | Heuristic complexity tier |
+| `feature-status [feature]` | Artifact checklist + next step |
+| `feature-overview [feature]` | REQ → task → evidence dashboard |
+| `feature-pr-body [feature]` | PR description from traceability |
+| `validate-spec [feature]` | Spec shape gate |
+| `validate-tasks [feature]` | Task granularity / ownership gate |
+| `install-hooks` | Opt-in pre-commit (commit + suppressions) |
+| `loop list` / `loop show` / `loop run` | Operational loops (5.0+) |
+| `archive-feature [feature]` | Fold verified work into domain memory |
+
+Everyday gate examples after install:
+
+```bash
+npx @luizsantiago/spec-guardrails validate-spec auth
+npx @luizsantiago/spec-guardrails check-commit --message "feat(auth): add token refresh"
+npx @luizsantiago/spec-guardrails lessons list --status confirmed
+```
+
+Full CLI surface: run `npx @luizsantiago/spec-guardrails` with no args. Agent chat phrases: [Agent commands](docs/guide/agent-commands.md).
+
+---
+
+## Explore the repository
+
+| Path | What you find |
+| --- | --- |
+| [`index.js`](index.js) / [`lib/`](lib/) | Node CLI entry and command implementations |
+| [`skills/`](skills/) | Hub, phase guides, and sister skills installed into agent trees |
+| [`scripts/`](scripts/) | Python structural gates (Brakes mode) |
+| [`templates/`](templates/) | Spec/task scaffolds, CI template, config presets |
+| [`rules/`](rules/) | Engineering baseline and related rules |
+| [`docs/guide/`](docs/guide/) | Product guide — start at [Quick start](docs/guide/Quick-start.md) |
+| [`docs/guide/tutorials/`](docs/guide/tutorials/) | Hands-on paths from quick fix to parallel work |
+| [`.assets/`](.assets/) | README diagrams (banner, flow, tiers) |
+
+After install in a consumer project, day-to-day artifacts live under **`.specs/`** (`STATE.md`, feature folders, domain memory, and gate scripts).
+
 ## Limitations
 
 Spec Guardrails shapes **how the agent works** — it does not replace your judgment about product quality, security nuance, or whether a test truly proves the requirement.
@@ -452,33 +570,6 @@ Spec Guardrails shapes **how the agent works** — it does not replace your judg
 - **Optional capabilities** stay off until you configure them — absence of config is not a failure.
 
 See [What is enforced](#what-is-enforced--and-what-is-not) for the full honest split.
-
----
-
-## Contributing
-
-Focused improvements are welcome — [CONTRIBUTING.md](CONTRIBUTING.md). Sources: `skills/`, `lib/`, `scripts/`, `rules/`. Run `npm test` before every PR.
-
----
-
-## Credits
-
-Patterns adapted from open source. **Shipped influences** (skills, gates, or layout consumers install):
-
-| Source | License | What we extracted |
-| --- | --- | --- |
-| [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/main/packages/skills-catalog/skills/(development)/tlc-spec-driven) | CC-BY-4.0 | Spec → tasks → execute → verify phases; `.specs/features/`, `STATE.md`; gate “brakes” philosophy |
-| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT | Discuss-phase options A/B/C; definition-of-done in verify/archive |
-| [graph-engineering](https://github.com/codejunkie99/graph-engineering) | MIT | Task-graph rules; `validate-tasks` graph hygiene |
-| [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Execute wave model; operational vs feature loops in [loop-patterns.md](docs/guide/loop-patterns.md); **`loop list|show|run` CLI** (5.0+) |
-| [Addy Osmani — Loop engineering](https://addyosmani.com/blog/loop-engineering/) | Essay | Loop taxonomy in loop-patterns guide |
-| [awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | CC0 | Harness vs app vocabulary in [ecosystem.md](docs/guide/ecosystem.md) |
-| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | `check-suppressions`; `quality.checks` as verify evidence; `check-commit --staged`; honest-limits framing; README diagram approach |
-| [obra/superpowers](https://github.com/obra/superpowers) | MIT | Two-stage subagent review in `sub-agents.md` |
-
-**Original work here:** Node CLI, Python gates, platform adapters, elicitation (`/elicit`), Python Platform pack (4.7+), SDLC integration helpers (4.8+), operational loops CLI (5.0+), memory-index, execution policy, req-analysis tooling.
-
-**Cited, not vendored:** [DeepCode](https://github.com/HKUDS/DeepCode), [RepoGraph](https://github.com/ozyyshr/RepoGraph), [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) — see [credits.md](docs/guide/credits.md).
 
 ---
 
@@ -511,6 +602,35 @@ Full index: [docs/guide/README.md](docs/guide/README.md)
 
 ---
 
+## Contributing
+
+Focused improvements are welcome — [CONTRIBUTING.md](CONTRIBUTING.md). Sources: `skills/`, `lib/`, `scripts/`, `rules/`. Run `npm test` before every PR.
+
+---
+
+## Credits
+
+Patterns adapted from open source. **Shipped influences** (skills, gates, or layout consumers install):
+
+| Source | License | What we extracted |
+| --- | --- | --- |
+| [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/main/packages/skills-catalog/skills/(development)/tlc-spec-driven) | CC-BY-4.0 | Spec → tasks → execute → verify phases; `.specs/features/`, `STATE.md`; gate “brakes” philosophy |
+| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | MIT | Discuss-phase options A/B/C; definition-of-done in verify/archive |
+| [graph-engineering](https://github.com/codejunkie99/graph-engineering) | MIT | Task-graph rules; `validate-tasks` graph hygiene |
+| [loop-engineering](https://github.com/cobusgreyling/loop-engineering) | MIT | Execute wave model; operational vs feature loops in [loop-patterns.md](docs/guide/loop-patterns.md); **`loop list|show|run` CLI** (5.0+) |
+| [Addy Osmani — Loop engineering](https://addyosmani.com/blog/loop-engineering/) | Essay | Loop taxonomy in loop-patterns guide |
+| [awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | CC0 | Harness vs app vocabulary in [ecosystem.md](docs/guide/ecosystem.md) |
+| [loopgate_harness](https://github.com/rxdt/loopgate_harness) | MIT | `check-suppressions`; `quality.checks` as verify evidence; `check-commit --staged`; honest-limits framing; README diagram approach |
+| [obra/superpowers](https://github.com/obra/superpowers) | MIT | Two-stage subagent review in `sub-agents.md` |
+
+**Original work here:** Node CLI, Python gates, platform adapters, elicitation (`/elicit`), Python Platform pack (4.7+), SDLC integration helpers (4.8+), operational loops CLI (5.0+), memory-index, execution policy, req-analysis tooling.
+
+**Cited, not vendored:** [DeepCode](https://github.com/HKUDS/DeepCode), [RepoGraph](https://github.com/ozyyshr/RepoGraph), [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) — see [credits.md](docs/guide/credits.md).
+
+---
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
+
+[↑ Back to top](#spec-guardrails)

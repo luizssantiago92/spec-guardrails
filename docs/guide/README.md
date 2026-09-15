@@ -33,6 +33,7 @@ The npm [README](../../README.md) is the product entry point: **Install** → th
 | [Gates-and-guarantees.md](Gates-and-guarantees.md) | Freeze policy + honest limits |
 | [Architecture.md](Architecture.md) | Core vs platform adapters |
 | [Platform-parity.md](Platform-parity.md) | Cursor, Claude, Copilot, Codex |
+| [../architecture-and-governance-audit.md](../architecture-and-governance-audit.md) | Governance audit — authority, layers, public demos (analysis) |
 
 ---
 

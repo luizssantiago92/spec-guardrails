@@ -31,42 +31,11 @@ npm: [`@luizsantiago/spec-guardrails`](https://www.npmjs.com/package/@luizsantia
 
 ## What it is
 
-Spec Guardrails is not just another Spec Kit or a pack of prompt templates. It is a **governance layer** — a repo-native harness for AI coding agents: the spec-driven method plus executable brakes, durable `.specs/` memory, and human control of git. It is not an IDE, not an autonomous agent, and not an MLOps platform. It installs a working method into your repository so agents operate through:
+A **governance layer** for AI coding agents — not an IDE, not an autonomous agent, and not an MLOps platform. After install, agents work through written phases you approve:
 
-- **Requirements** — structured discovery when intent is vague
-- **Specifications** — written goals with testable criteria
-- **Task planning** — atomic jobs with file ownership and REQ coverage
-- **Controlled implementation** — waves, gates, and optional parallel isolation
-- **Verification** — independent proof with `file:line` evidence
-- **Persistent memory** — `.specs/` artifacts that survive chat sessions
-- **Human approvals** — you approve specs and tasks; consequential git actions stay explicit
-- **Evidence in git** — the repo is the source of truth, not the chat log
+**Requirements** → **Spec** → **Tasks** → **Execute** (waves + gates) → **Verify** (`file:line` evidence) → **Archive** into `.specs/` memory
 
-You do not need to already know “spec-driven development.” The kit teaches the agent the phases; you approve the artifacts.
-
----
-
-## The problem
-
-AI agents are fast. They can also:
-
-- build the **wrong thing** (inferred intent ≠ actual intent)
-- declare **fake done** (confidence without evidence)
-- **lose context** between sessions (decisions live only in chat)
-- **drift** from requirements mid-build
-- touch files **outside** the intended scope
-- run **parallel work** without isolation
-
-Spec Guardrails maps each failure mode to a mechanism:
-
-| Failure mode | Mechanism |
-| --- | --- |
-| **Wrong goal** | Requirements analysis (`/elicit`, requirements brief) |
-| **Fake done** | Gates (Brakes) + independent `/verify` |
-| **Lost context** | Persistent memory (`.specs/`, archive, lessons) |
-| **Unclear implementation** | Specification + design + tasks |
-| **Uncontrolled execution** | Feature loops, task graph, workspace isolation |
-| **Unsafe autonomy** | Human approvals + git governance tiers |
+You do not need to already know “spec-driven development.” The kit teaches the phases; you approve the artifacts. Failure modes and mechanisms: [three pillars](#three-pillars).
 
 ---
 
@@ -124,28 +93,20 @@ npx @luizsantiago/spec-guardrails preset list
 
 > Python turns “trust the agent” into “the agent has to prove it.”
 
-Add Python when you want checklists enforced by **exit codes** instead of agent honesty — [Gates and guarantees](#gates-and-guarantees). `doctor` reports Process vs Brakes readiness after install and upgrades.
-
-**Go deeper:** [Gates reference](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md) · [Process vs Brakes (FAQ)](docs/guide/FAQ.md#process-vs-brakes)
+`doctor` reports Process vs Brakes readiness. Gate taxonomy: [Gates and guarantees](#gates-and-guarantees) · [FAQ](docs/guide/FAQ.md#process-vs-brakes).
 
 ---
 
 ## 2. Verify readiness
 
-After install, run `doctor` again anytime you upgrade or change machines:
-
-```bash
-npx @luizsantiago/spec-guardrails doctor
-```
-
-What “ready” looks like:
+Re-run `doctor` after upgrades or machine changes. You are ready when:
 
 - Skills are present in your agent tree (for example `.cursor/skills/` in Cursor)
 - `.specs/` exists with the memory scaffold
 - Gate scripts are available when you want Brakes mode (Python 3.10+)
 - Your AI coding agent can open the project and see the installed hub skill
 
-**Multi-agent repos:** `install --all-platforms` writes every supported skill tree. By default `install` detects one platform. See [Platform parity](docs/guide/Platform-parity.md).
+For multi-agent installs, see [Multi-agent and platform support](#multi-agent-and-platform-support).
 
 <details>
 <summary>Working in this source repository (contributors)?</summary>
@@ -199,8 +160,6 @@ Stuck? See [Quick start — If something feels stuck](docs/guide/Quick-start.md#
 
 ## Three pillars
 
-Most agent failures are not “bad code in one file.” They are **wrong goal**, **lost context**, or **fake done**. Spec Guardrails attacks those three problems directly.
-
 | Problem | Pillar | One-line win |
 | --- | --- | --- |
 | Built the wrong feature | **Requirements analysis** | Agree on intent before `spec.md` |
@@ -229,7 +188,7 @@ Most agent failures are not “bad code in one file.” They are **wrong goal**,
 
 ### 2. Gates (Brakes) — “done” has to be provable
 
-**Process vs Brakes** — who enforces the checklist — is in [Install](#node-alone-vs-node--python-gates). Here is *when* Brakes run: scripts return non-zero = **STOP**; fix the artifact, re-run.
+Scripts return non-zero = **STOP**; fix the artifact, re-run. Process vs Brakes (who enforces): [Install](#node-alone-vs-node--python-gates). Taxonomy: [Gates and guarantees](#gates-and-guarantees).
 
 | Moment | What gates protect |
 | --- | --- |
@@ -239,7 +198,7 @@ Most agent failures are not “bad code in one file.” They are **wrong goal**,
 | **Before “feature done”** | Traceability REQ → task → `file:line` evidence; PASS verdict and `Verifier-Mode` in `validation.md` |
 | **After verify FAIL** | Lessons are recorded — failures become rules, not forgotten |
 
-Full gate taxonomy: [Gates and guarantees](#gates-and-guarantees) · pipeline order: [gates reference](docs/guide/gates.md).
+Pipeline order: [gates reference](docs/guide/gates.md).
 
 ---
 
@@ -292,11 +251,9 @@ Archive — fold into domain memory
 
 ## Spec-driven development (SDD)
 
-Under the three pillars sits the **spec-driven method** the agent follows: written phases instead of improvisation. Before work starts, **`classify-change`** picks a complexity tier (Quick → Parallel) so a typo does not get a task graph and a payment flow does not skip review.
+The agent follows **written phases** instead of improvisation. **`classify-change`** picks Quick → Parallel so ceremony matches risk.
 
 > More risk and complexity → more planning, design, evidence, and control.
-
-Lineage: [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/main/packages/skills-catalog/skills/(development)/tlc-spec-driven), [loop-engineering](https://github.com/cobusgreyling/loop-engineering), [graph-engineering](https://github.com/codejunkie99/graph-engineering), [loopgate_harness](https://github.com/rxdt/loopgate_harness). **Repo-native harness** — not another desktop runtime.
 
 ### Phase map — what runs when
 
@@ -326,7 +283,7 @@ Lineage: [tlc-spec-driven](https://github.com/tech-leads-club/agent-skills/tree/
 
 ## Gates and guarantees
 
-Gates convert expectations into **executable checks** (Python scripts under `.specs/guardrails/scripts/`). Exit code **0** = pass; **non-zero** = STOP.
+Exit code **0** = pass; **non-zero** = STOP. Scripts live under `.specs/guardrails/scripts/` after install.
 
 ### Gate layers (accurate taxonomy)
 
@@ -356,11 +313,11 @@ Gates enforce **structure and evidence in `.specs/`** — not product taste, not
 | Commit policy and suppression patterns | Coverage % as quality proxy |
 | Commands under `quality.checks` (when configured) | Commands you never configured |
 
-> A green gate means the required **process and evidence** exist — it is not proof that the product is perfect.
+> A green gate means the required **process and evidence** exist — it is not proof that the product is perfect. `/verify` is phase discipline (not an exit-code guarantee by itself); optional capabilities stay off until configured.
 
 **You** still approve specs and tasks. Approving a spec does **not** authorize push, PR, merge, or deploy — see [Human-in-the-loop](#human-in-the-loop-and-git-governance).
 
-**Go deeper:** [FAQ](docs/guide/FAQ.md) · [Limitations](#limitations)
+**Go deeper:** [FAQ](docs/guide/FAQ.md)
 
 ---
 
@@ -416,7 +373,7 @@ Spec Guardrails is a **repository-level governance method** adapted to different
 | **OpenAI Codex** | `.codex/skills/` |
 | **Other agents** | Root `AGENTS.md` (open standard) |
 
-By default `install` detects one platform and writes **one** tree. Use `install --all-platforms` when the repo serves multiple agents. Existing trees are preserved when you switch IDEs.
+By default `install` detects one platform and writes **one** tree. Use `install --all-platforms` for every supported tree (existing trees are preserved when you switch IDEs).
 
 **Go deeper:** [Platform parity](docs/guide/Platform-parity.md)
 
@@ -499,22 +456,11 @@ Advanced enforcement exists without making every project pay the same complexity
 
 ---
 
-## More in the kit
-
-| Capability | Role |
-| --- | --- |
-| **`feature-status` / `feature-overview`** | Human-readable checklist and REQ → task → evidence dashboard |
-| **`feature-pr-body`** | PR description from traceability (Tier 1 handoff) |
-| **`phase-context`** | Inject team rules from `config.yaml` at a given phase |
-| **Tutorials** | Hands-on paths: quick fix → medium feature → parallel → python platform — [index](docs/guide/tutorials/README.md) |
-
-**Go deeper:** [Tutorials](docs/guide/tutorials/README.md) · [Ecosystem map](docs/guide/ecosystem.md)
-
----
-
 ## Commands cheat sheet
 
 Run from your project root (where you ran `install`). Prefer `npx @luizsantiago/spec-guardrails <command>` unless the CLI is on your `PATH`.
+
+Inspect feature governance state with `feature-status` / `feature-overview`. Hands-on paths: [Tutorials](docs/guide/tutorials/README.md).
 
 | Command | What it does |
 | --- | --- |
@@ -528,6 +474,7 @@ Run from your project root (where you ran `install`). Prefer `npx @luizsantiago/
 | `feature-status [feature]` | Artifact checklist + next step |
 | `feature-overview [feature]` | REQ → task → evidence dashboard |
 | `feature-pr-body [feature]` | PR description from traceability |
+| `phase-context <phase>` | Inject team rules from `config.yaml` |
 | `validate-spec [feature]` | Spec shape gate |
 | `validate-tasks [feature]` | Task granularity / ownership gate |
 | `install-hooks` | Opt-in pre-commit (commit + suppressions) |
@@ -561,42 +508,17 @@ Full CLI surface: run `npx @luizsantiago/spec-guardrails` with no args. Agent ch
 
 After install in a consumer project, day-to-day artifacts live under **`.specs/`** (`STATE.md`, feature folders, domain memory, and gate scripts).
 
-## Limitations
-
-Spec Guardrails shapes **how the agent works** — it does not replace your judgment about product quality, security nuance, or whether a test truly proves the requirement.
-
-- Gates read **`.specs/` artifacts**, not your implementation AST.
-- **Independent `/verify`** is a phase discipline — not an exit-code guarantee by itself.
-- **Optional capabilities** stay off until you configure them — absence of config is not a failure.
-
-See [What is enforced](#what-is-enforced--and-what-is-not) for the full honest split.
-
 ---
 
 ## Documentation
 
-### Start here
-
-- [Quick start](docs/guide/Quick-start.md) — first ten minutes
-- [How it works](docs/guide/How-it-works.md) — goal → done narrative
-- [Concepts](docs/guide/concepts.md) — complexity tiers, loop, graph
-- [Overview](docs/guide/Overview.md) — plain-language full picture
-- [Tutorials](docs/guide/tutorials/README.md) — hands-on paths
-
-### Understand the system
-
-- [Architecture](docs/guide/Architecture.md) · [Platform parity](docs/guide/Platform-parity.md)
-- [Gates reference](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md) · [Gates and guarantees](docs/guide/Gates-and-guarantees.md)
-- [Requirements analysis](docs/guide/requirements-analysis.md) · [Memory](docs/guide/Memory.md)
-- [Loop patterns](docs/guide/loop-patterns.md) · [Skills and hub](docs/guide/skills-and-hub.md)
-- [Agent commands](docs/guide/agent-commands.md)
-
-### Advanced
-
-- [Python platform](docs/guide/python-platform.md) · [Brownfield context](docs/guide/brownfield-context.md)
-- [Token efficiency](docs/guide/Token-efficiency.md) · [Ecosystem](docs/guide/ecosystem.md)
-- [Migration](docs/guide/Migration.md) · [Product history](docs/guide/Product-history.md) · [Stability policy](docs/guide/Stability-policy.md)
-- [CHANGELOG](docs/CHANGELOG.md) · [FAQ](docs/guide/FAQ.md) · [Glossary](docs/guide/Glossary.md)
+| Area | Guides |
+| --- | --- |
+| **Start** | [Overview](docs/guide/Overview.md) · [Quick start](docs/guide/Quick-start.md) · [Tutorials](docs/guide/tutorials/README.md) · [Agent commands](docs/guide/agent-commands.md) |
+| **Core** | [How it works](docs/guide/How-it-works.md) · [Concepts](docs/guide/concepts.md) · [Requirements analysis](docs/guide/requirements-analysis.md) · [Memory](docs/guide/Memory.md) |
+| **Enforcement** | [Gates](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md) · [Gates and guarantees](docs/guide/Gates-and-guarantees.md) |
+| **Platform** | [Architecture](docs/guide/Architecture.md) · [Platform parity](docs/guide/Platform-parity.md) · [Skills and hub](docs/guide/skills-and-hub.md) · [Loop patterns](docs/guide/loop-patterns.md) |
+| **Advanced** | [Python platform](docs/guide/python-platform.md) · [Brownfield](docs/guide/brownfield-context.md) · [Token efficiency](docs/guide/Token-efficiency.md) · [Ecosystem](docs/guide/ecosystem.md) · [Migration](docs/guide/Migration.md) · [Product history](docs/guide/Product-history.md) · [Stability](docs/guide/Stability-policy.md) · [CHANGELOG](docs/CHANGELOG.md) · [FAQ](docs/guide/FAQ.md) · [Glossary](docs/guide/Glossary.md) · [Governance audit](docs/architecture-and-governance-audit.md) |
 
 Full index: [docs/guide/README.md](docs/guide/README.md)
 

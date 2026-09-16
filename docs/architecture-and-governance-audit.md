@@ -168,7 +168,7 @@ YOU authorize Tier 1 / 2 as needed
 
 ### Accidental / review candidates (docs & UX — not gate removal)
 
-- Readers may miss that **governance visibility** already exists (`feature-status` / `feature-overview`) because README lists them late under “More in the kit,” not as a named “see state” step
+- Readers may miss that **governance visibility** already exists (`feature-status` / `feature-overview`) unless the README cheat sheet callout stays prominent near everyday commands
 - “Observability” in python-platform docs means **runtime APM is out of scope** — easy to confuse with **governance state visibility**
 - Optional capabilities (policy/guard/sandbox/memory embed) increase surface area while staying off — good for power users, easy to overlook in mental models
 - Naming drift risk across chat phrases vs CLI (`/elicit` vs `req-analysis`, etc.) — already documented but still cognitive load

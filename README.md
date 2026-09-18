@@ -387,6 +387,8 @@ The **hub** (`agent-architecture.md`) is the map loaded every turn: contract, **
 
 **Sister skills** load only when the work needs extra depth (security, task graphs, platform infra/AI, …). The hub loads **at most one** conditional sister at a time for Verify extras (AppSec, then QA).
 
+Optional **shell I/O** savings (compact `git`/test output) come from adjacent tools like [RTK](https://github.com/rtk-ai/rtk) — not bundled; see [Token efficiency](docs/guide/Token-efficiency.md).
+
 Full catalog: hub, nineteen phase guides, ten sister skills.
 
 **Go deeper:** [Skills and hub](docs/guide/skills-and-hub.md) · [Token efficiency](docs/guide/Token-efficiency.md)
@@ -401,6 +403,8 @@ Existing repositories do not start from zero. **`project-init`** maps the codeba
 - **Domain stubs** — optional `.specs/domains/`
 - **`code-index rebuild`** — shallow symbol map (runs by default since **5.0**; skip with `--no-code-index`)
 - **Preset suggestion** — may recommend `python-platform` when infra/AI paths are detected
+
+For large mixed corpora, optional external tools like [Graphify](https://github.com/Graphify-Labs/graphify) can add a navigable wiki/graph — **not** part of this package; see [Brownfield context](docs/guide/brownfield-context.md).
 
 The agent reads project memory instead of rediscovering structure every session.
 
@@ -547,7 +551,7 @@ Patterns adapted from open source. **Shipped influences** (skills, gates, or lay
 
 **Original work here:** Node CLI, Python gates, platform adapters, elicitation (`/elicit`), Python Platform pack (4.7+), SDLC integration helpers (4.8+), operational loops CLI (5.0+), memory-index, execution policy, req-analysis tooling.
 
-**Cited, not vendored:** [DeepCode](https://github.com/HKUDS/DeepCode), [RepoGraph](https://github.com/ozyyshr/RepoGraph), [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) — see [credits.md](docs/guide/credits.md).
+**Cited, not vendored:** [DeepCode](https://github.com/HKUDS/DeepCode), [RepoGraph](https://github.com/ozyyshr/RepoGraph), [Graphify](https://github.com/Graphify-Labs/graphify), [RTK](https://github.com/rtk-ai/rtk), [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) — see [credits.md](docs/guide/credits.md).
 
 ---
 

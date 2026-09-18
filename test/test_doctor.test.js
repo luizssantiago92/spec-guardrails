@@ -97,6 +97,50 @@ describe("guardrails doctor", () => {
     assert.equal(modes.process.ready, true);
   });
 
+  it("exposes optional rtk and graphify checks without lowering score", async () => {
+    const cwd = await createTempDir("doctor-ecosystem-");
+    await scaffoldDoctorInstall(cwd);
+
+    const checks = await runDoctorChecks(cwd);
+    const scoreWithMissing = scoreDoctorChecks(checks);
+    const rtk = checks.find((check) => check.id === "rtk-available");
+    const graphify = checks.find((check) => check.id === "graphify-available");
+
+    assert.equal(rtk?.optional, true);
+    assert.equal(graphify?.optional, true);
+    assert.equal(graphify?.pass, false);
+    assert.match(graphify?.suggest ?? "", /Graphify/);
+    if (rtk?.pass) {
+      assert.equal(rtk.suggest, undefined);
+    } else {
+      assert.match(rtk?.suggest ?? "", /rtk init/);
+    }
+    assert.ok(scoreWithMissing >= 80);
+
+    await fs.mkdir(path.join(cwd, "graphify-out"), { recursive: true });
+    const checksWithOut = await runDoctorChecks(cwd);
+    assert.equal(
+      checksWithOut.find((check) => check.id === "graphify-available")?.pass,
+      true,
+    );
+    assert.equal(
+      scoreDoctorChecks(checksWithOut),
+      scoreWithMissing,
+      "optional graphify pass must not change readiness score",
+    );
+  });
+
+  it("suggests cursor-specific rtk init when cursor adapter is present and rtk is missing", async () => {
+    const cwd = await createTempDir("doctor-rtk-cursor-");
+    await scaffoldDoctorInstall(cwd);
+
+    const checks = await runDoctorChecks(cwd);
+    const rtk = checks.find((check) => check.id === "rtk-available");
+    if (!rtk?.pass) {
+      assert.match(rtk?.suggest ?? "", /--agent cursor/);
+    }
+  });
+
   it("requires task-graph.md when active feature has 3+ tasks", async () => {
     const cwd = await createTempDir("doctor-graph-");
     const feature = "001-auth";

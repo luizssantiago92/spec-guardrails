@@ -195,7 +195,7 @@ docs(spec): record validation report for auth
 
 When the last task is complete:
 
-1. Run the full project harness once more (tests, linter, build).
+1. Run the full project harness once more (tests, linter, build). Prefer **compact** command output (failures and summaries over full green spam). If the environment has [RTK](https://github.com/rtk-ai/rtk) installed, its hooks already compress common `git`/test output — Spec Guardrails does not require it.
 2. Refresh the feature dashboard: `npx @luizsantiago/spec-guardrails feature-overview [feature] --write` (writes `overview.md`).
 3. Trigger `/verify` with a fresh context — mandatory, never prompted. See `validate.md`.
 4. Do not declare the feature done until `validate_state.py` passes.

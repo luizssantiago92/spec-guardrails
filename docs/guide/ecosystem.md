@@ -9,7 +9,8 @@ Where Spec Guardrails sits among harness, loop, and graph engineering — and wh
 | **Runtime** (sessions, tools, models, desktop) | DeepCode, harness-foundry | Adjacent — we do not ship a runtime |
 | **Operational loops** (cadence, triage, CI, cost) | loop-engineering | Complementary — see [loop-patterns.md](loop-patterns.md) |
 | **Spec + gates + memory** | **@luizsantiago/spec-guardrails** | **This package** — skills, `.specs/`, Python gates, [Guarantees matrix](Guarantees-matrix.md) |
-| **Code context** (repo graphs, search) | RepoGraph | Optional brownfield plugin — not bundled |
+| **Code context** (repo graphs, search) | RepoGraph, Graphify | Optional brownfield tools — not bundled |
+| **Shell I/O compression** | RTK | Optional agent runtime tool — not bundled |
 
 ## This package
 
@@ -35,6 +36,8 @@ Where Spec Guardrails sits among harness, loop, and graph engineering — and wh
 | [awesome-harness-engineering](https://github.com/ai-boost/awesome-harness-engineering) | Curated index | Taxonomy reference |
 | [DeepCode](https://github.com/HKUDS/DeepCode) | Full agent runtime | Adjacent product |
 | [RepoGraph](https://github.com/ozyyshr/RepoGraph) | Repo-level code graph | Optional brownfield context (not bundled) |
+| [Graphify](https://github.com/Graphify-Labs/graphify) | Multimodal codebase → queryable graph + agent wiki | Optional brownfield navigation — use when `code-index` is not enough; see [brownfield-context.md](brownfield-context.md) |
+| [RTK](https://github.com/rtk-ai/rtk) | CLI proxy that compresses bash output for agents | Orthogonal token savings (shell I/O); complements progressive skill loading — see [Token-efficiency.md](Token-efficiency.md) |
 | [github/spec-kit](https://github.com/github/spec-kit) | Official SDD CLI + integrations | Same problem space — we add Brakes gates and `.specs/` memory; see [tutorials](tutorials/README.md) |
 | [dceoy/speckit-agent-skills](https://github.com/dceoy/speckit-agent-skills) | Spec Kit skills + CI regeneration | Reference for multi-platform skill trees |
 | [alfredoperez/speckit-companion](https://github.com/alfredoperez/speckit-companion) | VS Code spec workspace UI | Complementary — we ship `feature-overview` markdown instead |
@@ -61,7 +64,8 @@ Guide: [python-platform.md](python-platform.md)
 ## What we are not building
 
 - A desktop agent or session runtime (see DeepCode, Cursor, Claude Code)
-- Full knowledge-graph pipeline (see graph-engineering KG half)
+- Full knowledge-graph pipeline (see graph-engineering KG half, Graphify) — core stays at `code-index` + curated `.specs/`
+- A bash-output compression proxy (see RTK) — document and detect optionally; do not vendor or auto-install
 - SWE-bench research integration (see RepoGraph)
 
 ## Further reading

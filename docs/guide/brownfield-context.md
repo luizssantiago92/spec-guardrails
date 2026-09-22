@@ -55,16 +55,42 @@ A future **optional plugin** could still add full RepoGraph or a triple-store KG
 - Agent uses normal repo search + `PROJECT.md` hints
 - Task graphs for **planned** work, not automatic code graphs
 
+## Optional: Graphify
+
+[Graphify](https://github.com/Graphify-Labs/graphify) builds a **queryable knowledge graph** from code, docs, PDFs, and images (AST + LLM), and can export an **agent-crawlable wiki** (`--wiki` → `index.md` per community). It is a mature optional tool in the same *navigation* space as RepoGraph — **not** part of Spec Guardrails install.
+
+### When `code-index` is enough
+
+- Small/medium repos where `PROJECT.md` + domains + `code-index search` answer “where is X?”
+- You want deterministic, zero-LLM brownfield hints only
+- You must keep install surface Node + optional Python gates
+
+### When Graphify helps
+
+- Large or multi-domain repos where agents re-read the same trees every session
+- Mixed corpus (code + long docs + papers/diagrams) that a shallow symbol map cannot connect
+- You want a persistent wiki/`GRAPH_REPORT.md` the agent can navigate by reading files
+
+### How to use alongside Spec Guardrails
+
+1. Keep Spec Guardrails for **agreement** (specs, tasks, gates, archive).
+2. Install Graphify separately (`pip install graphifyy` / skill install — see upstream README).
+3. Point the agent at `graphify-out/wiki/index.md` (or re-run `/graphify . --wiki` / `--update`) for navigation — do **not** treat auto-extracted edges as domain truth.
+4. `doctor` may report an optional `graphify-available` check; missing Graphify does **not** lower the readiness score.
+
+Do **not** replace `code-index`, wire Graphify into Python gates, or auto-install it from `npx @luizsantiago/spec-guardrails install`.
+
 ## When to revisit
 
-Consider RepoGraph or KG only if:
+Consider RepoGraph, Graphify-as-plugin, or a full KG only if:
 
-- Brownfield repos routinely exceed what `PROJECT.md` + domains capture
+- Brownfield repos routinely exceed what `PROJECT.md` + domains + `code-index` capture
 - You ship a **separate optional plugin** (not core install) with cache + refresh policy
-- You have evals proving graph context reduces verify failures without increasing false edits
+- You have evals proving graph/wiki context reduces verify failures without increasing false edits
 
 ## Credits
 
 - [graph-engineering](https://github.com/codejunkie99/graph-engineering) (MIT) — KG pipeline and task-graph theory
 - [npubird/KnowledgeGraphCourse](https://github.com/npubird/KnowledgeGraphCourse) — original SEU course (graph-engineering distillation source)
 - [RepoGraph](https://github.com/ozyyshr/RepoGraph) — repository-level code graph research (SWE-bench integration)
+- [Graphify](https://github.com/Graphify-Labs/graphify) — optional multimodal graph + agent wiki (not vendored)

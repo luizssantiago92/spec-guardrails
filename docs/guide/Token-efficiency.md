@@ -44,6 +44,19 @@ Numbers come from `lib/token-cost.js`; CI guardrails in `test/test_token_cost.te
 
 Full skill map: [Skills and hub](skills-and-hub.md).
 
+## Two layers of savings
+
+Spec Guardrails and optional shell tools attack **different** token sources:
+
+| Layer | What shrinks | Who |
+| --- | --- | --- |
+| **Playbook / skills** | Hub + one phase guide per turn (not the full kit) | Spec Guardrails (this package) |
+| **Bash / command output** | Compact `git`, test, `rg`, `docker`, … output before the agent reads it | [RTK](https://github.com/rtk-ai/rtk) (optional, not bundled) |
+
+RTK is a Rust CLI proxy (hooks rewrite e.g. `git status` → `rtk git status`). It does **not** replace progressive skill loading, and Spec Guardrails does **not** vendor or auto-install it. `doctor` may surface an optional `rtk-available` hint; absence does not lower the readiness score.
+
+Prefer compact Verify evidence either way: failures and discrimination results matter more than full green test spam. If RTK is installed, its test/git filters help; if not, still ask the agent for focused command output.
+
 ## Sub-agents (optional)
 
 For a **huge** build batch, you can split work across helpers when files don’t overlap. For a normal feature, one agent walking Specify → Verify is enough. Don’t spawn a fleet by default — that can *increase* cost.
@@ -52,4 +65,5 @@ For a **huge** build batch, you can split work across helpers when files don’t
 
 - [How it works](How-it-works.md)  
 - [Gates and guarantees](Gates-and-guarantees.md)  
+- [Ecosystem](ecosystem.md) — RTK and Graphify as adjacent tools  
 - [FAQ](FAQ.md)

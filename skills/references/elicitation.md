@@ -85,6 +85,7 @@ Run `req-analysis init` when templates help; otherwise create the brief path dir
 3. Skim PROJECT.md, ROADMAP, brownfield code if relevant.
 4. `code-index search "<keywords>"` when the repo already has code.
 5. `memory-retrieve "<topic>"` when memory index exists.
+6. If the owner already maintains a Graphify wiki (`graphify-out/wiki/index.md`), skim that index for orientation — do not treat auto-edges as requirements.
 
 Summarize **Current state** in the brief — do not copy entire kickoff verbatim.
 

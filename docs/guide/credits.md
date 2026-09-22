@@ -49,6 +49,8 @@ We mention these for context or future plugins. **No code from these repos ships
 | --- | --- |
 | [DeepCode](https://github.com/HKUDS/DeepCode) | Example of agent harness + loop runtime (separate product category) |
 | [RepoGraph](https://github.com/ozyyshr/RepoGraph) | Brownfield code-graph direction; we ship lightweight `code-index` instead |
+| [Graphify](https://github.com/Graphify-Labs/graphify) | Optional multimodal codebase graph + agent wiki; documented for brownfield when `code-index` is not enough |
+| [RTK](https://github.com/rtk-ai/rtk) | Optional CLI proxy that compresses bash output; complements progressive skill loading (orthogonal token layer) |
 | Google DeepMind × MIT — [Scaling Agent Systems](https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/) | Cited in task-graph material for stop-rule research |
 | [npubird/KnowledgeGraphCourse](https://github.com/npubird/KnowledgeGraphCourse) | SEU graduate KG course; English distillation notes for graph-engineering lineage |
 

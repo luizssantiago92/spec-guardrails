@@ -39,6 +39,10 @@ Map an existing codebase into `.specs/` project memory before the first `/specif
 4. **Optional constitution** — `references/constitution.md` when principles are not yet written.
 5. **First feature** — `feature-init` then `specify.md` using **delta specs** when domain truth exists.
 
+## Optional deep navigation (not required)
+
+`code-index` is the default brownfield lookup. For **large or multi-domain** repos where agents keep re-reading the same trees, the owner may install [Graphify](https://github.com/Graphify-Labs/graphify) separately and point the agent at `graphify-out/wiki/index.md` (after `/graphify . --wiki`). Treat that wiki as **navigation**, not curated domain truth — specs and gates still own agreement. See `docs/guide/brownfield-context.md`.
+
 ## Flags
 
 | Flag | Effect |

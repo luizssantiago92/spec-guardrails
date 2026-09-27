@@ -8,7 +8,14 @@ Version history for `@luizsantiago/spec-guardrails`.
 
 ## Unreleased
 
-—
+### Changed
+
+- **Project status** — Spec Guardrails is superseded by its successor [Retornatus](https://github.com/luizssantiago92/retornatus) (PyPI package `retornatus`, [docs](https://luizssantiago92.github.io/retornatus/)). The package stays usable and receives no new features. Migration map: [From Spec Guardrails](https://github.com/luizssantiago92/retornatus/blob/main/docs/guide/From-spec-guardrails.md).
+
+### Fixed
+
+- **`install-hooks` commit message** — the message check no longer runs in `pre-commit`. That hook was reading `.git/COMMIT_EDITMSG`, which still holds the previous commit, so a bad message was accepted and the next valid one was rejected. The check now lives in a `commit-msg` hook that passes `$1` to `check_commit.py --file`. Staged-diff size stays on `pre-commit` via `check_commit.py --staged`.
+- **`install-hooks` git directory** — hooks are written to `git rev-parse --git-path hooks`, so install works in linked worktrees (where `.git` is a file, and `.git/hooks` raises `ENOTDIR`) and honors `core.hooksPath`. Re-run `install-hooks` to replace an older hook.
 
 ## 5.0.0 — Operational loops CLI + brownfield + converge hints
 

@@ -1,5 +1,9 @@
 # Spec Guardrails
 
+> **Superseded by its successor [Retornatus](https://github.com/luizssantiago92/retornatus).**
+>
+> Spec Guardrails stays usable, but it receives no new features. PyPI package: [`retornatus`](https://pypi.org/project/retornatus/). Docs: <https://luizssantiago92.github.io/retornatus/>. To move an existing repo, follow the migration guide: [From Spec Guardrails](https://github.com/luizssantiago92/retornatus/blob/main/docs/guide/From-spec-guardrails.md).
+
 [![npm version](https://img.shields.io/npm/v/@luizsantiago/spec-guardrails.svg)](https://www.npmjs.com/package/@luizsantiago/spec-guardrails)
 [![CI](https://github.com/luizssantiago92/spec-guardrails/actions/workflows/ci.yml/badge.svg)](https://github.com/luizssantiago92/spec-guardrails/actions/workflows/ci.yml)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -294,7 +298,7 @@ Exit code **0** = pass; **non-zero** = STOP. Scripts live under `.specs/guardrai
 | **Platform gates** | Opt-in `python-platform` preset | `validate-ship-surface` when infra/AI paths appear in task Files |
 | **Orchestration (aux)** | Planning and lookup — not artifact-shape gates | `loop-plan`, `memory-index`, `code-index` |
 
-Also shipped: CI template (`templates/ci/guardrails-pr.yml`), opt-in `install-hooks` (`check-suppressions` + `check-commit --staged` on staged diffs).
+Also shipped: CI template (`templates/ci/guardrails-pr.yml`), opt-in `install-hooks` (`pre-commit`: `check-suppressions` + `check-commit --staged`; `commit-msg`: Conventional Commits via `$1`).
 
 **Go deeper:** [gates.md](docs/guide/gates.md) · [Guarantees matrix](docs/guide/Guarantees-matrix.md) · [Gates and guarantees](docs/guide/Gates-and-guarantees.md)
 
@@ -481,7 +485,7 @@ Inspect feature governance state with `feature-status` / `feature-overview`. Han
 | `phase-context <phase>` | Inject team rules from `config.yaml` |
 | `validate-spec [feature]` | Spec shape gate |
 | `validate-tasks [feature]` | Task granularity / ownership gate |
-| `install-hooks` | Opt-in pre-commit (commit + suppressions) |
+| `install-hooks` | Opt-in `pre-commit` (suppressions) and `commit-msg` (Conventional Commits) |
 | `loop list` / `loop show` / `loop run` | Operational loops (5.0+) |
 | `archive-feature [feature]` | Fold verified work into domain memory |
 

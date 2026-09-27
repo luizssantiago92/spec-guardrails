@@ -126,8 +126,8 @@ Commands:
     [--json]                         Machine-readable output (no markdown body)
   feature-pr-body [feature]            Generate GitHub PR description from overview
     [--json]                         Machine-readable output
-  install-hooks                      Install optional git pre-commit (check-commit, suppressions)
-    [--remove]                       Remove Spec Guardrails-managed pre-commit hook
+  install-hooks                      Install optional git hooks (pre-commit + commit-msg)
+    [--remove]                       Remove Spec Guardrails-managed git hooks
   phase-context <phase>              Print .specs/config.yaml context + rules for a phase
   doctor [path]                      Audit guardrails readiness (score + next actions)
     [--json]                         Machine-readable output
@@ -287,10 +287,13 @@ if (command === "--version" || command === "-v" || command === "version") {
       }
     }
     const result = await installHooks(process.cwd(), { remove });
+    const listed = (result.hooks || [{ path: result.path }])
+      .map((hook) => hook.path)
+      .join(", ");
     if (result.action === "installed") {
-      console.log(`✅ Installed pre-commit hook at ${result.path}`);
+      console.log(`✅ Installed Spec Guardrails hooks at ${listed}`);
     } else if (result.action === "removed") {
-      console.log(`✅ Removed Spec Guardrails pre-commit hook`);
+      console.log(`✅ Removed Spec Guardrails hooks (${listed})`);
     } else {
       console.log(`ℹ️  No Spec Guardrails hook to remove`);
     }

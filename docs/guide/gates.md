@@ -102,7 +102,7 @@ Copy `node_modules/@luizsantiago/spec-guardrails/templates/ci/guardrails-pr.yml`
 npx @luizsantiago/spec-guardrails install-hooks
 ```
 
-Installs a hook that runs `check-suppressions` on the staged diff and `check-commit --staged` when a commit message is available. Remove with `install-hooks --remove`.
+Installs two hooks: `pre-commit` runs `check-suppressions` and `check-commit --staged` on the index; `commit-msg` runs `check-commit --file "$1"` on the message Git is about to record. Remove with `install-hooks --remove`.
 
 `doctor` checks that scripts exist, Python works, and suggests `loop-plan` when Execute is next.
 

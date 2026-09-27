@@ -1,13 +1,18 @@
 #!/bin/sh
-# Spec Guardrails — optional pre-commit hook (Brakes helpers)
+# Spec Guardrails — optional commit-msg hook (Brakes helpers)
 #
 # Install: npx @luizsantiago/spec-guardrails install-hooks
 # Uninstall: npx @luizsantiago/spec-guardrails install-hooks --remove
 #
-# Commit message checks belong in the commit-msg hook (see templates/hooks/commit-msg).
-# During pre-commit, .git/COMMIT_EDITMSG still holds the previous commit's message.
+# Git passes the proposed commit message file as $1. Read that path — do not
+# open .git/COMMIT_EDITMSG from pre-commit, where it still holds the previous message.
 
 set -e
+
+if [ -z "$1" ]; then
+  echo "[spec-guardrails] commit-msg hook requires the message file path (\$1)"
+  exit 1
+fi
 
 ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
@@ -28,19 +33,11 @@ for candidate in python3 python "py -3"; do
 done
 
 if [ -z "$PYTHON" ]; then
-  echo "[spec-guardrails] Python 3.10+ not found — skipping Brakes pre-commit checks (Process mode)."
+  echo "[spec-guardrails] Python 3.10+ not found — skipping Brakes commit-msg checks (Process mode)."
   exit 0
 fi
 
-STAGED="$(git diff --cached --name-only)"
-if [ -z "$STAGED" ]; then
-  exit 0
-fi
-
-echo "[spec-guardrails] check-suppressions (staged diff)"
-$PYTHON .specs/guardrails/scripts/check_suppressions.py
-
-echo "[spec-guardrails] check-commit --staged"
-$PYTHON .specs/guardrails/scripts/check_commit.py --staged
+echo "[spec-guardrails] check-commit"
+$PYTHON .specs/guardrails/scripts/check_commit.py --file "$1"
 
 exit 0

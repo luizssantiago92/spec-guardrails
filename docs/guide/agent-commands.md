@@ -249,7 +249,7 @@ These are **not** chat slash commands. Useful when you want a status check witho
 | `feature-status [feature]` | Artifacts present, task counts, next recommended gate |
 | `feature-overview [feature] [--write]` | REQ → task → evidence dashboard; `--write` saves `overview.md` |
 | `feature-pr-body [feature] [--json]` | PR description from overview (Tier 1 handoff) |
-| `install-hooks [--remove]` | Opt-in pre-commit hook (`check-suppressions` + `check-commit --staged`) |
+| `install-hooks [--remove]` | Opt-in `pre-commit` (`check-suppressions` + `check-commit --staged`) and `commit-msg` (`check-commit --file "$1"`) |
 | `loop list [--json]` | Operational loop pattern catalog (triage, CI, deps, …) |
 | `loop show <pattern-id> [--json]` | One operational pattern (constraints, stop rules) |
 | `loop run <pattern-id> [--dry-run] [--json]` | Structured agent brief for an operational loop |
